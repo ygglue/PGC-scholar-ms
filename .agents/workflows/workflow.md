@@ -1,3 +1,7 @@
+---
+description: 
+---
+
 # Scholar Management System — Workflow
 
 This document describes every user-facing workflow in the system from start to finish.
@@ -53,7 +57,7 @@ Scholars cannot directly edit their own records. All changes go through an appro
 
 Documents are uploaded to Supabase Storage in a private bucket. They are never publicly accessible.
 
-1. Scholar selects a file (JPEG, PNG, or PDF, max 10MB)
+1. Scholar selects a file (JPEG, PNG, or PDF, max 1MB)
 2. Scholar selects the document type: `COR`, `ROG`, `explanation_letter`, `completion_form`, or `other`
 3. Scholar optionally links the document to a specific semester (academic record)
 4. Backend validates file type and size
