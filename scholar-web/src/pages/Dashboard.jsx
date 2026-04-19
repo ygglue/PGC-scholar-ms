@@ -1,21 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UploadCloud, FileText, CheckCircle } from 'lucide-react';
 import Layout from '../components/Layout';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [documents, setDocuments] = useState([]);
+  
+  const fileInputRef = useRef(null);
+  const [uploadTarget, setUploadTarget] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState({});
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:8000/scholars/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setProfile(res.data);
+        const [profRes, docRes] = await Promise.all([
+            axios.get('http://localhost:8000/scholars/me', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('http://localhost:8000/documents/me', { headers: { Authorization: `Bearer ${token}` } })
+        ]);
+        setProfile(profRes.data);
+        setDocuments(docRes.data);
       } catch (err) {
         if (err.response && err.response.status === 401) {
           localStorage.removeItem('token');
@@ -23,69 +29,166 @@ const Dashboard = () => {
         }
       }
     };
-    fetchProfile();
+    fetchData();
   }, [navigate]);
+
+  const triggerUpload = (docType) => {
+      setUploadTarget(docType);
+      fileInputRef.current.click();
+  };
+
+  const handleFileUpload = async (e) => {
+      const file = e.target.files[0];
+      if (!file || !uploadTarget) return;
+      
+      setUploadStatus(prev => ({ ...prev, [uploadTarget]: 'uploading' }));
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('doc_type', uploadTarget);
+      
+      try {
+          const token = localStorage.getItem('token');
+          await axios.post('http://localhost:8000/documents/upload', formData, {
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+          setUploadStatus(prev => ({ ...prev, [uploadTarget]: 'success' }));
+          
+          const docRes = await axios.get('http://localhost:8000/documents/me', { headers: { Authorization: `Bearer ${token}` } });
+          setDocuments(docRes.data);
+      } catch(err) {
+          setUploadStatus(prev => ({ ...prev, [uploadTarget]: 'error' }));
+      } finally {
+          e.target.value = null; 
+      }
+  };
+
+  const handleViewDocument = async (docId) => {
+      try {
+          const token = localStorage.getItem('token');
+          const res = await axios.get(`http://localhost:8000/documents/${docId}/view`, {
+             headers: { Authorization: `Bearer ${token}` }
+          });
+          window.open(res.data.url, '_blank');
+      } catch (err) { }
+  };
 
   if (!profile) return (
     <Layout>
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', background: 'transparent'}}>
-          <div className="headline-sm" style={{color: 'var(--primary)'}}>Mounting Dashboard Engine...</div>
-      </div>
+      <div className="flex justify-center items-center h-[60vh] text-primary">Loading interface...</div>
     </Layout>
   );
 
   return (
     <Layout>
-      <header style={{marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h2 className="headline-sm">Semester Hub</h2>
-      </header>
-
-      {/* Submission Bin for Current Semester Documents */}
-      <section className="hero-gradient" style={{marginBottom: '2.5rem'}}>
-          <div style={{flex: 1}}>
-              <h1 className="headline-lg">Required Submissions</h1>
-              <p className="body-md" style={{marginTop: '0.5rem', opacity: 0.9, maxWidth: '600px'}}>
-                Upload your Proof of Enrollment (COR) and Prospectus load for the active semester cycle to maintain your {profile.status} standing.
-              </p>
-              
-              <div style={{marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
-                  <button className="btn-secondary" style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                      <UploadCloud size={20}/> Upload Document
-                  </button>
-                  <button className="btn-secondary" style={{display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--surface-lowest)', color: 'var(--primary)'}}>
-                      <FileText size={20}/> Submit Grades
-                  </button>
-              </div>
-          </div>
+      <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/jpeg,image/png,application/pdf" className="hidden" />
+      
+      <section className="mb-8">
+        <h2 className="text-2xl font-bold font-headline text-on-surface">Welcome back, {profile.first_name}</h2>
+        <p className="text-on-surface-variant text-sm mt-1">Keep your documentation up to date to maintain your grant.</p>
       </section>
 
-      {/* Historical Records component */}
-      <section className="ms-grid">
-           <div className="surface-lowest ms-col-full">
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem'}}>
-                 <h3 className="headline-md">Historical Records</h3>
-                 <span className="chip-tertiary label-sm">All Time Archives</span>
+      <div className="grid grid-cols-1 gap-4 mb-8">
+        <div className="bg-gradient-to-br from-primary to-secondary p-6 rounded-[32px] shadow-lg text-on-primary relative overflow-hidden">
+          <div className="relative z-10">
+            <span className="text-[10px] uppercase tracking-widest font-bold opacity-80 block mb-2">Current Standing</span>
+            <h3 className="text-3xl font-extrabold font-headline">{profile.status.toUpperCase()}</h3>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: '"FILL" 1'}}>verified</span>
+              <span className="text-sm font-medium">{profile.course} • Batch {profile.batch_number}</span>
+            </div>
+          </div>
+          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+      </div>
+
+      <section className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-sm font-bold uppercase tracking-wide text-on-surface-variant">Required Submissions</h4>
+        </div>
+        
+        <div className="space-y-4">
+          {/* COR Bin */}
+          <div className="bg-surface-container-lowest p-5 rounded-[28px] shadow-sm flex items-center gap-4 group hover:shadow-md transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+              <span className="material-symbols-outlined">description</span>
+            </div>
+            <div className="flex-1">
+              <h5 className="text-sm font-bold text-on-surface">Certificate of Registration (COR)</h5>
+              <p className="text-xs text-on-surface-variant">Must be a valid PDF for this semester</p>
+            </div>
+            <button 
+               onClick={() => triggerUpload('COR')}
+               disabled={uploadStatus['COR'] === 'uploading'}
+               className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-bold shadow-md hover:bg-primary-container transition-colors scale-95 active:duration-150 relative"
+               style={{opacity: uploadStatus['COR'] === 'uploading' ? 0.7 : 1}}>
+                 {uploadStatus['COR'] === 'uploading' ? 'Uploading...' : uploadStatus['COR'] === 'success' ? 'Uploaded!' : 'Upload'}
+            </button>
+          </div>
+          
+          {/* ROG Bin */}
+          <div className="bg-surface-container-lowest p-5 rounded-[28px] shadow-sm flex items-center gap-4 group hover:shadow-md transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+              <span className="material-symbols-outlined">grade</span>
+            </div>
+            <div className="flex-1">
+              <h5 className="text-sm font-bold text-on-surface">Report of Grades (ROG)</h5>
+              <p className="text-xs text-on-surface-variant">Scanned copy of your official grades</p>
+            </div>
+            <button 
+               onClick={() => triggerUpload('ROG')}
+               disabled={uploadStatus['ROG'] === 'uploading'}
+               className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-bold shadow-md hover:bg-primary-container transition-colors scale-95 active:duration-150"
+               style={{opacity: uploadStatus['ROG'] === 'uploading' ? 0.7 : 1}}>
+                 {uploadStatus['ROG'] === 'uploading' ? 'Uploading...' : uploadStatus['ROG'] === 'success' ? 'Uploaded!' : 'Upload'}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h4 className="text-sm font-bold uppercase tracking-wide text-on-surface-variant mb-4">Previous Submissions</h4>
+        
+        <details className="group/accordion bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-sm border border-surface-container-low" open>
+          <summary className="w-full flex items-center justify-between p-4 hover:bg-surface-container-high/30 transition-colors cursor-pointer select-none">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary-fixed/20 flex items-center justify-center text-primary">
+                <span className="material-symbols-outlined">folder</span>
               </div>
-              
-              {/* Dummy Iteratable Base List */}
-              <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-                  <div style={{padding: '1rem', border: '1px solid var(--outline-variant)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                     <div>
-                         <div className="label-md" style={{color: 'var(--primary)', fontWeight: 'bold'}}>2024-2025 • 2nd Semester</div>
-                         <div className="body-md" style={{marginTop: '0.25rem'}}>Submitted: 6 Subjects, Pending Verification</div>
-                     </div>
-                     <span className="chip-tertiary label-sm">Processing</span>
-                  </div>
-              
-                  <div style={{padding: '1rem', border: '1px solid var(--outline-variant)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                     <div>
-                         <div className="label-md" style={{color: 'var(--primary)', fontWeight: 'bold'}}>2024-2025 • 1st Semester</div>
-                         <div className="body-md" style={{marginTop: '0.25rem'}}>Submitted: 5 Subjects, COR Verified</div>
-                     </div>
-                     <CheckCircle size={24} color="var(--primary)"/>
-                  </div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-on-surface">Uploaded History</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider">{documents.length} FILES UPLOADED</p>
               </div>
-           </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-on-surface-variant transition-transform duration-300 expand-icon">expand_more</span>
+            </div>
+          </summary>
+          
+          <div className="bg-surface-container-low/20 px-2 pb-2 space-y-1">
+             {documents.length === 0 ? (
+                <div className="p-4 text-center text-on-surface-variant text-sm">No records found</div>
+             ) : documents.map(doc => (
+                <div key={doc.id} className="flex items-center justify-between p-3 rounded-2xl hover:bg-white transition-colors cursor-pointer group/file" onClick={() => handleViewDocument(doc.id)}>
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+                         <span className="material-symbols-outlined text-on-surface-variant text-base">description</span>
+                      </div>
+                      <div>
+                         <p className="text-xs font-bold text-on-surface">{doc.file_name}</p>
+                         <p className="text-[9px] text-on-surface-variant uppercase tracking-wider">{new Date(doc.uploaded_at).toLocaleDateString()}</p>
+                      </div>
+                   </div>
+                   <div className="flex items-center gap-3">
+                       <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${doc.is_verified ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container-highest text-on-surface-variant'}`}>{doc.is_verified ? 'Verified' : 'Pending'}</span>
+                       <span className="material-symbols-outlined text-on-surface-variant group-hover/file:text-primary text-lg">visibility</span>
+                   </div>
+                </div>
+             ))}
+          </div>
+        </details>
       </section>
     </Layout>
   );

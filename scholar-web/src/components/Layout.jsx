@@ -1,88 +1,58 @@
-import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Inbox as InboxIcon, User, LogOut, MoreVertical } from 'lucide-react';
-import '../index.css';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  const navItems = [
-    { path: '/', label: 'Dashboard', icon: <LayoutDashboard size={24} /> },
-    { path: '/inbox', label: 'Inbox', icon: <InboxIcon size={24} /> },
-    { path: '/profile', label: 'Profile', icon: <User size={24} /> }
-  ];
-
   return (
-    <div className="dashboard-layout">
-      {/* Mobile Top Bar */}
-      <div className="mobile-topbar glass-nav">
-         <div className="headline-sm" style={{color: 'var(--primary)', fontFamily: 'Plus Jakarta Sans'}}>Luminary</div>
-         <button className="btn-ghost" style={{padding: '0.25rem'}} onClick={() => setMenuOpen(!menuOpen)}>
-           <MoreVertical size={24} color="var(--on-surface)"/>
-         </button>
-      </div>
-
-      {menuOpen && (
-        <div style={{position: 'fixed', top: '70px', right: '1.5rem', background: 'var(--surface-lowest)', zIndex: 60, padding: '1rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--ambient-shadow)', display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-          <button className="btn-ghost" onClick={handleLogout} style={{color: '#d32f2f', textAlign: 'left', width: '100%', padding: '0.5rem 1rem'}}>
-            <LogOut size={16} style={{display: 'inline', marginRight: '0.5rem', marginBottom: '-2px'}}/> Sign Out
-          </button>
+    <div className="bg-surface-container-low text-on-surface min-h-screen pb-32">
+      {/* Top App Bar */}
+      <header className="bg-emerald-50/70 dark:bg-emerald-950/70 backdrop-blur-xl fixed top-0 w-full z-50 shadow-sm">
+        <div className="flex justify-between items-center px-6 py-4 w-full">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold tracking-tight text-emerald-800 dark:text-emerald-200 font-headline">PGC-ISKOnektado</h1>
+          </div>
+          <div className="flex items-center gap-4">
+             <button onClick={handleLogout} className="text-on-surface hover:opacity-80 transition-opacity">
+                <span className="material-symbols-outlined hover:text-error transition-colors">logout</span>
+             </button>
+          </div>
         </div>
-      )}
+      </header>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="mobile-nav">
-         {navItems.map(item => (
-           <button 
-              key={item.path}
-              className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
-              onClick={() => navigate(item.path)}
-           >
-               {item.icon}
-               <span>{item.label}</span>
-           </button>
-         ))}
-      </div>
-
-      {/* Desktop Sidebar */}
-      <nav className="dashboard-sidebar">
-        <div className="headline-sm" style={{marginBottom: '4rem', color: 'var(--primary)', fontFamily: 'Plus Jakarta Sans'}}>Luminary</div>
-        <div className="nav-links">
-           {navItems.map(item => {
-               const isActive = location.pathname === item.path;
-               return (
-                   <button 
-                     key={item.path}
-                     className={isActive ? "btn-primary" : "btn-ghost"} 
-                     style={{
-                       textAlign: 'left', 
-                       width: '100%', 
-                       ...(isActive ? {borderRadius: 'var(--radius-md)', background: 'var(--surface-highest)', color: 'var(--primary)', fontWeight: 'bold'} : {color: 'var(--on-surface-variant)'})
-                     }}
-                     onClick={() => navigate(item.path)}
-                   >
-                     {item.label}
-                   </button>
-               )
-           })}
-        </div>
-        <div style={{marginTop: 'auto'}}>
-          <button className="btn-ghost" onClick={handleLogout} style={{textAlign: 'left', width: '100%', color: '#d32f2f'}}>
-             <LogOut size={18} style={{display: 'inline', marginRight: '0.5rem', marginBottom: '-4px'}}/> Sign Out
-          </button>
-        </div>
-      </nav>
-      
-      <main className="main-content">
-         {children}
+      <main className="pt-24 px-6 max-w-4xl mx-auto space-y-8">
+        {children}
       </main>
+
+      {/* Bottom Nav Bar */}
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-white/80 dark:bg-emerald-900/80 backdrop-blur-2xl shadow-xl rounded-t-[32px]">
+        {/* Home */}
+        <button 
+           onClick={() => navigate('/')}
+           className={`flex flex-col items-center justify-center rounded-full px-6 py-2 transition-all ${location.pathname === '/' ? 'bg-emerald-100 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-50 active-nav' : 'text-emerald-800/50 dark:text-emerald-200/50 hover:bg-emerald-50 dark:hover:bg-emerald-800/50'}`}>
+          <span className="material-symbols-outlined">home</span>
+          <span className="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-0.5">Home</span>
+        </button>
+        {/* Inbox */}
+        <button 
+           onClick={() => navigate('/inbox')}
+           className={`flex flex-col items-center justify-center rounded-full px-6 py-2 transition-all ${location.pathname === '/inbox' ? 'bg-emerald-100 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-50 active-nav' : 'text-emerald-800/50 dark:text-emerald-200/50 hover:bg-emerald-50 dark:hover:bg-emerald-800/50'}`}>
+          <span className="material-symbols-outlined">mail</span>
+          <span className="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-0.5">Inbox</span>
+        </button>
+        {/* Profile */}
+        <button 
+           onClick={() => navigate('/profile')}
+           className={`flex flex-col items-center justify-center rounded-full px-6 py-2 transition-all ${location.pathname === '/profile' ? 'bg-emerald-100 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-50 active-nav' : 'text-emerald-800/50 dark:text-emerald-200/50 hover:bg-emerald-50 dark:hover:bg-emerald-800/50'}`}>
+          <span className="material-symbols-outlined">person</span>
+          <span className="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-0.5">Profile</span>
+        </button>
+      </nav>
     </div>
   );
 };
