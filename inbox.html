@@ -1,0 +1,569 @@
+<!doctype html>
+
+<html class="light" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Inbox - Emerald Scholar</title>
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link
+            crossorigin=""
+            href="https://fonts.gstatic.com"
+            rel="preconnect"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&amp;display=swap"
+            rel="stylesheet"
+        />
+        <!-- Icons -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet"
+        />
+        <!-- Tailwind -->
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "primary-fixed": "#97f8a9",
+                            "on-secondary": "#ffffff",
+                            "on-secondary-fixed": "#00210a",
+                            "inverse-surface": "#2e312f",
+                            "surface-dim": "#d9dad8",
+                            "secondary-container": "#a5f5b1",
+                            "surface-container-low": "#f3f4f1",
+                            "surface-container-highest": "#e2e3e0",
+                            "tertiary-fixed": "#ffd9dd",
+                            surface: "#f9faf7",
+                            "outline-variant": "#becabc",
+                            "on-background": "#191c1b",
+                            primary: "#006b30",
+                            "on-primary": "#ffffff",
+                            "inverse-primary": "#7bdb8f",
+                            "secondary-fixed": "#a5f5b1",
+                            "primary-fixed-dim": "#7bdb8f",
+                            "surface-tint": "#006d32",
+                            background: "#f9faf7",
+                            "on-tertiary": "#ffffff",
+                            "surface-container-high": "#e7e8e6",
+                            "on-tertiary-fixed": "#400013",
+                            "on-tertiary-container": "#fffbff",
+                            secondary: "#1c6c37",
+                            "on-surface": "#191c1b",
+                            "on-secondary-container": "#24723c",
+                            "surface-container": "#edeeeb",
+                            "surface-variant": "#e2e3e0",
+                            error: "#ba1a1a",
+                            "secondary-fixed-dim": "#89d897",
+                            "on-primary-container": "#f7fff3",
+                            "inverse-on-surface": "#f0f1ee",
+                            "on-surface-variant": "#3f493f",
+                            "error-container": "#ffdad6",
+                            "on-tertiary-fixed-variant": "#80253b",
+                            "surface-bright": "#f9faf7",
+                            "on-error": "#ffffff",
+                            "on-error-container": "#93000a",
+                            "surface-container-lowest": "#ffffff",
+                            tertiary: "#9c3a4f",
+                            "on-primary-fixed": "#00210a",
+                            outline: "#6f7a6e",
+                            "tertiary-fixed-dim": "#ffb2bd",
+                            "tertiary-container": "#bb5267",
+                            "on-secondary-fixed-variant": "#005224",
+                            "primary-container": "#218544",
+                            "on-primary-fixed-variant": "#005224",
+                            "palawan-yellow": "#fec311",
+                        },
+                        fontFamily: {
+                            headline: ["Manrope"],
+                            body: ["Plus Jakarta Sans"],
+                            label: ["Plus Jakarta Sans"],
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            .material-symbols-outlined {
+                font-variation-settings:
+                    "FILL" 0,
+                    "wght" 400,
+                    "GRAD" 0,
+                    "opsz" 24;
+            }
+            body {
+                font-family: "Plus Jakarta Sans", sans-serif;
+                background-color: #f3f4f1; /* surface-container-low */
+            }
+            .tonal-shift {
+                background: linear-gradient(to bottom, #f9faf7, #f3f4f1);
+            }
+            .active-nav .material-symbols-outlined {
+                font-variation-settings: "FILL" 1;
+            }
+        </style>
+        <style>
+            body {
+                min-height: max(884px, 100dvh);
+            }
+        </style>
+    </head>
+    <body class="text-on-surface antialiased">
+        <!-- TopAppBar -->
+        <header
+            class="bg-emerald-50/70 dark:bg-emerald-950/70 backdrop-blur-xl fixed top-0 w-full z-50 shadow-sm"
+        >
+            <div class="flex justify-between items-center px-6 py-4 w-full">
+                <div class="flex items-center gap-3">
+                    <h1
+                        class="text-xl font-bold tracking-tight text-emerald-800 dark:text-emerald-200 font-headline"
+                    >
+                        PGC-ISKOnektado
+                    </h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-10 h-10 rounded-full border-2 border-primary/20 overflow-hidden bg-surface-container-high"
+                    >
+                        <img
+                            alt="Scholar profile photo"
+                            class="w-full h-full object-cover"
+                            data-alt="close-up portrait of a young professional academic student with a friendly expression and glasses in a brightly lit library"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6agl30l-2iO7yn3aMHFcropZoZHAZBm1JT3Lvc41xzepYpdJUeTwnMPYFFKqE-rybz8WSmeYdm2WLUP2F5oPmCObkru4C0dvCnBBs77sqiTaSTRMT5dbXuSAsbzCKe8QHFoJX4JMXJ2bAkGGHQiO-AGiZ-cPnR_zf7i180eGsm67FHu3zVoL9HnNjpwsNH4WMBEIP759qitWwHCV4jiIz5Up0F50IdBBDRHZD2FYaYILlyNSGQRsqY7f626pZPSuiwQOyrNEKofY"
+                        />
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Canvas -->
+        <main class="pt-24 pb-32 px-6 max-w-5xl mx-auto min-h-screen">
+            <!-- Header Section -->
+            <header class="mb-8">
+                <h1
+                    class="text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-2"
+                    style=""
+                >
+                    Scholar Communications
+                </h1>
+                <p class="text-on-surface-variant font-body" style="">
+                    Manage your institutional updates and evaluator feedback.
+                </p>
+            </header>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Section 1: System Updates (Bento Column) -->
+                <section class="lg:col-span-5 space-y-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2
+                            class="text-xs font-bold font-label uppercase tracking-widest text-on-surface-variant"
+                            style=""
+                        >
+                            System Updates
+                        </h2>
+                        <span
+                            class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold"
+                            style=""
+                            >2 NEW</span
+                        >
+                    </div>
+                    <!-- Urgent Card -->
+                    <div
+                        class="bg-surface-container-lowest rounded-[28px] p-6 shadow-sm border-l-8 border-palawan-yellow relative overflow-hidden group hover:shadow-md transition-shadow"
+                    >
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="p-3 rounded-2xl bg-palawan-yellow/10 text-on-surface"
+                            >
+                                <span
+                                    class="material-symbols-outlined text-[32px]"
+                                    style="
+                                        font-variation-settings: &quot;FILL&quot;
+                                            1;
+                                    "
+                                    >warning</span
+                                >
+                            </div>
+                            <div>
+                                <h3
+                                    class="font-bold text-lg font-headline text-on-surface leading-tight mb-1"
+                                    style=""
+                                >
+                                    Missing Requirements
+                                </h3>
+                                <p
+                                    class="text-sm text-on-surface-variant mb-4"
+                                    style=""
+                                >
+                                    Your Semester 2 grade report is pending
+                                    verification. Please upload the PDF by
+                                    Friday.
+                                </p>
+                                <button
+                                    class="bg-on-surface text-surface px-4 py-2 rounded-full text-xs font-bold hover:opacity-90 transition-all"
+                                    style=""
+                                >
+                                    Upload Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Info Card -->
+                    <div
+                        class="bg-surface-container-lowest rounded-[28px] p-6 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow"
+                    >
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="p-3 rounded-2xl bg-primary-fixed text-primary"
+                            >
+                                <span
+                                    class="material-symbols-outlined text-[32px]"
+                                    style="
+                                        font-variation-settings: &quot;FILL&quot;
+                                            1;
+                                    "
+                                    >payments</span
+                                >
+                            </div>
+                            <div>
+                                <h3
+                                    class="font-bold text-lg font-headline text-on-surface leading-tight mb-1"
+                                    style=""
+                                >
+                                    Stipend Scheduled
+                                </h3>
+                                <p
+                                    class="text-sm text-on-surface-variant mb-1"
+                                    style=""
+                                >
+                                    Processing for October allowance has begun.
+                                    Expected arrival: Oct 15.
+                                </p>
+                                <p
+                                    class="text-[10px] font-bold uppercase tracking-widest text-primary"
+                                    style=""
+                                >
+                                    Reference: #EST-9920
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Status Summary Card (Decorative Bento) -->
+                    <div
+                        class="bg-primary text-on-primary rounded-[32px] p-8 shadow-lg relative overflow-hidden"
+                    >
+                        <div
+                            class="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"
+                        ></div>
+                        <div class="relative z-10">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-2 block"
+                                style=""
+                                >Grantee Compliance</span
+                            >
+                            <div
+                                class="text-4xl font-extrabold font-headline mb-4"
+                                style=""
+                            >
+                                92%
+                            </div>
+                            <div
+                                class="w-full bg-white/20 h-1.5 rounded-full overflow-hidden mb-4"
+                            >
+                                <div
+                                    class="bg-white h-full w-[92%] rounded-full"
+                                ></div>
+                            </div>
+                            <p class="text-xs opacity-90 font-medium" style="">
+                                Keep it up! Complete your pending requirements
+                                to reach 100% standing.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section 2: Evaluator Remarks -->
+                <section class="lg:col-span-7">
+                    <div class="flex items-center justify-between mb-4 px-2">
+                        <h2
+                            class="text-xs font-bold font-label uppercase tracking-widest text-on-surface-variant"
+                            style=""
+                        >
+                            Evaluator Remarks
+                        </h2>
+                        <button
+                            class="text-primary text-xs font-bold flex items-center gap-1"
+                            style=""
+                        >
+                            Mark all read
+                            <span
+                                class="material-symbols-outlined text-sm"
+                                style=""
+                                >done_all</span
+                            >
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <!-- Unread Message -->
+                        <div
+                            class="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-transparent hover:border-primary-fixed transition-colors"
+                        >
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-surface-container-high overflow-hidden border-2 border-primary/10"
+                                    >
+                                        <img
+                                            alt="Dr. Helena Vance"
+                                            class=""
+                                            data-alt="professional portrait of an elderly female professor with gray hair and elegant glasses in a sunlit university office"
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_SkJxjF_sHXdmyIGHYpQS4zfhu-aYpBe9cJD7Xz7ZgZt1tWQCFQBgx8UcPkMMu55sLgWTMmHu-Ui3yqwfYpaynLbqGBBLqEChozn2aH8x_mGgVjQLjQTc1KEHh6s-mKJ0Jp2C0WiAxQEEZ3mtXX8D3UoGTbFxAAWTIwWprBfWhm1o-hk4Kv23e5AOOCKe6yb16lb6bhFM6W4SgZZ9ipQlODmkpNN3mEqX6i62T8-xZocSzr2k6s85KmYGRHvcUfDNoyxsae5CcwA"
+                                            style=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div
+                                        class="flex justify-between items-start mb-2"
+                                    >
+                                        <div>
+                                            <h4
+                                                class="font-bold text-on-surface font-headline"
+                                                style=""
+                                            >
+                                                Dr. Helena Vance
+                                            </h4>
+                                            <p
+                                                class="text-[10px] text-primary font-bold uppercase tracking-wider"
+                                                style=""
+                                            >
+                                                Research Supervisor
+                                            </p>
+                                        </div>
+                                        <span
+                                            class="text-[10px] text-on-surface-variant font-medium"
+                                            style=""
+                                            >10:45 AM</span
+                                        >
+                                    </div>
+                                    <p
+                                        class="text-sm text-on-surface mb-4 leading-relaxed"
+                                        style=""
+                                    >
+                                        I've reviewed your thesis proposal on
+                                        "Quantum Dynamics in Biological
+                                        Systems". The methodology section is
+                                        robust, but please clarify the sampling
+                                        size in Table 2. Excellent progress so
+                                        far.
+                                    </p>
+                                    <div class="flex items-center gap-3">
+                                        <button
+                                            class="flex items-center gap-2 bg-surface-container text-on-surface-variant px-5 py-2 rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all scale-95 active:duration-150"
+                                            style=""
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-sm"
+                                                style=""
+                                                >reply</span
+                                            >
+                                            Reply
+                                        </button>
+                                        <button
+                                            class="p-2 text-on-surface-variant hover:text-primary transition-colors"
+                                            style=""
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-sm"
+                                                style=""
+                                                >bookmark</span
+                                            >
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Read Message -->
+                        <div
+                            class="bg-surface-container-low rounded-[32px] p-6 opacity-80 group"
+                        >
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-surface-container-highest overflow-hidden filter grayscale opacity-60"
+                                    >
+                                        <img
+                                            alt="Marcus Ling"
+                                            class=""
+                                            data-alt="close-up portrait of a young male academic administrator with a modern workspace background"
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpo-uCTXmqZ2uMemb1yC9pcDbi1743PIq64h4dzaH6elfs2vWSStx4PxrRVvCB0FKflKjZMo4-P8WsamzIkTzjyiUtl0b22m4CZ2xhx33akYWv-5bZy_t3C8OpNYv2EELZQ2qRPpiU-Zux-MBX27WldervUCd8w0oVNciqW9ZkHSsF5rZM_jNgAQv1aUgqrD1smnAwt6kJejuW_sgnFT0eu4_39jUb4IpXi8R3pB6nX_OBANG9omKwSboSl6NSK1riLTPIDU1POAY"
+                                            style=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div
+                                        class="flex justify-between items-start mb-2"
+                                    >
+                                        <div>
+                                            <h4
+                                                class="font-bold text-on-surface font-headline"
+                                                style=""
+                                            >
+                                                Marcus Ling
+                                            </h4>
+                                            <p
+                                                class="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider"
+                                                style=""
+                                            >
+                                                Administrative Officer
+                                            </p>
+                                        </div>
+                                        <span
+                                            class="text-[10px] text-on-surface-variant font-medium"
+                                            style=""
+                                            >Yesterday</span
+                                        >
+                                    </div>
+                                    <p
+                                        class="text-sm text-on-surface-variant mb-4 leading-relaxed"
+                                        style=""
+                                    >
+                                        Your community service hours have been
+                                        successfully logged. You have 12 hours
+                                        remaining for this academic cycle.
+                                    </p>
+                                    <button
+                                        class="flex items-center gap-2 bg-surface-container-highest text-on-surface-variant px-5 py-2 rounded-full text-xs font-bold hover:bg-primary-container hover:text-on-primary-container transition-all scale-95 active:duration-150"
+                                        style=""
+                                    >
+                                        <span
+                                            class="material-symbols-outlined text-sm"
+                                            style=""
+                                            >reply</span
+                                        >
+                                        Reply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Another Message -->
+                        <div
+                            class="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-transparent hover:border-primary-fixed transition-colors"
+                        >
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-surface-container-high overflow-hidden border-2 border-primary/10"
+                                    >
+                                        <img
+                                            alt="Anita Moreno"
+                                            class=""
+                                            data-alt="close-up of a middle-aged hispanic female scholar with a warm smile in a brightly lit academic setting"
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsH6ZIGPUhT08ot8A1b24Ah6ZaLKVnXtKpGI7SgUufZ_Jydwb_8S_J0vy28yCuCTW2JBxRV2BXNSaJvaawkt4HhsyuOaOTIKm1k4tzQWLBj2qQBFcUZp4XWcKfDJLbkQeIg-M0Yi38DD_hcGkv6o1Jo5L-jiafijKhHSQTVHbEM6YytDhO6i3uGqOrC-U6BIqPSPOD0RSSPnOPwNAi0VV4tsV9pG7-ihRoIvSH9tiMrJebn5TSJ0-himwu2YCu_9nmuptk-RVKrnc"
+                                            style=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div
+                                        class="flex justify-between items-start mb-2"
+                                    >
+                                        <div>
+                                            <h4
+                                                class="font-bold text-on-surface font-headline"
+                                                style=""
+                                            >
+                                                Anita Moreno
+                                            </h4>
+                                            <p
+                                                class="text-[10px] text-on-tertiary-fixed-variant font-bold uppercase tracking-wider"
+                                                style=""
+                                            >
+                                                Dean of Students
+                                            </p>
+                                        </div>
+                                        <span
+                                            class="text-[10px] text-on-surface-variant font-medium"
+                                            style=""
+                                            >Oct 02</span
+                                        >
+                                    </div>
+                                    <p
+                                        class="text-sm text-on-surface mb-4 leading-relaxed"
+                                        style=""
+                                    >
+                                        Congratulations on making the Dean's
+                                        List for the third consecutive time. We
+                                        would like to invite you to the Honors
+                                        Breakfast next Monday.
+                                    </p>
+                                    <div class="flex items-center gap-3">
+                                        <button
+                                            class="flex items-center gap-2 bg-surface-container text-on-surface-variant px-5 py-2 rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all scale-95 active:duration-150"
+                                            style=""
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-sm"
+                                                style=""
+                                                >reply</span
+                                            >
+                                            Reply
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <!-- Bottom Navigation Bar -->
+        <nav
+            class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-white/80 dark:bg-emerald-900/80 backdrop-blur-2xl shadow-xl rounded-t-[32px]"
+        >
+            <a
+                class="flex flex-col items-center justify-center text-emerald-800/50 dark:text-emerald-200/50 px-6 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-800/50 transition-all"
+                href="dashboard.html"
+            >
+                <span class="material-symbols-outlined" data-icon="home"
+                    >home</span
+                >
+                <span
+                    class="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1"
+                    >Home</span
+                >
+            </a>
+            <!-- Active State: Inbox -->
+            <a
+                class="flex flex-col items-center justify-center bg-emerald-100 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-50 rounded-full px-6 py-2 transition-all active-nav"
+                href="inbox.html"
+            >
+                <span class="material-symbols-outlined" data-icon="mail"
+                    >mail</span
+                >
+                <span
+                    class="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1"
+                    >Inbox</span
+                >
+            </a>
+            <a
+                class="flex flex-col items-center justify-center text-emerald-800/50 dark:text-emerald-200/50 px-6 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-800/50 transition-all"
+                href="profile.html"
+            >
+                <span class="material-symbols-outlined" data-icon="person"
+                    >person</span
+                >
+                <span
+                    class="font-['Plus_Jakarta_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1"
+                    >Profile</span
+                >
+            </a>
+        </nav>
+    </body>
+</html>

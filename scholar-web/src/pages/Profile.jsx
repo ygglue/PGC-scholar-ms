@@ -1,33 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
+import { useApiCache } from '../hooks/useApiCache';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+  const { data: profile } = useApiCache('profile', 'http://localhost:8000/scholars/me');
   
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [submitStatus, setSubmitStatus] = useState(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:8000/scholars/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setProfile(res.data);
-      } catch (err) {
-         if (err.response && err.response.status === 401) {
-             localStorage.removeItem('token');
-             navigate('/login');
-         }
-      }
-    };
-    fetchProfile();
-  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');

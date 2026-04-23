@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import '../index.css';
+import { clearCache } from '../hooks/useApiCache';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Login = () => {
         id_token: credentialResponse.credential
       });
       localStorage.setItem('token', res.data.access_token);
+      clearCache();
       navigate('/');
     } catch (err) {
       alert("Login failed! Ensure your backend is running and scholar account exists.");
@@ -31,8 +33,8 @@ const Login = () => {
         email: "scholar@test.com"
       });
       localStorage.setItem('token', res.data.access_token);
+      clearCache();
       navigate('/');
-      window.location.reload();
     } catch (err) {
       alert("Dev Login failed!");
     }

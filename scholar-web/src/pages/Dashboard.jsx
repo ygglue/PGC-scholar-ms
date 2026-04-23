@@ -1,36 +1,18 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
+import { useApiCache } from '../hooks/useApiCache';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
-  const [documents, setDocuments] = useState([]);
   
+  const { data: profile } = useApiCache('profile', 'http://localhost:8000/scholars/me');
+  const { data: documents, fetcher: fetchDocuments } = useApiCache('documents', 'http://localhost:8000/documents/me');
+
   const fileInputRef = useRef(null);
   const [uploadTarget, setUploadTarget] = useState(null);
   const [uploadStatus, setUploadStatus] = useState({});
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const [profRes, docRes] = await Promise.all([
-            axios.get('http://localhost:8000/scholars/me', { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get('http://localhost:8000/documents/me', { headers: { Authorization: `Bearer ${token}` } })
-        ]);
-        setProfile(profRes.data);
-        setDocuments(docRes.data);
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          localStorage.removeItem('token');
-          navigate('/login');
-        }
-      }
-    };
-    fetchData();
-  }, [navigate]);
 
   const triggerUpload = (docType) => {
       setUploadTarget(docType);
@@ -56,8 +38,7 @@ const Dashboard = () => {
           });
           setUploadStatus(prev => ({ ...prev, [uploadTarget]: 'success' }));
           
-          const docRes = await axios.get('http://localhost:8000/documents/me', { headers: { Authorization: `Bearer ${token}` } });
-          setDocuments(docRes.data);
+          await fetchDocuments();
       } catch(err) {
           setUploadStatus(prev => ({ ...prev, [uploadTarget]: 'error' }));
       } finally {
@@ -75,7 +56,7 @@ const Dashboard = () => {
       } catch (err) { }
   };
 
-  if (!profile) return (
+  if (!profile || !documents) return (
     <Layout>
       <div className="flex justify-center items-center h-[60vh] text-primary">Loading interface...</div>
     </Layout>
@@ -143,6 +124,27 @@ const Dashboard = () => {
                className="bg-primary text-on-primary px-4 py-2 rounded-full text-xs font-bold shadow-md hover:bg-primary-container transition-colors scale-95 active:duration-150"
                style={{opacity: uploadStatus['ROG'] === 'uploading' ? 0.7 : 1}}>
                  {uploadStatus['ROG'] === 'uploading' ? 'Uploading...' : uploadStatus['ROG'] === 'success' ? 'Uploaded!' : 'Upload'}
+            </button>
+          </div>
+          
+          {/* Optional Letter Bin */}
+          <div className="bg-surface-container/50 border-2 border-dashed border-outline-variant p-5 rounded-[28px] flex items-center gap-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant shrink-0">
+              <span className="material-symbols-outlined">mail</span>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h5 className="text-sm font-bold text-on-surface">Personal Letter</h5>
+                <span className="text-[10px] text-on-surface-variant/60 font-medium italic">Optional</span>
+              </div>
+              <p className="text-xs text-on-surface-variant">Update the board on your progress</p>
+            </div>
+            <button 
+               onClick={() => triggerUpload('LETTER')}
+               disabled={uploadStatus['LETTER'] === 'uploading'}
+               className="text-primary hover:bg-primary-fixed px-4 py-2 rounded-full text-xs font-bold transition-colors scale-95 active:duration-150"
+               style={{opacity: uploadStatus['LETTER'] === 'uploading' ? 0.7 : 1}}>
+                 {uploadStatus['LETTER'] === 'uploading' ? 'Uploading...' : uploadStatus['LETTER'] === 'success' ? 'Uploaded!' : 'Upload'}
             </button>
           </div>
         </div>
