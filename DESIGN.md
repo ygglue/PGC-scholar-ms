@@ -1,4 +1,4 @@
-# Design System Document: The Academic Luminary
+# Design System Document: PGC-Scholar Management System
 
 ## 1. Overview & Creative North Star
 This design system is built for a premier scholar management portal, moving beyond the utilitarian look of standard administrative tools to create a space that feels prestigious, nurturing, and high-performance. 
