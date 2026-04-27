@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluator App Preview - PalawanPay Theme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#2DC84D',
+                        brand_dark: '#0B7230',
+                        bg_main: '#FFFFFF',
+                        surface_light: '#F5F5F5',
+                        surface_subtle: '#FAFAFA',
+                        text_dark: '#1A1A2E',
+                        text_mid: 'rgba(0, 0, 0, 0.55)',
+                        gold: '#FFB800',
+                        red_alert: '#E53935',
+                        border_color: '#E0E0E0'
+                    },
+                    fontFamily: {
+                        sans: ['"Poppins"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
+                        'brand': '0 4px 20px rgba(11, 114, 48, 0.35)',
+                        'modal': '0 -4px 24px rgba(0, 0, 0, 0.16)'
+                    },
+                    backgroundImage: {
+                        'brand-gradient': 'linear-gradient(135deg, #2DC84D 0%, #0B7230 100%)',
+                        'gold-gradient': 'linear-gradient(135deg, #FFB800 0%, #FF8C00 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #FFFFFF; color: #1A1A2E; }
+        
+        /* Tab Switching Logic */
+        .tab-content { display: none; }
+        .tab-content.active { display: flex; }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col overflow-hidden bg-surface_light">
+
+    <!-- Top Debug / Tab Switcher -->
+    <div class="bg-white border-b border-border_color p-4 flex gap-4 shadow-sm z-50 shrink-0">
+        <span class="font-bold text-brand flex items-center mr-4">PREVIEW:</span>
+        <button onclick="switchTab('login')" class="tab-btn px-4 py-2 rounded-full font-semibold text-sm bg-brand text-white cursor-pointer transition-colors">Login</button>
+        <button onclick="switchTab('documents')" class="tab-btn px-4 py-2 rounded-full font-semibold text-sm bg-surface_light text-text_dark hover:bg-border_color cursor-pointer transition-colors">Pending Documents</button>
+        <button onclick="switchTab('requests')" class="tab-btn px-4 py-2 rounded-full font-semibold text-sm bg-surface_light text-text_dark hover:bg-border_color cursor-pointer transition-colors">Profile Requests</button>
+        <button onclick="switchTab('directory')" class="tab-btn px-4 py-2 rounded-full font-semibold text-sm bg-surface_light text-text_dark hover:bg-border_color cursor-pointer transition-colors">Directory</button>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="flex-1 relative w-full h-full bg-surface_light overflow-hidden flex justify-center p-6">
+        
+        <!-- App Window Container (Mocking a fixed desktop window) -->
+        <div class="w-full max-w-[1200px] h-[800px] bg-white rounded-2xl shadow-modal flex overflow-hidden relative">
+
+            <!-- 1. LOGIN SCREEN -->
+            <div id="login" class="tab-content active absolute inset-0 items-center justify-center bg-surface_light">
+                <div class="w-full max-w-md bg-white rounded-[16px] shadow-card p-10 flex flex-col gap-6">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-brand-gradient rounded-full mx-auto flex items-center justify-center mb-4 shadow-brand">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h1 class="font-bold text-2xl text-text_dark">Evaluator Portal</h1>
+                        <p class="text-text_mid text-sm mt-1">Sign in with your staff credentials</p>
+                    </div>
+                    
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <p class="text-sm font-medium mb-1 text-text_dark">Email Address</p>
+                            <input type="email" placeholder="example@pgc.gov" class="w-full bg-white text-text_dark rounded-[10px] px-4 py-3 outline-none focus:ring-1 focus:ring-brand focus:border-brand transition-all border-[1.5px] border-border_color">
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium mb-1 text-text_dark">Password</p>
+                            <input type="password" placeholder="••••••••" class="w-full bg-white text-text_dark rounded-[10px] px-4 py-3 outline-none focus:ring-1 focus:ring-brand focus:border-brand transition-all border-[1.5px] border-border_color">
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-brand hover:bg-[#26B343] text-white font-semibold rounded-[24px] py-[14px] mt-4 transition-colors cursor-pointer transform hover:scale-[0.98]">
+                        Secure Sign In
+                    </button>
+                </div>
+            </div>
+
+            <!-- APP SHELL FOR DASHBOARD VIEWS -->
+            <div id="app-shell" class="hidden flex-1 flex h-full">
+                <!-- Sidebar -->
+                <div class="w-[280px] bg-white border-r border-border_color flex flex-col h-full z-10 shadow-card">
+                    <div class="p-8 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-brand-gradient rounded-full flex items-center justify-center shadow-brand shrink-0">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <span class="font-bold text-xl text-text_dark leading-tight">PGC-Scholar<br><span class="text-brand">Evaluator</span></span>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2 px-4 flex-1 mt-4">
+                        <button class="flex items-center gap-3 px-4 py-3 bg-surface_light text-brand rounded-[12px] font-semibold cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Pending Documents
+                        </button>
+                        <button class="flex items-center gap-3 px-4 py-3 text-text_dark hover:bg-surface_subtle rounded-[12px] font-medium cursor-pointer transition-colors">
+                            <svg class="w-5 h-5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Profile Requests
+                        </button>
+                        <button class="flex items-center gap-3 px-4 py-3 text-text_dark hover:bg-surface_subtle rounded-[12px] font-medium cursor-pointer transition-colors">
+                            <svg class="w-5 h-5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Directory
+                        </button>
+                    </div>
+
+                    <div class="p-4 mt-auto border-t border-border_color">
+                        <div class="flex items-center gap-3 px-4 py-3">
+                            <div class="w-8 h-8 rounded-full bg-surface_light overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name=Evaluator&background=F5F5F5&color=1A1A2E" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-bold text-text_dark">Admin Evaluator</p>
+                            </div>
+                            <button class="text-red_alert hover:bg-red-50 p-2 rounded-full transition-colors cursor-pointer">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="flex-1 h-full bg-surface_subtle overflow-y-auto relative p-8">
+                    
+                    <!-- 2. PENDING DOCUMENTS -->
+                    <div id="documents" class="tab-content flex-col h-full gap-6">
+                        <div class="bg-brand-gradient rounded-[16px] shadow-brand p-8 text-white relative overflow-hidden shrink-0">
+                            <div class="relative z-10">
+                                <h2 class="font-bold text-2xl">Pending Document Verification</h2>
+                                <p class="text-white/80 mt-1">You have 12 documents awaiting review</p>
+                            </div>
+                            <!-- Decorative background circle -->
+                            <div class="absolute -right-10 -bottom-20 w-64 h-64 bg-white/10 rounded-full blur-2xl"></div>
+                        </div>
+                        
+                        <div class="flex flex-1 gap-6 min-h-0">
+                            <!-- List -->
+                            <div class="flex-[1] bg-white rounded-[12px] shadow-card overflow-y-auto flex flex-col border border-border_color">
+                                <div class="p-4 border-b border-border_color hover:bg-surface_light cursor-pointer transition-colors bg-surface_light">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <p class="font-bold text-base text-text_dark">Juan Dela Cruz</p>
+                                        <span class="w-2 h-2 rounded-full bg-red_alert mt-1.5"></span>
+                                    </div>
+                                    <p class="text-sm text-text_mid">Certificate of Registration (COR)</p>
+                                    <p class="text-xs text-text_mid mt-2">2 hours ago</p>
+                                </div>
+                                <div class="p-4 border-b border-border_color hover:bg-surface_light cursor-pointer transition-colors">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <p class="font-bold text-base text-text_dark">Maria Clara</p>
+                                    </div>
+                                    <p class="text-sm text-text_mid">Report of Grades (ROG)</p>
+                                    <p class="text-xs text-text_mid mt-2">5 hours ago</p>
+                                </div>
+                            </div>
+
+                            <!-- Detail Panel -->
+                            <div class="flex-[1.8] bg-white rounded-[12px] shadow-card p-6 flex flex-col gap-6 border border-border_color">
+                                <div class="flex justify-between items-center pb-4 border-b border-border_color">
+                                    <div>
+                                        <h3 class="font-bold text-xl text-text_dark">Juan Dela Cruz</h3>
+                                        <p class="text-sm text-text_mid mt-1">Reviewing: Certificate of Registration</p>
+                                    </div>
+                                    <button class="text-brand font-semibold text-sm hover:underline cursor-pointer">View Scholar Profile →</button>
+                                </div>
+                                
+                                <!-- PDF Placeholder -->
+                                <div class="flex-1 bg-surface_light rounded-[8px] flex items-center justify-center border-[1.5px] border-border_color min-h-[300px]">
+                                    <div class="text-center opacity-50">
+                                        <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                        <p class="font-bold text-text_dark">Document Preview</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 pt-4 border-t border-border_color mt-auto">
+                                    <button class="flex-1 bg-white border-[1.5px] border-red_alert text-red_alert hover:bg-red-50 font-semibold py-[14px] rounded-[24px] transition-colors cursor-pointer">Reject</button>
+                                    <button class="flex-1 bg-brand hover:bg-[#26B343] text-white font-semibold py-[14px] rounded-[24px] shadow-card transition-colors cursor-pointer transform hover:scale-[0.98]">Verify Document</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. PROFILE REQUESTS -->
+                    <div id="requests" class="tab-content flex-col h-full gap-6">
+                        <div class="bg-brand-gradient rounded-[16px] shadow-brand p-8 text-white relative overflow-hidden shrink-0">
+                            <div class="relative z-10">
+                                <h2 class="font-bold text-2xl">Profile Update Requests</h2>
+                                <p class="text-white/80 mt-1">Review scholar-initiated data changes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-1 gap-6 min-h-0">
+                            <div class="flex-[1] bg-white rounded-[12px] shadow-card overflow-y-auto flex flex-col border border-border_color">
+                                <div class="p-4 border-b border-border_color hover:bg-surface_light cursor-pointer transition-colors bg-surface_light">
+                                    <p class="font-bold text-base text-text_dark">Andres Bonifacio</p>
+                                    <p class="text-sm text-text_mid mt-1">Contact Information Update</p>
+                                    <p class="text-xs text-text_mid mt-2">1 hour ago</p>
+                                </div>
+                                <div class="p-4 border-b border-border_color hover:bg-surface_light cursor-pointer transition-colors">
+                                    <p class="font-bold text-base text-text_dark">Emilio Aguinaldo</p>
+                                    <p class="text-sm text-text_mid mt-1">Bank Details Update</p>
+                                    <p class="text-xs text-text_mid mt-2">3 hours ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-[1.8] bg-white rounded-[12px] shadow-card p-6 flex flex-col gap-6 border border-border_color">
+                                <h3 class="font-bold text-xl text-text_dark pb-4 border-b border-border_color">Review Changes</h3>
+                                
+                                <!-- Diff View -->
+                                <div class="flex flex-col gap-4 flex-1">
+                                    <div class="bg-surface_light rounded-[10px] p-4 border border-border_color">
+                                        <p class="text-xs font-bold text-text_mid uppercase tracking-wider mb-3">Field: Phone Number</p>
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-1 bg-white border border-red-200 text-red_alert p-3 rounded-[8px] text-sm line-through">
+                                                09123456789
+                                            </div>
+                                            <svg class="w-5 h-5 text-text_mid" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                            <div class="flex-1 bg-white border border-green-200 text-brand_dark p-3 rounded-[8px] text-sm font-bold shadow-sm">
+                                                09987654321
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 pt-4 border-t border-border_color mt-auto">
+                                    <button class="flex-1 bg-white border-[1.5px] border-red_alert text-red_alert hover:bg-red-50 font-semibold py-[14px] rounded-[24px] transition-colors cursor-pointer">Deny Changes</button>
+                                    <button class="flex-1 bg-brand hover:bg-[#26B343] text-white font-semibold py-[14px] rounded-[24px] shadow-card transition-colors cursor-pointer transform hover:scale-[0.98]">Approve All</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. DIRECTORY -->
+                    <div id="directory" class="tab-content flex-col h-full gap-6">
+                        <div class="flex justify-between items-center shrink-0">
+                            <h2 class="font-bold text-2xl text-text_dark">Scholar Directory</h2>
+                            <div class="relative w-80">
+                                <input type="text" placeholder="Search scholars..." class="w-full bg-white border-[1.5px] border-border_color rounded-[10px] py-[10px] px-4 pl-10 focus:outline-none focus:border-brand transition-colors text-sm">
+                                <svg class="w-5 h-5 absolute left-3 top-[11px] text-text_mid" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="flex gap-3 shrink-0 overflow-x-auto pb-2">
+                            <button class="bg-brand text-white px-5 py-[8px] rounded-full text-sm font-semibold cursor-pointer shrink-0 shadow-card">All Scholars</button>
+                            <button class="bg-white border-[1.5px] border-border_color text-text_dark hover:bg-surface_light px-5 py-[8px] rounded-full text-sm font-medium cursor-pointer transition-colors shrink-0">Active</button>
+                            <button class="bg-white border-[1.5px] border-border_color text-text_dark hover:bg-surface_light px-5 py-[8px] rounded-full text-sm font-medium cursor-pointer transition-colors shrink-0">Suspended</button>
+                            <button class="bg-white border-[1.5px] border-border_color text-text_dark hover:bg-surface_light px-5 py-[8px] rounded-full text-sm font-medium cursor-pointer transition-colors shrink-0">Graduated</button>
+                        </div>
+
+                        <!-- Table area -->
+                        <div class="bg-white rounded-[12px] shadow-card flex-1 overflow-auto border border-border_color">
+                            <table class="w-full text-left border-collapse min-w-[800px]">
+                                <thead>
+                                    <tr class="bg-surface_light border-b border-border_color text-xs uppercase text-text_mid">
+                                        <th class="p-4 font-semibold">Scholar</th>
+                                        <th class="p-4 font-semibold">Course / Batch</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-border_color hover:bg-surface_subtle transition-colors">
+                                        <td class="p-4 flex items-center gap-3">
+                                            <div class="w-[40px] h-[40px] rounded-full bg-surface_light shrink-0 overflow-hidden flex items-center justify-center text-text_mid">JC</div>
+                                            <span class="font-bold text-text_dark">Juan Dela Cruz</span>
+                                        </td>
+                                        <td class="p-4 text-text_dark text-sm">BS Computer Science<br><span class="text-text_mid text-xs">Batch 2024</span></td>
+                                        <td class="p-4">
+                                            <span class="inline-flex items-center gap-1.5 bg-green-50 text-brand_dark px-2.5 py-1 rounded-[6px] text-xs font-bold border border-green-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <button class="text-brand font-semibold text-sm hover:underline cursor-pointer">View Profile</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-border_color hover:bg-surface_subtle transition-colors">
+                                        <td class="p-4 flex items-center gap-3">
+                                            <div class="w-[40px] h-[40px] rounded-full bg-surface_light shrink-0 overflow-hidden flex items-center justify-center text-text_mid">MC</div>
+                                            <span class="font-bold text-text_dark">Maria Clara</span>
+                                        </td>
+                                        <td class="p-4 text-text_dark text-sm">BS Nursing<br><span class="text-text_mid text-xs">Batch 2023</span></td>
+                                        <td class="p-4">
+                                            <span class="inline-flex items-center gap-1.5 bg-green-50 text-brand_dark px-2.5 py-1 rounded-[6px] text-xs font-bold border border-green-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <button class="text-brand font-semibold text-sm hover:underline cursor-pointer">View Profile</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-surface_subtle transition-colors">
+                                        <td class="p-4 flex items-center gap-3">
+                                            <div class="w-[40px] h-[40px] rounded-full bg-surface_light shrink-0 overflow-hidden flex items-center justify-center text-text_mid">AM</div>
+                                            <span class="font-bold text-text_dark">Apolinario Mabini</span>
+                                        </td>
+                                        <td class="p-4 text-text_dark text-sm">BA History<br><span class="text-text_mid text-xs">Batch 2022</span></td>
+                                        <td class="p-4">
+                                            <span class="inline-flex items-center gap-1.5 bg-red-50 text-red_alert px-2.5 py-1 rounded-[6px] text-xs font-bold border border-red-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red_alert"></span>
+                                                Suspended
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <button class="text-brand font-semibold text-sm hover:underline cursor-pointer">View Profile</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand', 'text-white');
+                btn.classList.add('bg-surface_light', 'text-text_dark');
+            });
+            event.target.classList.remove('bg-surface_light', 'text-text_dark');
+            event.target.classList.add('bg-brand', 'text-white');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Toggle App Shell visibility depending on if it's login or dashboard view
+            const shell = document.getElementById('app-shell');
+            if(tabId === 'login') {
+                shell.classList.add('hidden');
+                document.getElementById(tabId).classList.add('active');
+            } else {
+                shell.classList.remove('hidden');
+                document.getElementById(tabId).classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

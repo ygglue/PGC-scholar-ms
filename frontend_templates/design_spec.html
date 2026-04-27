@@ -1,0 +1,640 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .spec { padding: 0 0 2rem; }
+  .section { margin-bottom: 2.5rem; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 140px; }
+
+  /* Color swatch */
+  .swatch-group { display: flex; flex-direction: column; }
+  .swatch { height: 48px; border-radius: 8px 8px 0 0; }
+  .swatch-info {
+    padding: 8px 10px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background: var(--color-background-primary);
+  }
+  .swatch-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .swatch-hex { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+  .swatch-role { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  /* Gradient strip */
+  .grad-strip { height: 56px; border-radius: 8px; margin-bottom: 8px; }
+  .grad-info { display: flex; justify-content: space-between; align-items: baseline; }
+  .grad-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .grad-value { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+
+  /* Type row */
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta { width: 180px; flex-shrink: 0; }
+  .type-role { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); }
+  .type-spec { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+  .type-sample { color: var(--color-text-primary); line-height: 1; }
+
+  /* Spacing scale */
+  .space-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .space-row:last-child { border-bottom: none; }
+  .space-bar-wrap { width: 200px; }
+  .space-bar { height: 8px; border-radius: 2px; background: #2DC84D; }
+  .space-token { font-size: 11px; font-weight: 500; width: 70px; color: var(--color-text-primary); font-family: var(--font-mono); }
+  .space-val { font-size: 11px; color: var(--color-text-tertiary); width: 36px; }
+  .space-use { font-size: 11px; color: var(--color-text-secondary); }
+
+  /* Radius */
+  .radius-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .radius-row:last-child { border-bottom: none; }
+  .radius-box {
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid #2DC84D;
+    flex-shrink: 0;
+  }
+  .radius-info { flex: 1; }
+  .radius-val { font-size: 12px; font-weight: 500; color: var(--color-text-primary); font-family: var(--font-mono); }
+  .radius-use { font-size: 11px; color: var(--color-text-secondary); }
+
+  /* Elevation */
+  .elevation-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .elevation-row:last-child { border-bottom: none; }
+  .elev-swatch {
+    width: 52px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--color-background-primary);
+    flex-shrink: 0;
+  }
+  .elev-info { flex: 1; }
+  .elev-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .elev-val { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); margin-top: 2px; }
+
+  /* Component specs */
+  .comp-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .comp-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    font-size: 12px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-prop { color: var(--color-text-secondary); }
+  .spec-val { color: var(--color-text-primary); font-family: var(--font-mono); font-size: 11px; }
+
+  /* Grid for components */
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .comp-grid { grid-template-columns: 1fr; } }
+
+  /* Icon sample */
+  .icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  /* Divider */
+  .divider { height: 0.5px; background: var(--color-border-tertiary); margin: 2rem 0; }
+</style>
+
+<div class="spec">
+
+  <div class="section">
+    <div class="section-label">Color — primary</div>
+    <div class="row">
+      <div class="swatch-group">
+        <div class="swatch" style="background:#2DC84D;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">PalawanPay Green</div>
+          <div class="swatch-hex">#2DC84D</div>
+          <div class="swatch-role">Primary brand, CTAs, active nav, links</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#0B7230;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Deep Green</div>
+          <div class="swatch-hex">#0B7230</div>
+          <div class="swatch-role">Gradient terminus, dark surface tint</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#1A8A3A;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Mid Green</div>
+          <div class="swatch-hex">#1A8A3A</div>
+          <div class="swatch-role">Gradient mid-stop, promo banner start</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#F5F5F5; border: 0.5px solid #E0E0E0;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Surface Light</div>
+          <div class="swatch-hex">#F5F5F5</div>
+          <div class="swatch-role">Service icon circle bg, secondary surface</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Color — accent & semantic</div>
+    <div class="row">
+      <div class="swatch-group">
+        <div class="swatch" style="background:#FFB800;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold</div>
+          <div class="swatch-hex">#FFB800</div>
+          <div class="swatch-role">Points coin, QR button only</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#FF8C00;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold Deep</div>
+          <div class="swatch-hex">#FF8C00</div>
+          <div class="swatch-role">QR gradient terminus</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#FF3B30;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Badge Red</div>
+          <div class="swatch-hex">#FF3B30</div>
+          <div class="swatch-role">"New" badge pill, notification dot</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#E53935;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Error / Upsell Red</div>
+          <div class="swatch-hex">#E53935</div>
+          <div class="swatch-role">Form errors, "Upgrade Now" link</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Color — text</div>
+    <div class="row">
+      <div class="swatch-group">
+        <div class="swatch" style="background:#1A1A2E;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Text Dark</div>
+          <div class="swatch-hex">#1A1A2E</div>
+          <div class="swatch-role">Headings, labels on white</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:rgba(0,0,0,0.55); border-radius:8px 8px 0 0;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Text Mid</div>
+          <div class="swatch-hex">rgba(0,0,0,0.55)</div>
+          <div class="swatch-role">Captions, sublabels</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:#1A1A1A;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Ticker Dark</div>
+          <div class="swatch-hex">#1A1A1A</div>
+          <div class="swatch-role">Exchange rate ticker band bg</div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch" style="background:rgba(255,255,255,0.75); border:0.5px solid #E0E0E0; border-radius:8px 8px 0 0;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Text White Soft</div>
+          <div class="swatch-hex">rgba(255,255,255,0.75)</div>
+          <div class="swatch-role">Secondary text on gradient surfaces</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Gradients</div>
+
+    <div style="margin-bottom:16px;">
+      <div class="grad-strip" style="background:linear-gradient(135deg,#2DC84D 0%,#0B7230 100%);"></div>
+      <div class="grad-info">
+        <div class="grad-name">Balance card — primary brand surface</div>
+        <div class="grad-val">135deg · #2DC84D → #0B7230</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div class="grad-strip" style="background:linear-gradient(90deg,#1A8A3A 0%,#2DC84D 80%);"></div>
+      <div class="grad-info">
+        <div class="grad-name">Promo banners</div>
+        <div class="grad-val">90deg · #1A8A3A → #2DC84D</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="grad-strip" style="background:linear-gradient(135deg,#FFB800 0%,#FF8C00 100%); width:200px; border-radius:50px;"></div>
+      <div class="grad-info">
+        <div class="grad-name">QR tab button — gold</div>
+        <div class="grad-val">135deg · #FFB800 → #FF8C00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Typography</div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Balance display</div>
+        <div class="type-spec">36px / 700 / lh 1.1</div>
+      </div>
+      <div class="type-sample" style="font-size:36px;font-weight:700;color:#1A1A2E;">10,000.00</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Screen greeting / header</div>
+        <div class="type-spec">20px / 600 / lh 1.3</div>
+      </div>
+      <div class="type-sample" style="font-size:20px;font-weight:600;color:#1A1A2E;">Good Afternoon Bobby!</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Card label / button</div>
+        <div class="type-spec">14px / 600 / lh 1.4</div>
+      </div>
+      <div class="type-sample" style="font-size:14px;font-weight:600;color:#1A1A2E;">Cash In · View All Services</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Body / service label</div>
+        <div class="type-spec">14px / 400 / lh 1.5</div>
+      </div>
+      <div class="type-sample" style="font-size:14px;font-weight:400;color:#1A1A2E;">Send Money · Pay Bills</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Caption / tab label</div>
+        <div class="type-spec">12px / 400 / lh 1.4</div>
+      </div>
+      <div class="type-sample" style="font-size:12px;font-weight:400;color:rgba(0,0,0,0.55);">Transactions · Help · 1,200 PalawanPay Points</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Badge / notification</div>
+        <div class="type-spec">10px / 700 / lh 1.0</div>
+      </div>
+      <div class="type-sample">
+        <span style="font-size:10px;font-weight:700;background:#FF3B30;color:#fff;padding:3px 7px;border-radius:20px;">New</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-role">Ticker / exchange rate</div>
+        <div class="type-spec">13px / 400 / tracking 0</div>
+      </div>
+      <div class="type-sample" style="font-size:13px;font-weight:400;background:#1A1A1A;color:#fff;padding:4px 10px;border-radius:6px;display:inline-block;">CAD PHP 56.00</div>
+    </div>
+
+    <div style="margin-top:14px;padding:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);">
+      <div style="font-size:11px;color:var(--color-text-secondary);">Typeface: <span style="font-family:var(--font-mono)">Poppins</span> (primary) · <span style="font-family:var(--font-mono)">Inter</span> (fallback) · System sans as final fallback. Numeric amounts: <span style="font-family:var(--font-mono)">font-variant-numeric: tabular-nums</span> — prevents horizontal shift on live balance updates.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Spacing scale</div>
+    <div class="space-row">
+      <div class="space-token">sp-1</div>
+      <div class="space-val">4px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:8px;"></div></div>
+      <div class="space-use">Badge padding, tightest inner gap</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-2</div>
+      <div class="space-val">8px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:16px;"></div></div>
+      <div class="space-use">Icon-to-label gap, button vertical pad</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-3</div>
+      <div class="space-val">12px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:24px;"></div></div>
+      <div class="space-use">Card inner padding, grid gaps</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-4</div>
+      <div class="space-val">16px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:32px;"></div></div>
+      <div class="space-use">Screen edge gutter (all screens), card padding</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-5</div>
+      <div class="space-val">20px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:40px;"></div></div>
+      <div class="space-use">Balance card vertical padding</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-6</div>
+      <div class="space-val">24px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:48px;"></div></div>
+      <div class="space-use">Balance card horizontal padding, section separation</div>
+    </div>
+    <div class="space-row">
+      <div class="space-token">sp-7</div>
+      <div class="space-val">32px</div>
+      <div class="space-bar-wrap"><div class="space-bar" style="width:64px;"></div></div>
+      <div class="space-use">Between major screen zones</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Border radius</div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:50%;width:40px;height:40px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">50%</div>
+        <div class="radius-use">Service icon circles, avatar, floating QR button</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:24px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">24px</div>
+        <div class="radius-use">Primary CTA buttons (full pill)</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:20px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">20px</div>
+        <div class="radius-use">"New" badge pills</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:16px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">16px</div>
+        <div class="radius-use">Balance card</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:12px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">12px</div>
+        <div class="radius-use">Content cards, promo banners, modals, Cash In/Out buttons</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:10px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">10px</div>
+        <div class="radius-use">Input fields, dropdown selectors</div>
+      </div>
+    </div>
+    <div class="radius-row">
+      <div class="radius-box" style="border-radius:6px;"></div>
+      <div class="radius-info">
+        <div class="radius-val">6px</div>
+        <div class="radius-use">Small chips, exchange rate ticker band</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Elevation & shadow</div>
+
+    <div class="elevation-row">
+      <div class="elev-swatch" style="box-shadow:none;border:0.5px solid var(--color-border-tertiary);"></div>
+      <div class="elev-info">
+        <div class="elev-name">Flat — service icon container</div>
+        <div class="elev-val">none</div>
+      </div>
+    </div>
+    <div class="elevation-row">
+      <div class="elev-swatch" style="box-shadow:0 2px 8px rgba(0,0,0,0.08);"></div>
+      <div class="elev-info">
+        <div class="elev-name">Card lift — content cards, promo banners</div>
+        <div class="elev-val">0 2px 8px rgba(0,0,0,0.08)</div>
+      </div>
+    </div>
+    <div class="elevation-row">
+      <div class="elev-swatch" style="box-shadow:0 -1px 8px rgba(0,0,0,0.08);"></div>
+      <div class="elev-info">
+        <div class="elev-name">Bottom nav — top-edge shadow only</div>
+        <div class="elev-val">0 -1px 8px rgba(0,0,0,0.08)</div>
+      </div>
+    </div>
+    <div class="elevation-row">
+      <div class="elev-swatch" style="background:linear-gradient(135deg,#2DC84D,#0B7230);box-shadow:0 4px 20px rgba(11,114,48,0.35);"></div>
+      <div class="elev-info">
+        <div class="elev-name">Balance card — color-tinted ambient</div>
+        <div class="elev-val">0 4px 20px rgba(11,114,48,0.35)</div>
+      </div>
+    </div>
+    <div class="elevation-row">
+      <div class="elev-swatch" style="background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:50%;box-shadow:0 4px 12px rgba(255,184,0,0.45);"></div>
+      <div class="elev-info">
+        <div class="elev-name">QR button — gold-tinted glow</div>
+        <div class="elev-val">0 4px 12px rgba(255,184,0,0.45)</div>
+      </div>
+    </div>
+    <div class="elevation-row">
+      <div class="elev-swatch" style="box-shadow:0 -4px 24px rgba(0,0,0,0.16);"></div>
+      <div class="elev-info">
+        <div class="elev-name">Bottom sheet / modal</div>
+        <div class="elev-val">0 -4px 24px rgba(0,0,0,0.16)</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);">
+      <div style="font-size:11px;color:var(--color-text-secondary);">Shadow tinting rule: shadows on colored components use a tint from that component's color family — not neutral gray. Green surfaces get a green shadow; the gold QR button gets a gold shadow. This connects elevation to color identity.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Components — balance card</div>
+    <div class="comp-card">
+      <div class="comp-title">Balance card</div>
+      <div class="spec-row"><span class="spec-prop">Background</span><span class="spec-val">linear-gradient(135deg, #2DC84D → #0B7230)</span></div>
+      <div class="spec-row"><span class="spec-prop">Border radius</span><span class="spec-val">16px</span></div>
+      <div class="spec-row"><span class="spec-prop">Padding</span><span class="spec-val">20px 24px</span></div>
+      <div class="spec-row"><span class="spec-prop">Shadow</span><span class="spec-val">0 4px 20px rgba(11,114,48,0.35)</span></div>
+      <div class="spec-row"><span class="spec-prop">Currency label</span><span class="spec-val">14px / 400 / white</span></div>
+      <div class="spec-row"><span class="spec-prop">Amount</span><span class="spec-val">36px / 700 / white / tabular-nums</span></div>
+      <div class="spec-row"><span class="spec-prop">Points row</span><span class="spec-val">13px / 400 / rgba(255,255,255,0.85)</span></div>
+      <div class="spec-row"><span class="spec-prop">Points coin icon</span><span class="spec-val">Gold (#FFB800), 16px</span></div>
+      <div class="spec-row"><span class="spec-prop">Action buttons</span><span class="spec-val">White fill · #1A1A2E text · 12px radius · 10px 24px pad</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Components — service grid</div>
+    <div class="comp-card">
+      <div class="comp-title">Service icon grid</div>
+      <div class="spec-row"><span class="spec-prop">Layout</span><span class="spec-val">4 columns · 12–16px gap</span></div>
+      <div class="spec-row"><span class="spec-prop">Icon container</span><span class="spec-val">48–52px circle · #F5F5F5 fill</span></div>
+      <div class="spec-row"><span class="spec-prop">Icon size</span><span class="spec-val">24–28px inside container</span></div>
+      <div class="spec-row"><span class="spec-prop">Label</span><span class="spec-val">12px / 400 / #1A1A2E / center / max 2 lines</span></div>
+      <div class="spec-row"><span class="spec-prop">"New" badge</span><span class="spec-val">#FF3B30 · 10px/700 · 4px 6px pad · 20px radius · top-right of circle</span></div>
+      <div class="spec-row"><span class="spec-prop">"View All" link</span><span class="spec-val">#2DC84D · 14px / 600 · full-width centered · 44px min touch</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Components — bottom navigation</div>
+    <div class="comp-card">
+      <div class="comp-title">Bottom tab bar</div>
+      <div class="spec-row"><span class="spec-prop">Background</span><span class="spec-val">#FFFFFF</span></div>
+      <div class="spec-row"><span class="spec-prop">Height</span><span class="spec-val">60–70px + env(safe-area-inset-bottom)</span></div>
+      <div class="spec-row"><span class="spec-prop">Shadow</span><span class="spec-val">0 -1px 8px rgba(0,0,0,0.08)</span></div>
+      <div class="spec-row"><span class="spec-prop">Active tab</span><span class="spec-val">Icon + label in #2DC84D · 500 weight</span></div>
+      <div class="spec-row"><span class="spec-prop">Inactive tab</span><span class="spec-val">Icon + label in rgba(0,0,0,0.35) · 400 weight</span></div>
+      <div class="spec-row"><span class="spec-prop">Tab label</span><span class="spec-val">10–11px / 500</span></div>
+      <div class="spec-row"><span class="spec-prop">QR tab (center)</span><span class="spec-val">56px circle · gold gradient · elevated 20px above rail · no text label</span></div>
+      <div class="spec-row"><span class="spec-prop">QR shadow</span><span class="spec-val">0 4px 12px rgba(255,184,0,0.45)</span></div>
+      <div class="spec-row"><span class="spec-prop">Tabs</span><span class="spec-val">Home · Rewards · QR · Transactions · Help</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Components — buttons</div>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-title">Primary CTA</div>
+        <div style="margin-bottom:10px;">
+          <div style="display:inline-block;background:#2DC84D;color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:24px;">Confirm Transfer</div>
+        </div>
+        <div class="spec-row"><span class="spec-prop">Fill</span><span class="spec-val">#2DC84D</span></div>
+        <div class="spec-row"><span class="spec-prop">Radius</span><span class="spec-val">24px</span></div>
+        <div class="spec-row"><span class="spec-prop">Padding</span><span class="spec-val">14px 32px</span></div>
+        <div class="spec-row"><span class="spec-prop">Active</span><span class="spec-val">scale(0.97) · darken to #26B343</span></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-title">Outlined / secondary</div>
+        <div style="margin-bottom:10px;">
+          <div style="display:inline-block;border:1.5px solid #2DC84D;color:#2DC84D;font-size:14px;font-weight:600;padding:12px 28px;border-radius:24px;">Learn More</div>
+        </div>
+        <div class="spec-row"><span class="spec-prop">Fill</span><span class="spec-val">transparent</span></div>
+        <div class="spec-row"><span class="spec-prop">Border</span><span class="spec-val">1.5px solid #2DC84D</span></div>
+        <div class="spec-row"><span class="spec-prop">Radius</span><span class="spec-val">24px</span></div>
+        <div class="spec-row"><span class="spec-prop">Active</span><span class="spec-val">scale(0.97)</span></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-title">Card action (on gradient)</div>
+        <div style="background:linear-gradient(135deg,#2DC84D,#0B7230);padding:10px;border-radius:10px;margin-bottom:10px;display:flex;gap:8px;">
+          <div style="background:#fff;color:#2DC84D;font-size:13px;font-weight:600;padding:8px 16px;border-radius:10px;flex:1;text-align:center;">Cash In</div>
+          <div style="background:#fff;color:#1A1A2E;font-size:13px;font-weight:600;padding:8px 16px;border-radius:10px;flex:1;text-align:center;">Cash Out</div>
+        </div>
+        <div class="spec-row"><span class="spec-prop">Fill</span><span class="spec-val">#FFFFFF on gradient surface</span></div>
+        <div class="spec-row"><span class="spec-prop">Radius</span><span class="spec-val">12px</span></div>
+        <div class="spec-row"><span class="spec-prop">Shadow</span><span class="spec-val">0 2px 8px rgba(0,0,0,0.12)</span></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-title">Text link</div>
+        <div style="margin-bottom:10px;">
+          <span style="color:#2DC84D;font-size:14px;font-weight:600;">View All Services →</span>
+        </div>
+        <div class="spec-row"><span class="spec-prop">Color</span><span class="spec-val">#2DC84D</span></div>
+        <div class="spec-row"><span class="spec-prop">Size</span><span class="spec-val">14px / 600</span></div>
+        <div class="spec-row"><span class="spec-prop">Trailing char</span><span class="spec-val">→ arrow</span></div>
+        <div class="spec-row"><span class="spec-prop">Touch target</span><span class="spec-val">44px min height</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Components — app header</div>
+    <div class="comp-card">
+      <div class="comp-title">Home screen header</div>
+      <div class="spec-row"><span class="spec-prop">Avatar</span><span class="spec-val">36px circle · 50% radius · profile photo</span></div>
+      <div class="spec-row"><span class="spec-prop">Greeting</span><span class="spec-val">18–20px / 600 / #1A1A2E · time-sensitive ("Good Afternoon...")</span></div>
+      <div class="spec-row"><span class="spec-prop">Tier label</span><span class="spec-val">Green dot + "Basic" in #2DC84D · 13px / 600</span></div>
+      <div class="spec-row"><span class="spec-prop">Upsell link</span><span class="spec-val">"Upgrade Now →" in #E53935 · 13px / 600</span></div>
+      <div class="spec-row"><span class="spec-prop">Mail icon</span><span class="spec-val">Outline icon · 8px red dot badge at top-right (#E53935)</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Touch targets & grid</div>
+    <div class="comp-card">
+      <div class="comp-title">Minimum sizes</div>
+      <div class="spec-row"><span class="spec-prop">All interactive elements</span><span class="spec-val">44 × 44px minimum (Apple HIG / WCAG 2.5.5)</span></div>
+      <div class="spec-row"><span class="spec-prop">Service icon circles</span><span class="spec-val">48–52px — meets minimum</span></div>
+      <div class="spec-row"><span class="spec-prop">Tab bar items</span><span class="spec-val">Full tab width × full bar height</span></div>
+      <div class="spec-row"><span class="spec-prop">QR button visible</span><span class="spec-val">56px · tap area extended to 64px+</span></div>
+      <div class="spec-row"><span class="spec-prop">Service grid columns</span><span class="spec-val">4 — fixed across all phone sizes</span></div>
+      <div class="spec-row"><span class="spec-prop">Screen edge gutter</span><span class="spec-val">16px horizontal — consistent everywhere</span></div>
+    </div>
+  </div>
+
+</div>

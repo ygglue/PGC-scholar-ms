@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PalawanPay — Design System Spec</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-primary: #1A8C3C;
+    --green-dark: #0F5C27;
+    --green-mid: #2BAD50;
+    --green-light: #4DC97A;
+    --green-pale: #E8F5ED;
+    --green-gradient-start: #3DBB6B;
+    --green-gradient-end: #0F6E2E;
+
+    --gold: #F5A623;
+    --gold-light: #FFD166;
+
+    --red-accent: #E53935;
+    --red-badge: #FF4444;
+
+    --white: #FFFFFF;
+    --off-white: #F7F9F7;
+    --surface: #F2F4F2;
+    --border: #E0E6E0;
+
+    --text-primary: #1A1A1A;
+    --text-secondary: #4A5568;
+    --text-muted: #8A9BAA;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+
+    --page-bg: #F0F2F0;
+    --card-bg: #FFFFFF;
+    --rule: #E4E9E4;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--page-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--green-dark);
+    padding: 48px 64px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 120px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header h1 span { color: var(--green-light); }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.52);
+    font-family: 'DM Mono', monospace;
+    margin-top: 6px;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+  section { margin-top: 56px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-primary);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+
+  /* ── COLORS ── */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+  .color-chip {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+  .color-chip:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .color-swatch {
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+  }
+  .copy-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.15s;
+    background: rgba(0,0,0,0.25);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .color-chip:hover .copy-hint { opacity: 1; }
+  .color-meta {
+    padding: 10px 12px 12px;
+    background: #fff;
+  }
+  .color-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+  .color-hex {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .color-role {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+  .copied-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--green-dark);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 9999;
+  }
+  .copied-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── TYPOGRAPHY ── */
+  .type-rows { display: flex; flex-direction: column; gap: 20px; }
+  .type-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta { display: flex; flex-direction: column; gap: 4px; }
+  .type-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-primary);
+  }
+  .type-specs {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── SPACING ── */
+  .spacing-grid { display: flex; flex-direction: column; gap: 12px; }
+  .spacing-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    align-items: center;
+    gap: 16px;
+  }
+  .spacing-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .spacing-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .spacing-bar {
+    height: 6px;
+    background: var(--green-primary);
+    border-radius: 3px;
+    opacity: 0.7;
+  }
+  .spacing-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-primary);
+    font-weight: 500;
+    text-align: right;
+  }
+
+  /* ── RADIUS ── */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
+  }
+  .radius-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 16px;
+    background: var(--off-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  .radius-box {
+    width: 56px;
+    height: 56px;
+    background: var(--green-primary);
+    opacity: 0.85;
+  }
+  .radius-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+  .radius-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green-dark);
+    text-align: center;
+  }
+
+  /* ── ELEVATION ── */
+  .elevation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+  }
+  .elevation-chip {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .elevation-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .elevation-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    word-break: break-all;
+  }
+
+  /* ── COMPONENTS ── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .comp-card {
+    background: var(--off-white);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .comp-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  /* Buttons */
+  .demo-btn-primary {
+    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  .demo-btn-outline {
+    background: #fff;
+    color: var(--green-primary);
+    border: 1.5px solid var(--green-primary);
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  .demo-btn-ghost {
+    background: var(--green-pale);
+    color: var(--green-dark);
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  /* Balance card */
+  .demo-balance {
+    background: linear-gradient(135deg, var(--green-gradient-start), var(--green-gradient-end));
+    border-radius: var(--radius-md);
+    padding: 20px;
+    color: #fff;
+  }
+  .demo-balance-label { font-size: 11px; opacity: 0.75; margin-bottom: 4px; }
+  .demo-balance-amount { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .demo-balance-points { font-size: 11px; opacity: 0.85; display: flex; align-items: center; gap: 4px; }
+  /* Service icon */
+  .demo-service {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .demo-service-icon {
+    width: 52px; height: 52px;
+    background: var(--surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .demo-service-label { font-size: 11px; color: var(--text-secondary); font-weight: 500; text-align: center; }
+  .services-row { display: flex; gap: 20px; justify-content: center; }
+  /* Badge */
+  .demo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--red-badge);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  /* Bottom nav */
+  .demo-nav {
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  .demo-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .demo-nav-item.active { color: var(--green-primary); }
+  .demo-nav-item .icon { font-size: 20px; }
+  .demo-nav-qr {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(245,166,35,0.4);
+  }
+  /* Ticker */
+  .demo-ticker {
+    background: #1A1A1A;
+    border-radius: var(--radius-full);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #fff;
+  }
+  .demo-ticker-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red-badge); }
+
+  /* ── ICON STYLE ── */
+  .icon-section .comp-card { gap: 20px; }
+  .icon-examples {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .icon-bubble {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── MOTION ── */
+  .motion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .motion-chip {
+    background: var(--off-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .motion-name { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .motion-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+  /* ── GRID SPEC ── */
+  .grid-spec-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .spec-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .spec-pair:last-child { border-bottom: none; }
+  .spec-key { color: var(--text-muted); }
+  .spec-val { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text-primary); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px;
+    padding: 32px 64px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--green-dark); }
+  .footer-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="copied-toast" id="toast">Hex copied!</div>
+
+<header>
+  <div class="page">
+    <div class="header-label">Design System · v1.0 · October 2024</div>
+    <h1>PalawanPay<br><span>Design Spec</span></h1>
+    <div class="header-sub">Mobile App · iOS · Android · React Native</div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ── COLORS ── -->
+  <section>
+    <div class="section-label">01 — Color</div>
+    <h2>Color Palette</h2>
+    <div class="card">
+      <div style="margin-bottom:20px; font-size:12px; color:var(--text-muted);">Click any swatch to copy its hex value to clipboard.</div>
+
+      <div style="margin-bottom:12px; font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--green-primary);">Primary Greens</div>
+      <div class="color-grid" style="margin-bottom:32px;">
+        <div class="color-chip" onclick="copyColor('#0F5C27','Green Dark')">
+          <div class="color-swatch" style="background:#0F5C27;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Dark</div>
+            <div class="color-hex">#0F5C27</div>
+            <div class="color-role">Header, deep bg</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#1A8C3C','Green Primary')">
+          <div class="color-swatch" style="background:#1A8C3C;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Primary</div>
+            <div class="color-hex">#1A8C3C</div>
+            <div class="color-role">CTA, active states</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#2BAD50','Green Mid')">
+          <div class="color-swatch" style="background:#2BAD50;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Mid</div>
+            <div class="color-hex">#2BAD50</div>
+            <div class="color-role">Gradient mid-stop</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#3DBB6B','Green Gradient Start')">
+          <div class="color-swatch" style="background:#3DBB6B;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Gradient Start</div>
+            <div class="color-hex">#3DBB6B</div>
+            <div class="color-role">Balance card gradient</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#4DC97A','Green Light')">
+          <div class="color-swatch" style="background:#4DC97A;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Light</div>
+            <div class="color-hex">#4DC97A</div>
+            <div class="color-role">Highlights, icons</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#E8F5ED','Green Pale')">
+          <div class="color-swatch" style="background:#E8F5ED; border:1px solid #d0e8d8;"><span class="copy-hint" style="background:rgba(0,0,0,0.12); color:#1A8C3C;">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Green Pale</div>
+            <div class="color-hex">#E8F5ED</div>
+            <div class="color-role">Ghost btn bg, tints</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px; font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold);">Accent & Status</div>
+      <div class="color-grid" style="margin-bottom:32px;">
+        <div class="color-chip" onclick="copyColor('#F5A623','Gold')">
+          <div class="color-swatch" style="background:#F5A623;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Gold</div>
+            <div class="color-hex">#F5A623</div>
+            <div class="color-role">QR button, points icon</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#FFD166','Gold Light')">
+          <div class="color-swatch" style="background:#FFD166;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Gold Light</div>
+            <div class="color-hex">#FFD166</div>
+            <div class="color-role">QR gradient end</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#FF4444','Red Badge')">
+          <div class="color-swatch" style="background:#FF4444;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Red Badge</div>
+            <div class="color-hex">#FF4444</div>
+            <div class="color-role">"New" badge, notif dot</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#E53935','Red Accent')">
+          <div class="color-swatch" style="background:#E53935;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Red Accent</div>
+            <div class="color-hex">#E53935</div>
+            <div class="color-role">Destructive, errors</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px; font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-muted);">Neutral & Surface</div>
+      <div class="color-grid">
+        <div class="color-chip" onclick="copyColor('#FFFFFF','White')">
+          <div class="color-swatch" style="background:#FFFFFF; border-bottom:1px solid #eee;"><span class="copy-hint" style="background:rgba(0,0,0,0.1); color:#333;">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">White</div>
+            <div class="color-hex">#FFFFFF</div>
+            <div class="color-role">Card bg, button bg</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#F7F9F7','Off White')">
+          <div class="color-swatch" style="background:#F7F9F7;"><span class="copy-hint" style="background:rgba(0,0,0,0.1); color:#333;">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Off White</div>
+            <div class="color-hex">#F7F9F7</div>
+            <div class="color-role">Page background</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#F2F4F2','Surface')">
+          <div class="color-swatch" style="background:#F2F4F2;"><span class="copy-hint" style="background:rgba(0,0,0,0.1); color:#333;">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Surface</div>
+            <div class="color-hex">#F2F4F2</div>
+            <div class="color-role">Service icon bg</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#1A1A1A','Text Primary')">
+          <div class="color-swatch" style="background:#1A1A1A;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Text Primary</div>
+            <div class="color-hex">#1A1A1A</div>
+            <div class="color-role">Body, headlines</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#4A5568','Text Secondary')">
+          <div class="color-swatch" style="background:#4A5568;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Text Secondary</div>
+            <div class="color-hex">#4A5568</div>
+            <div class="color-role">Subtitles, labels</div>
+          </div>
+        </div>
+        <div class="color-chip" onclick="copyColor('#8A9BAA','Text Muted')">
+          <div class="color-swatch" style="background:#8A9BAA;"><span class="copy-hint">Copy</span></div>
+          <div class="color-meta">
+            <div class="color-name">Text Muted</div>
+            <div class="color-hex">#8A9BAA</div>
+            <div class="color-role">Inactive nav, hints</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GRADIENTS ── -->
+  <section>
+    <div class="section-label">02 — Gradients</div>
+    <h2>Gradient Tokens</h2>
+    <div class="card">
+      <div class="color-grid">
+        <div style="border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);">
+          <div style="height:100px; background:linear-gradient(135deg,#3DBB6B,#0F6E2E);"></div>
+          <div class="color-meta">
+            <div class="color-name">Balance Card</div>
+            <div class="color-hex">135° · #3DBB6B → #0F6E2E</div>
+            <div class="color-role">Primary balance display</div>
+          </div>
+        </div>
+        <div style="border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);">
+          <div style="height:100px; background:linear-gradient(135deg,#F5A623,#FFD166);"></div>
+          <div class="color-meta">
+            <div class="color-name">QR Button</div>
+            <div class="color-hex">135° · #F5A623 → #FFD166</div>
+            <div class="color-role">Floating QR action</div>
+          </div>
+        </div>
+        <div style="border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);">
+          <div style="height:100px; background:linear-gradient(135deg,#1A8C3C,#0F5C27);"></div>
+          <div class="color-meta">
+            <div class="color-name">Primary Button</div>
+            <div class="color-hex">135° · #1A8C3C → #0F5C27</div>
+            <div class="color-role">CTA buttons</div>
+          </div>
+        </div>
+        <div style="border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);">
+          <div style="height:100px; background:linear-gradient(90deg,#1A8C3C 0%, #2BAD50 50%, #0F5C27 100%);"></div>
+          <div class="color-meta">
+            <div class="color-name">Promo Banner</div>
+            <div class="color-hex">90° · #1A8C3C → #2BAD50 → #0F5C27</div>
+            <div class="color-role">Promotional strips</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TYPOGRAPHY ── -->
+  <section>
+    <div class="section-label">03 — Typography</div>
+    <h2>Type Scale</h2>
+    <div class="card">
+      <div class="type-rows">
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Balance / Hero</div>
+            <div class="type-specs">700 weight<br>28–34px / 1.1 lh<br>Color: #FFFFFF</div>
+          </div>
+          <div style="font-size:32px; font-weight:700; color:var(--green-dark);">PHP 10,000.00</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Display / Greeting</div>
+            <div class="type-specs">600–700 weight<br>20–22px / 1.2 lh<br>Color: #1A1A1A</div>
+          </div>
+          <div style="font-size:21px; font-weight:700;">Good Afternoon Bobby!</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Section Title</div>
+            <div class="type-specs">600 weight<br>16–18px / 1.3 lh<br>Color: #1A1A1A</div>
+          </div>
+          <div style="font-size:17px; font-weight:600;">View All Services</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Button Label</div>
+            <div class="type-specs">600 weight<br>14–15px / 1.4 lh<br>Color: context</div>
+          </div>
+          <div style="font-size:15px; font-weight:600; color:var(--green-primary);">Cash In &nbsp;·&nbsp; Cash Out</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Body / Label</div>
+            <div class="type-specs">400–500 weight<br>12–13px / 1.5 lh<br>Color: #4A5568</div>
+          </div>
+          <div style="font-size:13px; font-weight:400; color:var(--text-secondary);">1,200 PalawanPay Points →</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Service Icon Label</div>
+            <div class="type-specs">500 weight<br>10–11px / 1.4 lh<br>Color: #4A5568</div>
+          </div>
+          <div style="display:flex; gap:16px;">
+            <div style="text-align:center; font-size:11px; font-weight:500; color:var(--text-secondary);">Send<br>Money</div>
+            <div style="text-align:center; font-size:11px; font-weight:500; color:var(--text-secondary);">Buy Load</div>
+            <div style="text-align:center; font-size:11px; font-weight:500; color:var(--text-secondary);">Pay Bills</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Nav Label</div>
+            <div class="type-specs">500 weight<br>10px / 1.2 lh<br>Active: #1A8C3C<br>Inactive: #8A9BAA</div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div style="font-size:10px; font-weight:600; color:var(--green-primary);">Home</div>
+            <div style="font-size:10px; font-weight:500; color:var(--text-muted);">Rewards</div>
+            <div style="font-size:10px; font-weight:500; color:var(--text-muted);">Transactions</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-tag">Badge / Tag</div>
+            <div class="type-specs">700 weight<br>9–10px / 1.0 lh<br>Uppercase<br>Color: #FFFFFF</div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="demo-badge">New</span>
+            <span style="display:inline-flex; align-items:center; background:#1A8C3C; color:#fff; font-size:9px; font-weight:700; padding:2px 8px; border-radius:999px; letter-spacing:0.06em; text-transform:uppercase;">Basic</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPACING ── -->
+  <section>
+    <div class="section-label">04 — Spacing</div>
+    <h2>Spacing Scale</h2>
+    <div class="card">
+      <div class="spacing-grid">
+        <div class="spacing-row">
+          <div class="spacing-label">xs</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:4px;"></div></div>
+          <div class="spacing-val">4px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">sm</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:8px;"></div></div>
+          <div class="spacing-val">8px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">md</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:12px;"></div></div>
+          <div class="spacing-val">12px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">lg</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:16px;"></div></div>
+          <div class="spacing-val">16px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">xl</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:24px;"></div></div>
+          <div class="spacing-val">20–24px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">2xl</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:32px;"></div></div>
+          <div class="spacing-val">32px</div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">3xl</div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:48px;"></div></div>
+          <div class="spacing-val">48px</div>
+        </div>
+      </div>
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--rule); font-size:12px; color:var(--text-muted);">
+        Base unit: <strong style="color:var(--text-primary); font-family:'DM Mono',monospace;">4px</strong>. Screen horizontal padding: <strong style="color:var(--text-primary); font-family:'DM Mono',monospace;">16px</strong>. Card inner padding: <strong style="color:var(--text-primary); font-family:'DM Mono',monospace;">16–20px</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BORDER RADIUS ── -->
+  <section>
+    <div class="section-label">05 — Border Radius</div>
+    <h2>Radius Tokens</h2>
+    <div class="card">
+      <div class="radius-grid">
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:4px;"></div>
+          <div class="radius-name">sm</div>
+          <div class="radius-val">4px</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Small inputs</div>
+        </div>
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:8px;"></div>
+          <div class="radius-name">md</div>
+          <div class="radius-val">8–10px</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Cards, modals</div>
+        </div>
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:14px;"></div>
+          <div class="radius-name">lg</div>
+          <div class="radius-val">14–16px</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Balance card, sheets</div>
+        </div>
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:24px;"></div>
+          <div class="radius-name">xl</div>
+          <div class="radius-val">20–24px</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Bottom sheets</div>
+        </div>
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:9999px; width:80px; height:40px;"></div>
+          <div class="radius-name">full</div>
+          <div class="radius-val">9999px</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Buttons, badges, pills</div>
+        </div>
+        <div class="radius-chip">
+          <div class="radius-box" style="border-radius:50%; width:56px; height:56px;"></div>
+          <div class="radius-name">circle</div>
+          <div class="radius-val">50%</div>
+          <div style="font-size:10px; color:var(--text-muted); text-align:center;">Icon buttons, avatars</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ELEVATION ── -->
+  <section>
+    <div class="section-label">06 — Elevation</div>
+    <h2>Shadow Tokens</h2>
+    <div class="elevation-grid">
+      <div class="elevation-chip" style="box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+        <div class="elevation-label">Level 1 · sm</div>
+        <div class="elevation-val">0 1px 3px rgba(0,0,0,0.08)</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Service cards, chips</div>
+      </div>
+      <div class="elevation-chip" style="box-shadow:0 4px 16px rgba(0,0,0,0.10);">
+        <div class="elevation-label">Level 2 · md</div>
+        <div class="elevation-val">0 4px 16px rgba(0,0,0,0.10)</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Balance card, nav bar</div>
+      </div>
+      <div class="elevation-chip" style="box-shadow:0 8px 32px rgba(0,0,0,0.13);">
+        <div class="elevation-label">Level 3 · lg</div>
+        <div class="elevation-val">0 8px 32px rgba(0,0,0,0.13)</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Modals, drawers</div>
+      </div>
+      <div class="elevation-chip" style="box-shadow:0 4px 12px rgba(245,166,35,0.40);">
+        <div class="elevation-label">QR Float Shadow</div>
+        <div class="elevation-val">0 4px 12px rgba(245,166,35,0.40)</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">QR action button only</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMPONENTS ── -->
+  <section>
+    <div class="section-label">07 — Components</div>
+    <h2>Component Library</h2>
+    <div class="comp-grid">
+
+      <!-- Balance Card -->
+      <div class="comp-card">
+        <div class="comp-title">Balance Card</div>
+        <div class="demo-balance">
+          <div class="demo-balance-label">PHP</div>
+          <div class="demo-balance-amount">10,000.00 👁</div>
+          <div class="demo-balance-points">🪙 1,200 PalawanPay Points →</div>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          Gradient bg · radius 14px<br>
+          Shadow: Level 2<br>
+          Eye icon: balance toggle
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="comp-card">
+        <div class="comp-title">Buttons</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="demo-btn-primary">Cash In</button>
+          <button class="demo-btn-outline">Cash Out</button>
+          <button class="demo-btn-ghost">View All Services</button>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          Height: 44px · radius: full<br>
+          Font: 14px / 600<br>
+          Padding: 12px 24px
+        </div>
+      </div>
+
+      <!-- Service Icons -->
+      <div class="comp-card">
+        <div class="comp-title">Service Icon Grid</div>
+        <div class="services-row">
+          <div class="demo-service">
+            <div class="demo-service-icon">💸</div>
+            <div class="demo-service-label">Send<br>Money</div>
+          </div>
+          <div class="demo-service">
+            <div class="demo-service-icon">🏦</div>
+            <div class="demo-service-label">Bank<br>Transfer</div>
+          </div>
+          <div class="demo-service">
+            <div class="demo-service-icon">📱</div>
+            <div class="demo-service-label">Buy<br>Load</div>
+          </div>
+          <div class="demo-service">
+            <div class="demo-service-icon">📋</div>
+            <div class="demo-service-label">Pay<br>Bills</div>
+          </div>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          Icon bubble: 52×52 · circle<br>
+          bg: #F2F4F2 · 4-up grid<br>
+          Label: 11px / 500
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="comp-card">
+        <div class="comp-title">Bottom Navigation</div>
+        <div class="demo-nav">
+          <div class="demo-nav-item active">
+            <div class="icon">🏠</div>
+            <div>Home</div>
+          </div>
+          <div class="demo-nav-item">
+            <div class="icon">🎁</div>
+            <div>Rewards</div>
+          </div>
+          <div class="demo-nav-item">
+            <div class="demo-nav-qr">⊞</div>
+            <div style="font-size:10px; color:var(--text-muted);">QR</div>
+          </div>
+          <div class="demo-nav-item">
+            <div class="icon">📄</div>
+            <div>Transactions</div>
+          </div>
+          <div class="demo-nav-item">
+            <div class="icon">💬</div>
+            <div>Help</div>
+          </div>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          5 items · QR center elevated<br>
+          Active: #1A8C3C<br>
+          Inactive: #8A9BAA
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="comp-card">
+        <div class="comp-title">Badges & Pills</div>
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
+          <span class="demo-badge">⭐ New</span>
+          <span style="display:inline-flex; align-items:center; gap:4px; background:var(--green-primary); color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:999px; letter-spacing:0.06em;">● Basic</span>
+          <span style="display:inline-flex; align-items:center; gap:4px; color:var(--green-primary); font-size:13px; font-weight:600; cursor:pointer;">Upgrade Now →</span>
+          <div style="position:relative; display:inline-block;">
+            <div style="width:28px;height:28px;background:var(--surface);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;">✉️</div>
+            <div style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--red-badge);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700;">1</div>
+          </div>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          Badge: radius full · 9–10px<br>
+          Notif dot: 14×14 · red bg<br>
+          Tier pill: green · uppercase
+        </div>
+      </div>
+
+      <!-- Ticker / Marquee -->
+      <div class="comp-card">
+        <div class="comp-title">Marquee Ticker</div>
+        <div class="demo-ticker">
+          <div class="demo-ticker-dot"></div>
+          <span style="font-size:12px;">🌐 Send Pera Padala Abroad</span>
+          <span style="font-family:'DM Mono',monospace; font-size:12px; margin-left:auto;">🇨🇦 CAD PHP 56.00 →</span>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; line-height:1.7;">
+          bg: #1A1A1A · radius full<br>
+          Scrolling FX rate band<br>
+          Dot: #FF4444 pulse
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── LAYOUT ── -->
+  <section>
+    <div class="section-label">08 — Layout & Grid</div>
+    <h2>Screen Layout Spec</h2>
+    <div class="card">
+      <div class="grid-spec-row">
+        <div>
+          <div class="spec-pair"><span class="spec-key">Screen width (design base)</span><span class="spec-val">390px</span></div>
+          <div class="spec-pair"><span class="spec-key">Horizontal padding</span><span class="spec-val">16px</span></div>
+          <div class="spec-pair"><span class="spec-key">Status bar height</span><span class="spec-val">44–54px</span></div>
+          <div class="spec-pair"><span class="spec-key">Bottom nav height</span><span class="spec-val">72–80px</span></div>
+          <div class="spec-pair"><span class="spec-key">Service icon grid</span><span class="spec-val">4 col × 3 row</span></div>
+          <div class="spec-pair"><span class="spec-key">Icon circle size</span><span class="spec-val">52×52px</span></div>
+        </div>
+        <div>
+          <div class="spec-pair"><span class="spec-key">Balance card height</span><span class="spec-val">~130px</span></div>
+          <div class="spec-pair"><span class="spec-key">Balance card radius</span><span class="spec-val">14–16px</span></div>
+          <div class="spec-pair"><span class="spec-key">Section gap (vertical)</span><span class="spec-val">20–24px</span></div>
+          <div class="spec-pair"><span class="spec-key">Promo banner height</span><span class="spec-val">~100px</span></div>
+          <div class="spec-pair"><span class="spec-key">Ticker height</span><span class="spec-val">~44px</span></div>
+          <div class="spec-pair"><span class="spec-key">QR button diameter</span><span class="spec-val">48px</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MOTION ── -->
+  <section>
+    <div class="section-label">09 — Motion</div>
+    <h2>Animation Tokens</h2>
+    <div class="motion-grid">
+      <div class="motion-chip">
+        <div class="motion-name">Micro Interaction</div>
+        <div class="motion-val">Duration: 150ms<br>Easing: ease-out<br>Use: tap feedback, icon presses</div>
+      </div>
+      <div class="motion-chip">
+        <div class="motion-name">Card Transition</div>
+        <div class="motion-val">Duration: 250ms<br>Easing: ease-in-out<br>Use: card expand, sheet open</div>
+      </div>
+      <div class="motion-chip">
+        <div class="motion-name">Page Navigation</div>
+        <div class="motion-val">Duration: 300ms<br>Easing: cubic-bezier(0.4,0,0.2,1)<br>Use: screen pushes, tab change</div>
+      </div>
+      <div class="motion-chip">
+        <div class="motion-name">Ticker Marquee</div>
+        <div class="motion-val">Duration: continuous loop<br>Easing: linear<br>Use: FX rate scrolling ticker</div>
+      </div>
+      <div class="motion-chip">
+        <div class="motion-name">Notification Pulse</div>
+        <div class="motion-val">Duration: 1500ms loop<br>Easing: ease-in-out<br>Use: red dot on notif badge</div>
+      </div>
+      <div class="motion-chip">
+        <div class="motion-name">Balance Reveal</div>
+        <div class="motion-val">Duration: 200ms<br>Easing: ease-out<br>Use: eye icon balance toggle</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ICON STYLE ── -->
+  <section class="icon-section">
+    <div class="section-label">10 — Iconography</div>
+    <h2>Icon Style Guide</h2>
+    <div class="card">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px;">
+        <div>
+          <div style="font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-muted); margin-bottom:12px;">Service Icons — Illustrated</div>
+          <div class="icon-examples">
+            <div class="icon-bubble">💸</div>
+            <div class="icon-bubble">🏦</div>
+            <div class="icon-bubble">📱</div>
+            <div class="icon-bubble">📋</div>
+            <div class="icon-bubble">🛒</div>
+            <div class="icon-bubble">♻️</div>
+            <div class="icon-bubble">🪙</div>
+            <div class="icon-bubble">💎</div>
+          </div>
+          <div style="margin-top:14px; font-size:12px; color:var(--text-muted); line-height:1.7;">
+            Full-color illustrated style with shadows.<br>
+            Contained in circular bg (#F2F4F2).<br>
+            Size: 28–32px inside 52px bubble.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-muted); margin-bottom:12px;">Nav Icons — Outline</div>
+          <div class="icon-examples">
+            <div style="font-size:22px; opacity:0.7;">🏠</div>
+            <div style="font-size:22px; opacity:0.7;">🎁</div>
+            <div style="font-size:22px; opacity:0.7;">📄</div>
+            <div style="font-size:22px; opacity:0.7;">💬</div>
+          </div>
+          <div style="margin-top:14px; font-size:12px; color:var(--text-muted); line-height:1.7;">
+            Outline / line style for inactive state.<br>
+            Filled for active state.<br>
+            Size: 22–24px. Color: matches nav state.
+          </div>
+          <div style="margin-top:20px; font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-muted); margin-bottom:10px;">Usage Rules</div>
+          <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+            — Illustrated icons: service grid only<br>
+            — Outline icons: navigation, actions<br>
+            — No icon without a label in nav<br>
+            — "New" badge overlays top-right<br>
+            — Consistent 52px touch target
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-brand">PalawanPay</div>
+  <div class="footer-meta">Design System · Oct 2024 · v1.0</div>
+</footer>
+
+<script>
+  function copyColor(hex, name) {
+    navigator.clipboard.writeText(hex).then(() => {
+      const toast = document.getElementById('toast');
+      toast.textContent = `${hex} copied!`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    });
+  }
+</script>
+</body>
+</html>
