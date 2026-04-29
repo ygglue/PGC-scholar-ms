@@ -1,11 +1,15 @@
 /* evaluator_theme.qss - "The Digital Curator" */
 * {
-    font-family: "Work Sans", "Plus Jakarta Sans", sans-serif;
+    font-family: "Roboto", "Segoe UI", sans-serif;
     color: #171d18;
     font-size: 14px;
 }
 
 QMainWindow, QWidget#MainWindow {
+    background-color: #f5fbf2;
+}
+
+QFrame#ContentContainer, QWidget#ContentContainer {
     background-color: #f5fbf2;
 }
 
@@ -18,7 +22,7 @@ QLabel#BrandLogo {
     color: #006834;
     font-size: 24px;
     font-weight: bold;
-    font-family: "Plus Jakarta Sans";
+    font-family: "Roboto";
 }
 
 QPushButton#NavButton {
@@ -56,7 +60,7 @@ QLabel#Title {
     font-weight: bold;
     font-size: 24px;
     color: #171d18;
-    font-family: "Plus Jakarta Sans";
+    font-family: "Roboto";
 }
 
 QLabel#Subtitle {
@@ -104,8 +108,16 @@ QLineEdit, QTextEdit, QPlainTextEdit, QComboBox {
     color: #171d18;
 }
 
+QTextEdit QWidget, QPlainTextEdit QWidget {
+    background-color: #dee4db;
+}
+
 QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QComboBox:focus {
     border: 2px solid #006834;
+    background-color: #ffffff;
+}
+
+QTextEdit:focus QWidget, QPlainTextEdit:focus QWidget {
     background-color: #ffffff;
 }
 
@@ -163,4 +175,35 @@ QScrollBar::handle:vertical {
 }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px;
+}
+
+/* Table */
+QTableWidget {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    padding: 8px;
+    gridline-color: transparent;
+}
+
+QTableWidget::item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f5ec;
+}
+
+QTableWidget::item:selected {
+    background-color: #e2e3e0;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #f0f5ec;
+    border: none;
+}
+
+QTableWidget QHeaderView::section {
+    background-color: #f0f5ec;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    color: #006834;
 }

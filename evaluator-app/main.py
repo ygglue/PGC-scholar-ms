@@ -1,71 +1,107 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QStackedWidget
+import ctypes
+from PySide6.QtWidgets import QApplication, QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QFrame
+from PySide6.QtCore import Qt, QPoint
+from PySide6.QtGui import QScreen, QWindow, QIcon
 from views.login import LoginView
 from views.dashboard import DashboardView
+from views.scholars_directory import ScholarsDirectoryView
 
-class EvaluatorApp(QApplication):
-    def __init__(self, sys_argv):
-        super().__init__(sys_argv)
-        
-        # Load fonts if available or rely on system fallback
-        # QFontDatabase.addApplicationFont("path/to/PlusJakartaSans.ttf")
-        
-        # Global Styles based on DESIGN.md
-        self.setStyleSheet("""
-            QWidget {
-                color: #171d18;
-                font-family: 'Work Sans', 'Segoe UI', sans-serif;
-            }
-            QMainWindow {
-                background-color: #f5fbf2;
-            }
-            QLineEdit {
-                background-color: #dee4db;
-                border: none;
-                border-radius: 8px;
-                padding: 12px;
-                font-size: 14px;
-            }
-            QLineEdit:focus {
-                border: 2px solid #006834;
-            }
-            QPushButton {
-                background-color: #006834;
-                color: white;
-                border: none;
-                border-radius: 20px;
-                padding: 12px 24px;
-                font-family: 'Plus Jakarta Sans', sans-serif;
-                font-weight: bold;
-                font-size: 14px;
-            }
-            QPushButton:hover {
-                background-color: #008444;
-            }
-        """)
+def set_windows_titlebar_color(hwnd, color_hex):
+    try:
+        r = int(color_hex[1:3], 16)
+        g = int(color_hex[3:5], 16)
+        b = int(color_hex[5:7], 16)
+        color_ref = (b << 16) | (g << 8) | r
+        DWMWA_CAPTION_COLOR = 35
+        ctypes.windll.dwmapi.DwmSetWindowAttribute(
+            hwnd,
+            DWMWA_CAPTION_COLOR,
+            ctypes.byref(ctypes.c_int(color_ref)),
+            ctypes.sizeof(ctypes.c_int)
+        )
+    except Exception as e:
+        print(f"Could not set titlebar color: {e}")
 
-        self.stacked_widget = QStackedWidget()
-        self.stacked_widget.setWindowTitle("Emerald Scholar - Evaluator Portal")
-        self.stacked_widget.resize(1200, 800)
+class MainWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Evaluator Portal")
+        self.resize(1200, 800)
         
-        # Initialize Views
+        # Set native titlebar color to match app background
+        set_windows_titlebar_color(int(self.winId()), "#f5fbf2")
+        
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        
+        self.content_container = QFrame()
+        self.content_container.setObjectName("ContentContainer")
+        self.content_layout = QVBoxLayout(self.content_container)
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.content_layout.setSpacing(0)
+        
+        main_layout.addWidget(self.content_container)
+        
+        self.stacked_widget = QStackedWidget(self.content_container)
+        self.content_layout.addWidget(self.stacked_widget)
+        
         self.login_view = LoginView(self.handle_login_success)
-        self.dashboard_view = DashboardView(self.handle_logout)
+        self.dashboard_view = DashboardView(self.handle_show_scholars_directory, self.handle_logout)
+        self.scholars_directory_view = None
         
         self.stacked_widget.addWidget(self.login_view)
         self.stacked_widget.addWidget(self.dashboard_view)
         
         self.stacked_widget.setCurrentWidget(self.login_view)
-        self.stacked_widget.show()
+        self.show()
 
     def handle_login_success(self, token: str):
-        # Store token and switch to dashboard
         self.dashboard_view.initialize_dashboard(token)
+        self.stacked_widget.setCurrentWidget(self.dashboard_view)
+
+    def handle_show_scholars_directory(self):
+        if not self.scholars_directory_view:
+            self.scholars_directory_view = ScholarsDirectoryView(
+                self.dashboard_view.token, 
+                self.handle_back_to_dashboard
+            )
+            self.stacked_widget.addWidget(self.scholars_directory_view)
+        self.stacked_widget.setCurrentWidget(self.scholars_directory_view)
+
+    def handle_back_to_dashboard(self):
         self.stacked_widget.setCurrentWidget(self.dashboard_view)
 
     def handle_logout(self):
         self.stacked_widget.setCurrentWidget(self.login_view)
+
+    def quit_app(self):
+        self.close()
+        import sys
+        sys.exit(0)
+
+
+class EvaluatorApp(QApplication):
+    def __init__(self, sys_argv):
+        super().__init__(sys_argv)
+        
+        theme_path = os.path.join(os.path.dirname(__file__), "evaluator_theme.qss")
+        if os.path.exists(theme_path):
+            with open(theme_path, "r") as f:
+                qss = f.read()
+                # Resolve relative asset paths to absolute paths
+                assets_dir = os.path.join(os.path.dirname(__file__), "assets").replace('\\', '/')
+                qss = qss.replace("url(assets/", f"url({assets_dir}/")
+                self.setStyleSheet(qss)
+        
+        self.main_window = MainWindow()
+
+    def quit(self):
+        self.main_window.close()
+        return super().quit()
+
 
 if __name__ == "__main__":
     app = EvaluatorApp(sys.argv)
