@@ -18,7 +18,6 @@ The system is split into three core components sharing a single backend API and 
 - **Python 3.10+** (for Backend and Evaluator App)
 - **Node.js 18+** (for Scholar Web App)
 - **uv** (recommended Python package manager)
-- **Supabase Project** (PostgreSQL & Storage)
 
 ### 1. Backend Setup (FastAPI)
 The backend uses FastAPI and connects to a Supabase PostgreSQL instance.
@@ -75,9 +74,6 @@ npm run dev
 
 ---
 
-## 🗄 Database & Storage
-- **Database**: Supabase (PostgreSQL 17). Migrations are handled via Alembic in the `backend/migrations` folder.
-- **Storage**: Supabase Storage is used for scholar documents. Ensure a private bucket named `scholar-documents` is created in your Supabase dashboard.
 
 ## 🔐 Authentication
 - **Scholars** log in via Google OAuth 2.0.

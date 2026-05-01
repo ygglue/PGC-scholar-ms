@@ -64,7 +64,7 @@ class ScholarsDirectoryView(QWidget):
         self.status_filter.currentTextChanged.connect(self.apply_filters)
         
         self.school_filter = QComboBox()
-        self.school_filter.addItems(["All Schools", "UST", "UP", "Ateneo", "DLSU", "Miriam"])
+        self.school_filter.addItems(["All Schools", "State University", "National College", "Polytechnic Institute", "University of the Philippines", "City College"])
         self.school_filter.currentTextChanged.connect(self.apply_filters)
         
         self.batch_filter = QComboBox()
