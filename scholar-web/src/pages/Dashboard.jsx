@@ -1,14 +1,11 @@
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient, { API_BASE } from '../config/api';
 import Layout from '../components/Layout';
 import { useApiCache } from '../hooks/useApiCache';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  
-  const { data: profile } = useApiCache('profile', 'http://localhost:8000/scholars/me');
-  const { data: documents, fetcher: fetchDocuments } = useApiCache('documents', 'http://localhost:8000/documents/me');
+  const { data: profile } = useApiCache('profile', `${API_BASE}/scholars/me`);
+  const { data: documents, fetcher: fetchDocuments } = useApiCache('documents', `${API_BASE}/documents/me`);
 
   const fileInputRef = useRef(null);
   const [uploadTarget, setUploadTarget] = useState(null);
@@ -29,10 +26,8 @@ const Dashboard = () => {
       formData.append('doc_type', uploadTarget);
       
       try {
-          const token = localStorage.getItem('token');
-          await axios.post('http://localhost:8000/documents/upload', formData, {
+          await apiClient.post(`${API_BASE}/documents/upload`, formData, {
               headers: {
-                  'Authorization': `Bearer ${token}`,
                   'Content-Type': 'multipart/form-data'
               }
           });
@@ -48,10 +43,7 @@ const Dashboard = () => {
 
   const handleViewDocument = async (docId) => {
       try {
-          const token = localStorage.getItem('token');
-          const res = await axios.get(`http://localhost:8000/documents/${docId}/view`, {
-             headers: { Authorization: `Bearer ${token}` }
-          });
+          const res = await apiClient.get(`${API_BASE}/documents/${docId}/view`);
           window.open(res.data.url, '_blank');
       } catch (err) { }
   };

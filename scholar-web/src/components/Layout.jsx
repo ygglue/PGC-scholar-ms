@@ -4,11 +4,6 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
-
   return (
     <div className="bg-surface-container-low text-on-surface min-h-screen pb-32">
       {/* Top App Bar */}
@@ -17,11 +12,7 @@ const Layout = ({ children }) => {
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold tracking-tight text-emerald-800 dark:text-emerald-200 font-headline">PGC-ISKOnektado</h1>
           </div>
-          <div className="flex items-center gap-4">
-             <button onClick={handleLogout} className="text-on-surface hover:opacity-80 transition-opacity">
-                <span className="material-symbols-outlined hover:text-error transition-colors">logout</span>
-             </button>
-          </div>
+          <div className="flex items-center gap-4"></div>
         </div>
       </header>
 

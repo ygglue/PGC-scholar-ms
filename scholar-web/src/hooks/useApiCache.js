@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../config/api';
 import { useNavigate } from 'react-router-dom';
 
 const globalCache = {};
@@ -15,16 +15,13 @@ export const useApiCache = (key, url) => {
 
     const fetcher = async () => {
         try {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-            const res = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await apiClient.get(url);
             globalCache[key] = res.data;
             setData(res.data);
             setLoading(false);
             return res.data;
         } catch(err) {
             if (err.response?.status === 401) {
-                localStorage.removeItem('token');
                 clearCache();
                 navigate('/login');
             }

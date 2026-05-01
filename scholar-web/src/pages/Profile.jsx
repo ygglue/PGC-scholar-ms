@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient, { API_BASE } from '../config/api';
 import Layout from '../components/Layout';
 import { useApiCache } from '../hooks/useApiCache';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { data: profile } = useApiCache('profile', 'http://localhost:8000/scholars/me');
+  const { data: profile } = useApiCache('profile', `${API_BASE}/scholars/me`);
   
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
+  const handleLogout = async () => {
+    try {
+      await apiClient.post(`${API_BASE}/auth/logout`);
+    } catch (err) {
+      // Ignore logout errors
+    }
     navigate('/login');
   };
 
@@ -35,10 +39,7 @@ const Profile = () => {
   const saveChanges = async () => {
       setSubmitStatus('saving');
       try {
-          const token = localStorage.getItem('token');
-          await axios.post('http://localhost:8000/scholars/me/update', editForm, {
-              headers: { Authorization: `Bearer ${token}` }
-          });
+          await apiClient.post(`${API_BASE}/scholars/me/update`, editForm);
           setSubmitStatus('success');
           setIsEditing(false);
           setTimeout(() => setSubmitStatus(null), 3000);
