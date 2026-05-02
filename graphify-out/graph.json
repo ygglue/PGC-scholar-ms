@@ -908,9 +908,9 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L203",
-      "id": "documents_rationale_203",
       "community": 0,
-      "norm_label": "get all documents submitted to a specific submission bin (evaluator only)."
+      "norm_label": "get all documents submitted to a specific submission bin (evaluator only).",
+      "id": "documents_rationale_203"
     },
     {
       "label": "pending_changes.py",
@@ -1133,9 +1133,9 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L61",
-      "id": "submission_bins_rationale_61",
       "community": 0,
-      "norm_label": "scholars see only active (non-approved) bins.     evaluators/admins see all bins"
+      "norm_label": "scholars see only active (non-approved) bins.     evaluators/admins see all bins",
+      "id": "submission_bins_rationale_61"
     },
     {
       "label": "env.py",
@@ -1250,9 +1250,9 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\5ee10ec12f32_add_submission_bins.py",
       "source_location": "L1",
-      "id": "5ee10ec12f32_add_submission_bins_rationale_1",
       "community": 18,
-      "norm_label": "add_submission_bins  revision id: 5ee10ec12f32 revises: ab66dfea0e7a create date"
+      "norm_label": "add_submission_bins  revision id: 5ee10ec12f32 revises: ab66dfea0e7a create date",
+      "id": "5ee10ec12f32_add_submission_bins_rationale_1"
     },
     {
       "label": "ab66dfea0e7a_add_avatar_url_to_scholars.py",
@@ -1322,9 +1322,9 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\cd81366cd8dd_add_is_approved_to_submission_bins.py",
       "source_location": "L1",
-      "id": "cd81366cd8dd_add_is_approved_to_submission_bins_rationale_1",
       "community": 20,
-      "norm_label": "add_is_approved_to_submission_bins  revision id: cd81366cd8dd revises: 5ee10ec12"
+      "norm_label": "add_is_approved_to_submission_bins  revision id: cd81366cd8dd revises: 5ee10ec12",
+      "id": "cd81366cd8dd_add_is_approved_to_submission_bins_rationale_1"
     },
     {
       "label": "main.py",
@@ -3200,11 +3200,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L13",
       "weight": 0.8,
-      "_src": "documents_bininforesponse",
-      "_tgt": "document_document",
+      "_src": "document_document",
+      "_tgt": "documents_bininforesponse",
+      "confidence_score": 0.5,
       "source": "document_document",
-      "target": "documents_bininforesponse",
-      "confidence_score": 0.5
+      "target": "documents_bininforesponse"
     },
     {
       "relation": "uses",
@@ -3224,11 +3224,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L13",
       "weight": 0.8,
-      "_src": "documents_rationale_203",
-      "_tgt": "document_document",
+      "_src": "document_document",
+      "_tgt": "documents_rationale_203",
+      "confidence_score": 0.5,
       "source": "document_document",
-      "target": "documents_rationale_203",
-      "confidence_score": 0.5
+      "target": "documents_rationale_203"
     },
     {
       "relation": "uses",
@@ -3260,11 +3260,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L116",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbincreate",
-      "_tgt": "document_document",
+      "_src": "document_document",
+      "_tgt": "submission_bins_submissionbincreate",
+      "confidence_score": 0.5,
       "source": "document_document",
-      "target": "submission_bins_submissionbincreate",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbincreate"
     },
     {
       "relation": "uses",
@@ -3272,11 +3272,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L116",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbinresponse",
-      "_tgt": "document_document",
+      "_src": "document_document",
+      "_tgt": "submission_bins_submissionbinresponse",
+      "confidence_score": 0.5,
       "source": "document_document",
-      "target": "submission_bins_submissionbinresponse",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbinresponse"
     },
     {
       "relation": "uses",
@@ -3284,11 +3284,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L116",
       "weight": 0.8,
-      "_src": "submission_bins_rationale_61",
-      "_tgt": "document_document",
+      "_src": "document_document",
+      "_tgt": "submission_bins_rationale_61",
+      "confidence_score": 0.5,
       "source": "document_document",
-      "target": "submission_bins_rationale_61",
-      "confidence_score": 0.5
+      "target": "submission_bins_rationale_61"
     },
     {
       "relation": "calls",
@@ -3368,11 +3368,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L15",
       "weight": 0.8,
-      "_src": "documents_bininforesponse",
-      "_tgt": "pending_change_pendingchange",
+      "_src": "pending_change_pendingchange",
+      "_tgt": "documents_bininforesponse",
+      "confidence_score": 0.5,
       "source": "pending_change_pendingchange",
-      "target": "documents_bininforesponse",
-      "confidence_score": 0.5
+      "target": "documents_bininforesponse"
     },
     {
       "relation": "uses",
@@ -3392,11 +3392,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L15",
       "weight": 0.8,
-      "_src": "documents_rationale_203",
-      "_tgt": "pending_change_pendingchange",
+      "_src": "pending_change_pendingchange",
+      "_tgt": "documents_rationale_203",
+      "confidence_score": 0.5,
       "source": "pending_change_pendingchange",
-      "target": "documents_rationale_203",
-      "confidence_score": 0.5
+      "target": "documents_rationale_203"
     },
     {
       "relation": "uses",
@@ -3632,11 +3632,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L12",
       "weight": 0.8,
-      "_src": "documents_bininforesponse",
-      "_tgt": "scholar_scholar",
+      "_src": "scholar_scholar",
+      "_tgt": "documents_bininforesponse",
+      "confidence_score": 0.5,
       "source": "scholar_scholar",
-      "target": "documents_bininforesponse",
-      "confidence_score": 0.5
+      "target": "documents_bininforesponse"
     },
     {
       "relation": "uses",
@@ -3656,11 +3656,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L12",
       "weight": 0.8,
-      "_src": "documents_rationale_203",
-      "_tgt": "scholar_scholar",
+      "_src": "scholar_scholar",
+      "_tgt": "documents_rationale_203",
+      "confidence_score": 0.5,
       "source": "scholar_scholar",
-      "target": "documents_rationale_203",
-      "confidence_score": 0.5
+      "target": "documents_rationale_203"
     },
     {
       "relation": "uses",
@@ -3728,11 +3728,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L14",
       "weight": 0.8,
-      "_src": "documents_bininforesponse",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "documents_bininforesponse",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "documents_bininforesponse",
-      "confidence_score": 0.5
+      "target": "documents_bininforesponse"
     },
     {
       "relation": "uses",
@@ -3740,11 +3740,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L14",
       "weight": 0.8,
-      "_src": "documents_documentresponse",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "documents_documentresponse",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "documents_documentresponse",
-      "confidence_score": 0.5
+      "target": "documents_documentresponse"
     },
     {
       "relation": "uses",
@@ -3752,11 +3752,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L14",
       "weight": 0.8,
-      "_src": "documents_rationale_203",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "documents_rationale_203",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "documents_rationale_203",
-      "confidence_score": 0.5
+      "target": "documents_rationale_203"
     },
     {
       "relation": "uses",
@@ -3764,11 +3764,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbincreate",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "submission_bins_submissionbincreate",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "submission_bins_submissionbincreate",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbincreate"
     },
     {
       "relation": "uses",
@@ -3776,11 +3776,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbinresponse",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "submission_bins_submissionbinresponse",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "submission_bins_submissionbinresponse",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbinresponse"
     },
     {
       "relation": "uses",
@@ -3788,11 +3788,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "submission_bins_rationale_61",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "submission_bins_rationale_61",
+      "confidence_score": 0.5,
       "source": "submission_bin_submissionbin",
-      "target": "submission_bins_rationale_61",
-      "confidence_score": 0.5
+      "target": "submission_bins_rationale_61"
     },
     {
       "relation": "calls",
@@ -3801,8 +3801,8 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L44",
       "weight": 1.0,
-      "_src": "submission_bins_create_bin",
-      "_tgt": "submission_bin_submissionbin",
+      "_src": "submission_bin_submissionbin",
+      "_tgt": "submission_bins_create_bin",
       "source": "submission_bin_submissionbin",
       "target": "submission_bins_create_bin"
     },
@@ -3932,11 +3932,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "documents_bininforesponse",
-      "_tgt": "user_user",
+      "_src": "user_user",
+      "_tgt": "documents_bininforesponse",
+      "confidence_score": 0.5,
       "source": "user_user",
-      "target": "documents_bininforesponse",
-      "confidence_score": 0.5
+      "target": "documents_bininforesponse"
     },
     {
       "relation": "uses",
@@ -3956,11 +3956,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\documents.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "documents_rationale_203",
-      "_tgt": "user_user",
+      "_src": "user_user",
+      "_tgt": "documents_rationale_203",
+      "confidence_score": 0.5,
       "source": "user_user",
-      "target": "documents_rationale_203",
-      "confidence_score": 0.5
+      "target": "documents_rationale_203"
     },
     {
       "relation": "uses",
@@ -4016,11 +4016,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L10",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbincreate",
-      "_tgt": "user_user",
+      "_src": "user_user",
+      "_tgt": "submission_bins_submissionbincreate",
+      "confidence_score": 0.5,
       "source": "user_user",
-      "target": "submission_bins_submissionbincreate",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbincreate"
     },
     {
       "relation": "uses",
@@ -4028,11 +4028,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L10",
       "weight": 0.8,
-      "_src": "submission_bins_submissionbinresponse",
-      "_tgt": "user_user",
+      "_src": "user_user",
+      "_tgt": "submission_bins_submissionbinresponse",
+      "confidence_score": 0.5,
       "source": "user_user",
-      "target": "submission_bins_submissionbinresponse",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbinresponse"
     },
     {
       "relation": "uses",
@@ -4040,11 +4040,11 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\submission_bins.py",
       "source_location": "L10",
       "weight": 0.8,
-      "_src": "submission_bins_rationale_61",
-      "_tgt": "user_user",
+      "_src": "user_user",
+      "_tgt": "submission_bins_rationale_61",
+      "confidence_score": 0.5,
       "source": "user_user",
-      "target": "submission_bins_rationale_61",
-      "confidence_score": 0.5
+      "target": "submission_bins_rationale_61"
     },
     {
       "relation": "contains",
@@ -5326,9 +5326,9 @@
       "weight": 0.8,
       "_src": "main_mainwindow",
       "_tgt": "submission_bins_submissionbinsview",
+      "confidence_score": 0.5,
       "source": "main_mainwindow",
-      "target": "submission_bins_submissionbinsview",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbinsview"
     },
     {
       "relation": "uses",
@@ -5338,9 +5338,9 @@
       "weight": 0.8,
       "_src": "main_mainwindow",
       "_tgt": "bin_documents_bindocumentsview",
+      "confidence_score": 0.5,
       "source": "main_mainwindow",
-      "target": "bin_documents_bindocumentsview",
-      "confidence_score": 0.5
+      "target": "bin_documents_bindocumentsview"
     },
     {
       "relation": "inherits",
@@ -5614,9 +5614,9 @@
       "weight": 0.8,
       "_src": "main_evaluatorapp",
       "_tgt": "submission_bins_submissionbinsview",
+      "confidence_score": 0.5,
       "source": "main_evaluatorapp",
-      "target": "submission_bins_submissionbinsview",
-      "confidence_score": 0.5
+      "target": "submission_bins_submissionbinsview"
     },
     {
       "relation": "uses",
@@ -5626,9 +5626,9 @@
       "weight": 0.8,
       "_src": "main_evaluatorapp",
       "_tgt": "bin_documents_bindocumentsview",
+      "confidence_score": 0.5,
       "source": "main_evaluatorapp",
-      "target": "bin_documents_bindocumentsview",
-      "confidence_score": 0.5
+      "target": "bin_documents_bindocumentsview"
     },
     {
       "relation": "calls",
