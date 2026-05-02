@@ -1,0 +1,3 @@
+# Auto-resolve graphify-out conflicts using the incoming branch's version.
+# Graphify always rebuilds fresh after the merge commit anyway.
+graphify-out/** merge=theirs
