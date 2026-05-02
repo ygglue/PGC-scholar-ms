@@ -55,13 +55,13 @@
 
 ## Surprising Connections (you probably didn't know these)
 - `Extract token from Authorization header or cookie.` --uses--> `User`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\core\dependencies.py → backend\app\models\user.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\core\dependencies.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py
 - `PendingChange` --calls--> `request_profile_update()`  [INFERRED]
-  backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
 - `User` --uses--> `Set httpOnly cookie with the access token.`  [INFERRED]
-  backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
 - `seed()` --calls--> `User`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py → backend\app\models\user.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py
 - `seed()` --calls--> `Scholar`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\scholar.py
 
@@ -230,7 +230,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`User` has 19 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 13 inferred relationships involving `Scholar` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
   _`Scholar` has 13 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 12 inferred relationships involving `PendingChange` (e.g. with `ScholarUpdate` and `ScholarResponse`) actually correct?**
+- **Are the 12 inferred relationships involving `PendingChange` (e.g. with `GradeInput` and `GradeSubmitRequest`) actually correct?**
   _`PendingChange` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `MainWindow` (e.g. with `LoginView` and `DashboardView`) actually correct?**
   _`MainWindow` has 3 INFERRED edges - model-reasoned connections that need verification._
