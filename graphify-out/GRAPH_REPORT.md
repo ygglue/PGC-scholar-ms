@@ -1,12 +1,12 @@
-# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-02)
+# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-03)
 
 ## Corpus Check
-- 57 files · ~53,887 words
+- 63 files · ~64,556 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 302 nodes · 568 edges · 33 communities detected
-- Extraction: 62% EXTRACTED · 38% INFERRED · 0% AMBIGUOUS · INFERRED: 213 edges (avg confidence: 0.68)
+- 382 nodes · 757 edges · 35 communities detected
+- Extraction: 64% EXTRACTED · 36% INFERRED · 0% AMBIGUOUS · INFERRED: 276 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -43,18 +43,20 @@
 - [[_COMMUNITY_Community 30|Community 30]]
 - [[_COMMUNITY_Community 31|Community 31]]
 - [[_COMMUNITY_Community 32|Community 32]]
+- [[_COMMUNITY_Community 33|Community 33]]
+- [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `User` - 26 edges
-2. `MainWindow` - 19 edges
-3. `Scholar` - 17 edges
-4. `PendingChange` - 16 edges
-5. `CacheService` - 16 edges
-6. `SubmissionBinsView` - 16 edges
-7. `BinDocumentsView` - 15 edges
-8. `get_cache_service()` - 14 edges
-9. `LoginView` - 13 edges
-10. `ScholarsDirectoryView` - 13 edges
+1. `User` - 30 edges
+2. `MainWindow` - 25 edges
+3. `Scholar` - 21 edges
+4. `ScholarsDirectoryView` - 21 edges
+5. `PendingChange` - 18 edges
+6. `CacheService` - 18 edges
+7. `SubmissionBinsView` - 16 edges
+8. `get_cache_service()` - 15 edges
+9. `BinDocumentsView` - 15 edges
+10. `Document` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Extract token from Authorization header or cookie.` --uses--> `User`  [INFERRED]
@@ -63,96 +65,96 @@
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
 - `User` --uses--> `Set httpOnly cookie with the access token.`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
-- `SubmissionBin` --calls--> `create_bin()`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\submission_bin.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\submission_bins.py
-- `User` --uses--> `CreateAnnouncementRequest`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\announcements.py
+- `Scholar` --uses--> `Creates fake scholars for testing purposes.`  [INFERRED]
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\scholar.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py
+- `Scholar` --uses--> `Deletes all fake scholars by email pattern.`  [INFERRED]
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\scholar.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.09
-Nodes (37): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), AnnouncementReceipt, DevLoginRequest (+29 more)
+Cohesion: 0.07
+Nodes (44): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), AnnouncementReceipt, DevLoginRequest (+36 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.09
-Nodes (8): DownloadDocThread, CacheService, get_cache_service(), get_network_status(), NetworkStatus, QObject, FetchScholarsThread, ScholarsDirectoryView
+Cohesion: 0.05
+Nodes (17): clear_auth_token(), _get_machine_id(), load_auth_token(), save_auth_token(), _simple_decrypt(), _simple_encrypt(), create_ambient_shadow(), DashboardView (+9 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.1
-Nodes (9): BinDocumentsView, DashboardView, get_db(), LoginView, EvaluatorApp, MainWindow, set_windows_titlebar_color(), QApplication (+1 more)
+Cohesion: 0.08
+Nodes (16): QFrame, QMainWindow, QWidget, create_ambient_shadow(), FetchScholarDocsThread, FetchScholarsThread, get_avatar_color(), get_initials() (+8 more)
 
 ### Community 3 - "Community 3"
+Cohesion: 0.12
+Nodes (8): CacheService, Loads existing list, replaces/adds items from new_items, and saves.         Use, Returns the latest 'updated_at' timestamp from the cached list., get_current_user(), get_current_user_from_request(), get_token_from_request(), Extract token from Authorization header or cookie., review_change()
+
+### Community 4 - "Community 4"
 Cohesion: 0.09
 Nodes (9): get_bin_documents(), view_document_evaluator(), view_document_scholar(), remove_scholar_avatar(), request_profile_update(), upload_scholar_avatar(), create_signed_url(), delete_avatar() (+1 more)
 
-### Community 4 - "Community 4"
-Cohesion: 0.18
-Nodes (4): QDialog, CreateBinDialog, FetchBinsThread, SubmissionBinsView
-
 ### Community 5 - "Community 5"
-Cohesion: 0.17
-Nodes (4): FetchBinDocsThread, ViewDocThread, AutoLoginThread, QThread
+Cohesion: 0.16
+Nodes (6): BinDocumentsView, create_ambient_shadow(), DownloadDocThread, FetchBinDocsThread, ViewDocThread, QThread
 
 ### Community 6 - "Community 6"
-Cohesion: 0.18
-Nodes (5): getAvatarColor(), Dashboard(), Layout(), Profile(), useApiCache()
+Cohesion: 0.17
+Nodes (6): get_cache_service(), QDialog, create_ambient_shadow(), CreateBinDialog, FetchBinsThread, SubmissionBinsView
 
 ### Community 7 - "Community 7"
-Cohesion: 0.31
-Nodes (8): dev_login(), google_login(), login(), Set httpOnly cookie with the access token., _set_token_cookie(), create_access_token(), verify_google_token(), verify_password()
+Cohesion: 0.16
+Nodes (6): getAvatarColor(), Dashboard(), Layout(), Profile(), ScholarDetailPanel, useApiCache()
 
 ### Community 8 - "Community 8"
-Cohesion: 0.27
-Nodes (6): clear_auth_token(), _get_machine_id(), load_auth_token(), save_auth_token(), _simple_decrypt(), _simple_encrypt()
+Cohesion: 0.31
+Nodes (8): dev_login(), google_login(), login(), Set httpOnly cookie with the access token., _set_token_cookie(), create_access_token(), verify_google_token(), verify_password()
 
 ### Community 9 - "Community 9"
 Cohesion: 0.32
 Nodes (6): Announcement, create_announcement(), CreateAnnouncementRequest, get_announcements(), Create a new announcement (requires auth), Get announcements for the current scholar.     Returns announcements filtered by
 
 ### Community 10 - "Community 10"
-Cohesion: 0.38
-Nodes (4): get_current_user(), get_current_user_from_request(), get_token_from_request(), Extract token from Authorization header or cookie.
+Cohesion: 0.32
+Nodes (4): QObject, get_sync_service(), SyncService, SyncWorker
 
 ### Community 11 - "Community 11"
 Cohesion: 0.4
 Nodes (4): Run migrations in 'offline' mode.      This configures the context with just a U, Run migrations in 'online' mode.      In this scenario we need to create an Engi, run_migrations_offline(), run_migrations_online()
 
 ### Community 12 - "Community 12"
-Cohesion: 0.5
-Nodes (3): QMainWindow, create_ambient_shadow(), MainWindow
+Cohesion: 0.83
+Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 13 - "Community 13"
 Cohesion: 0.83
 Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 14 - "Community 14"
-Cohesion: 0.83
-Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
-
-### Community 15 - "Community 15"
-Cohesion: 0.5
-Nodes (1): review_change()
-
-### Community 16 - "Community 16"
 Cohesion: 0.5
 Nodes (1): initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5
 
-### Community 17 - "Community 17"
+### Community 15 - "Community 15"
 Cohesion: 0.5
 Nodes (1): add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date
 
-### Community 18 - "Community 18"
+### Community 16 - "Community 16"
 Cohesion: 0.5
 Nodes (1): add_avatar_url_to_scholars  Revision ID: ab66dfea0e7a Revises: 3b9970469f0e Crea
 
-### Community 19 - "Community 19"
+### Community 17 - "Community 17"
 Cohesion: 0.5
 Nodes (1): add_is_approved_to_submission_bins  Revision ID: cd81366cd8dd Revises: 5ee10ec12
 
-### Community 20 - "Community 20"
+### Community 18 - "Community 18"
+Cohesion: 0.5
+Nodes (1): add_updated_at_and_system_sync  Revision ID: eeb1e72caa3a Revises: cd81366cd8dd
+
+### Community 19 - "Community 19"
 Cohesion: 0.67
 Nodes (1): main()
+
+### Community 20 - "Community 20"
+Cohesion: 1.0
+Nodes (0): 
 
 ### Community 21 - "Community 21"
 Cohesion: 1.0
@@ -200,14 +202,24 @@ Nodes (0):
 
 ### Community 32 - "Community 32"
 Cohesion: 1.0
+Nodes (1): Generate initials: Juan + Dela Cruz -> "JDC"
+
+### Community 33 - "Community 33"
+Cohesion: 1.0
+Nodes (1): Generate consistent color from name hash
+
+### Community 34 - "Community 34"
+Cohesion: 1.0
 Nodes (1): # TODO: Implement actual API call via requests
 
 ## Knowledge Gaps
-- **8 isolated node(s):** `Create a new announcement (requires auth)`, `Run migrations in 'offline' mode.      This configures the context with just a U`, `Run migrations in 'online' mode.      In this scenario we need to create an Engi`, `initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5`, `add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date` (+3 more)
+- **15 isolated node(s):** `Create a new announcement (requires auth)`, `Run migrations in 'offline' mode.      This configures the context with just a U`, `Run migrations in 'online' mode.      In this scenario we need to create an Engi`, `initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5`, `add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date` (+10 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 21`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
+- **Thin community `Community 20`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (2 nodes): `main.py`, `health_check()`
+- **Thin community `Community 21`** (2 nodes): `main.py`, `health_check()`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 22`** (2 nodes): `sync.py`, `get_last_changed()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 23`** (2 nodes): `App()`, `App.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -227,23 +239,27 @@ Nodes (1): # TODO: Implement actual API call via requests
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 31`** (1 nodes): `api.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (1 nodes): `# TODO: Implement actual API call via requests`
+- **Thin community `Community 32`** (1 nodes): `Generate initials: Juan + Dela Cruz -> "JDC"`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 33`** (1 nodes): `Generate consistent color from name hash`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 34`** (1 nodes): `# TODO: Implement actual API call via requests`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `Community 0` to `Community 9`, `Community 10`, `Community 7`?**
-  _High betweenness centrality (0.206) - this node is a cross-community bridge._
-- **Why does `LoginView` connect `Community 2` to `Community 8`, `Community 1`, `Community 5`?**
-  _High betweenness centrality (0.116) - this node is a cross-community bridge._
-- **Why does `get_token_from_request()` connect `Community 10` to `Community 1`?**
-  _High betweenness centrality (0.111) - this node is a cross-community bridge._
-- **Are the 24 inferred relationships involving `User` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
-  _`User` has 24 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 5 inferred relationships involving `MainWindow` (e.g. with `LoginView` and `DashboardView`) actually correct?**
-  _`MainWindow` has 5 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 15 inferred relationships involving `Scholar` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
-  _`Scholar` has 15 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 14 inferred relationships involving `PendingChange` (e.g. with `GradeInput` and `GradeSubmitRequest`) actually correct?**
-  _`PendingChange` has 14 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `User` connect `Community 0` to `Community 8`, `Community 9`, `Community 3`?**
+  _High betweenness centrality (0.195) - this node is a cross-community bridge._
+- **Why does `LoginView` connect `Community 1` to `Community 2`?**
+  _High betweenness centrality (0.114) - this node is a cross-community bridge._
+- **Are the 28 inferred relationships involving `User` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
+  _`User` has 28 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 6 inferred relationships involving `MainWindow` (e.g. with `LoginView` and `DashboardView`) actually correct?**
+  _`MainWindow` has 6 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 19 inferred relationships involving `Scholar` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
+  _`Scholar` has 19 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 3 inferred relationships involving `ScholarsDirectoryView` (e.g. with `MainWindow` and `EvaluatorApp`) actually correct?**
+  _`ScholarsDirectoryView` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 16 inferred relationships involving `PendingChange` (e.g. with `Updates the global last_updated_at timestamp in the system_sync table.     We u` and `GradeInput`) actually correct?**
+  _`PendingChange` has 16 INFERRED edges - model-reasoned connections that need verification._

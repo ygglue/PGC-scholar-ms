@@ -18,7 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.routers import academic_records, auth, documents, pending_changes, scholars, announcements, submission_bins
+from app.routers import academic_records, auth, documents, pending_changes, scholars, announcements, submission_bins, sync
+from app.core.events import register_event_listeners
+
+register_event_listeners()
 
 app.include_router(auth.router)
 app.include_router(scholars.router)
@@ -27,6 +30,7 @@ app.include_router(pending_changes.router)
 app.include_router(documents.router)
 app.include_router(announcements.router)
 app.include_router(submission_bins.router)
+app.include_router(sync.router)
 
 
 @app.get("/health")

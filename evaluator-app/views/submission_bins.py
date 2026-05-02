@@ -2,13 +2,21 @@ import requests
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QFrame, QListWidget, QListWidgetItem, QDialog, QLineEdit,
-    QComboBox, QMessageBox, QSizePolicy
+    QComboBox, QMessageBox, QSizePolicy, QGraphicsDropShadowEffect
 )
 from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QColor
 
 from services.cache_service import get_cache_service
 from services.network_status import get_network_status
 
+def create_ambient_shadow():
+    shadow = QGraphicsDropShadowEffect()
+    shadow.setBlurRadius(32)
+    shadow.setXOffset(0)
+    shadow.setYOffset(8)
+    shadow.setColor(QColor(23, 29, 24, 15))
+    return shadow
 
 API_BASE = "http://localhost:8000"
 CACHE_KEY = "bins/list"
@@ -90,6 +98,8 @@ class CreateBinDialog(QDialog):
         btn_row.addWidget(create_btn)
         layout.addLayout(btn_row)
 
+        self.setGraphicsEffect(create_ambient_shadow())
+
     def get_values(self):
         return self.ay_input.text().strip(), self.sem_combo.currentText()
 
@@ -144,6 +154,7 @@ class SubmissionBinsView(QWidget):
         self.list_widget = QListWidget()
         self.list_widget.setObjectName("Panel")
         self.list_widget.setSpacing(4)
+        self.list_widget.setGraphicsEffect(create_ambient_shadow())
         layout.addWidget(self.list_widget, stretch=1)
 
         self.load_bins()
@@ -151,8 +162,6 @@ class SubmissionBinsView(QWidget):
     def load_bins(self):
         cache = get_cache_service()
         network = get_network_status()
-        
-        self.list_widget.clear()
         
         if network.is_online():
             self._fetch_from_api()
@@ -212,6 +221,7 @@ class SubmissionBinsView(QWidget):
         self._display_bins(bins)
 
     def _display_bins(self, bins):
+        self.list_widget.clear()
         if not bins:
             if self.status_label:
                 self.status_label.setText("No submission bins yet. Create one to allow scholars to upload documents.")

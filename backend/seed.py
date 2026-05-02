@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from app.core.database import SessionLocal
 from app.models.user import User
 from app.models.scholar import Scholar
+from app.models.system_sync import SystemSync
 from app.core.security import get_password_hash
 
 FAKE_EMAIL_DOMAIN = "fake.local"
@@ -19,6 +20,13 @@ SCHOOLS = ["State University", "National College", "Polytechnic Institute", "Uni
 def seed():
     db = SessionLocal()
     try:
+        # 0. Seed SystemSync
+        sync = db.query(SystemSync).filter(SystemSync.id == "global").first()
+        if not sync:
+            sync = SystemSync(id="global")
+            db.add(sync)
+            print("Initialized SystemSync global record")
+
         # 1. Seed an Evaluator
         evaluator_email = "evaluator@test.com"
         evaluator = db.query(User).filter(User.email == evaluator_email).first()
