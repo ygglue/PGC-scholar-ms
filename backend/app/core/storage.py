@@ -1,6 +1,8 @@
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from PIL import Image
+import io
 
 load_dotenv()
 
@@ -38,3 +40,40 @@ def delete_document(path: str):
     if not supabase:
         raise Exception("Supabase client not configured. Check your .env file.")
     supabase.storage.from_("scholar-documents").remove([path])
+
+def upload_avatar(scholar_id: str, file_bytes: bytes) -> str:
+    if not supabase:
+        raise Exception("Supabase client not configured. Check your .env file.")
+    
+    img = Image.open(io.BytesIO(file_bytes))
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    
+    img.thumbnail((400, 400))
+    out_io = io.BytesIO()
+    img.save(out_io, format="WEBP", quality=85)
+    out_bytes = out_io.getvalue()
+    
+    path = f"{scholar_id}/avatar.webp"
+    bucket = "scholar-avatars"
+    
+    try:
+        supabase.storage.from_(bucket).upload(
+            path=path,
+            file=out_bytes,
+            file_options={"content-type": "image/webp", "x-upsert": "true"}
+        )
+    except Exception:
+        supabase.storage.from_(bucket).update(
+            path=path,
+            file=out_bytes,
+            file_options={"content-type": "image/webp"}
+        )
+    
+    return supabase.storage.from_(bucket).get_public_url(path)
+
+def delete_avatar(scholar_id: str):
+    if not supabase:
+        raise Exception("Supabase client not configured.")
+    path = f"{scholar_id}/avatar.webp"
+    supabase.storage.from_("scholar-avatars").remove([path])

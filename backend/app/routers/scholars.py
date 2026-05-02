@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from pydantic import BaseModel, ConfigDict
@@ -7,6 +7,7 @@ import uuid
 
 from app.core.database import get_db
 from app.core.dependencies import get_current_scholar, get_current_evaluator
+from app.core.storage import upload_avatar, delete_avatar
 from app.models.user import User
 from app.models.scholar import Scholar
 from app.models.pending_change import PendingChange
@@ -49,6 +50,7 @@ class ScholarResponse(BaseModel):
     religion: Optional[str]
     address: Optional[str]
     contact_number: Optional[str]
+    avatar_url: Optional[str]
     model_config = ConfigDict(from_attributes=True)
 
 @router.get("/me", response_model=ScholarResponse)
@@ -57,6 +59,59 @@ def get_own_profile(current_user: User = Depends(get_current_scholar), db: Sessi
     if not scholar:
         raise HTTPException(status_code=404, detail="Scholar profile not found")
     return scholar
+
+@router.post("/me/avatar")
+async def upload_scholar_avatar(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_scholar),
+    db: Session = Depends(get_db)
+):
+    scholar = db.query(Scholar).filter(Scholar.user_id == current_user.id).first()
+    if not scholar:
+        raise HTTPException(status_code=404, detail="Scholar profile not found")
+
+    if file.content_type not in ["image/jpeg", "image/png", "image/webp"]:
+        raise HTTPException(status_code=400, detail="Only JPEG, PNG, or WebP images are allowed")
+
+    file_bytes = await file.read()
+    if len(file_bytes) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large. Maximum size is 5MB")
+
+    try:
+        public_url = upload_avatar(str(scholar.id), file_bytes)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    # Add timestamp to URL to bust browser cache
+    import time
+    public_url_with_cache_buster = f"{public_url}?t={int(time.time())}"
+    
+    scholar.avatar_url = public_url_with_cache_buster
+    db.commit()
+    
+    return {"message": "Avatar uploaded successfully", "avatar_url": public_url_with_cache_buster}
+
+@router.delete("/me/avatar")
+def remove_scholar_avatar(
+    current_user: User = Depends(get_current_scholar),
+    db: Session = Depends(get_db)
+):
+    scholar = db.query(Scholar).filter(Scholar.user_id == current_user.id).first()
+    if not scholar:
+        raise HTTPException(status_code=404, detail="Scholar profile not found")
+        
+    if not scholar.avatar_url:
+        raise HTTPException(status_code=400, detail="No avatar to delete")
+        
+    try:
+        delete_avatar(str(scholar.id))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        
+    scholar.avatar_url = None
+    db.commit()
+    
+    return {"message": "Avatar deleted successfully"}
 
 @router.post("/me/update")
 def request_profile_update(update_data: ScholarUpdate, current_user: User = Depends(get_current_scholar), db: Session = Depends(get_db)):

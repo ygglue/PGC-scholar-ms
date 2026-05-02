@@ -1,12 +1,12 @@
-# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-04-27)
+# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-02)
 
 ## Corpus Check
-- 43 files · ~32,787 words
+- 46 files · ~38,540 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 140 nodes · 188 edges · 28 communities detected
-- Extraction: 65% EXTRACTED · 35% INFERRED · 0% AMBIGUOUS · INFERRED: 66 edges (avg confidence: 0.6)
+- 170 nodes · 249 edges · 31 communities detected
+- Extraction: 65% EXTRACTED · 35% INFERRED · 0% AMBIGUOUS · INFERRED: 87 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -38,112 +38,115 @@
 - [[_COMMUNITY_Community 25|Community 25]]
 - [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_Community 27|Community 27]]
+- [[_COMMUNITY_Community 28|Community 28]]
+- [[_COMMUNITY_Community 29|Community 29]]
+- [[_COMMUNITY_Community 30|Community 30]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `PendingChange` - 14 edges
-2. `User` - 14 edges
-3. `Scholar` - 12 edges
-4. `AcademicRecord` - 9 edges
-5. `ProspectusGrade` - 7 edges
-6. `GradeInput` - 7 edges
-7. `GradeSubmitRequest` - 7 edges
-8. `ProspectusGradeResponse` - 7 edges
-9. `AcademicRecordResponse` - 7 edges
-10. `PendingChangeResponse` - 7 edges
+1. `User` - 21 edges
+2. `Scholar` - 15 edges
+3. `PendingChange` - 14 edges
+4. `MainWindow` - 12 edges
+5. `AcademicRecord` - 9 edges
+6. `ScholarsDirectoryView` - 9 edges
+7. `DashboardView` - 8 edges
+8. `LoginView` - 8 edges
+9. `ProspectusGrade` - 7 edges
+10. `GradeInput` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Extract token from Authorization header or cookie.` --uses--> `User`  [INFERRED]
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\core\dependencies.py → backend\app\models\user.py
 - `PendingChange` --calls--> `request_profile_update()`  [INFERRED]
   backend\app\models\pending_change.py → backend\app\routers\scholars.py
+- `User` --uses--> `Set httpOnly cookie with the access token.`  [INFERRED]
+  backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
 - `seed()` --calls--> `User`  [INFERRED]
-  backend\seed.py → backend\app\models\user.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py → backend\app\models\user.py
 - `seed()` --calls--> `Scholar`  [INFERRED]
-  backend\seed.py → backend\app\models\scholar.py
-- `User` --uses--> `GoogleLoginRequest`  [INFERRED]
-  backend\app\models\user.py → backend\app\routers\auth.py
-- `User` --uses--> `DevLoginRequest`  [INFERRED]
-  backend\app\models\user.py → backend\app\routers\auth.py
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py → backend\app\models\scholar.py
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.18
-Nodes (19): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), Base, BaseModel (+11 more)
+Cohesion: 0.15
+Nodes (22): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), AnnouncementReceipt, DevLoginRequest (+14 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.12
-Nodes (9): DashboardView, LoginView, # TODO: Implement actual API call via requests, EvaluatorApp, QApplication, QMainWindow, QWidget, create_ambient_shadow() (+1 more)
+Nodes (8): DashboardView, LoginView, EvaluatorApp, MainWindow, set_windows_titlebar_color(), QApplication, QWidget, ScholarsDirectoryView
 
 ### Community 2 - "Community 2"
-Cohesion: 0.21
-Nodes (10): dev_login(), DevLoginRequest, google_login(), GoogleLoginRequest, login(), create_access_token(), get_password_hash(), verify_google_token() (+2 more)
-
-### Community 3 - "Community 3"
 Cohesion: 0.2
 Nodes (3): view_document_evaluator(), view_document_scholar(), create_signed_url()
 
+### Community 3 - "Community 3"
+Cohesion: 0.31
+Nodes (8): dev_login(), google_login(), login(), Set httpOnly cookie with the access token., _set_token_cookie(), create_access_token(), verify_google_token(), verify_password()
+
 ### Community 4 - "Community 4"
-Cohesion: 0.29
-Nodes (3): Dashboard(), Profile(), useApiCache()
+Cohesion: 0.32
+Nodes (6): Announcement, create_announcement(), CreateAnnouncementRequest, get_announcements(), Create a new announcement (requires auth), Get announcements for the current scholar.     Returns announcements filtered by
 
 ### Community 5 - "Community 5"
 Cohesion: 0.33
-Nodes (1): request_profile_update()
+Nodes (6): get_password_hash(), cleanup_fake_scholars(), Deletes all fake scholars by email pattern., Creates fake scholars for testing purposes., seed(), seed_fake_scholars()
 
 ### Community 6 - "Community 6"
+Cohesion: 0.38
+Nodes (4): get_current_user(), get_current_user_from_request(), get_token_from_request(), Extract token from Authorization header or cookie.
+
+### Community 7 - "Community 7"
+Cohesion: 0.29
+Nodes (3): Dashboard(), Profile(), useApiCache()
+
+### Community 8 - "Community 8"
+Cohesion: 0.33
+Nodes (1): request_profile_update()
+
+### Community 9 - "Community 9"
 Cohesion: 0.4
 Nodes (4): Run migrations in 'offline' mode.      This configures the context with just a U, Run migrations in 'online' mode.      In this scenario we need to create an Engi, run_migrations_offline(), run_migrations_online()
 
-### Community 7 - "Community 7"
-Cohesion: 0.83
-Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
-
-### Community 8 - "Community 8"
-Cohesion: 0.83
-Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
-
-### Community 9 - "Community 9"
-Cohesion: 0.5
-Nodes (0): 
-
 ### Community 10 - "Community 10"
 Cohesion: 0.5
-Nodes (0): 
+Nodes (3): QMainWindow, create_ambient_shadow(), MainWindow
 
 ### Community 11 - "Community 11"
-Cohesion: 0.5
-Nodes (1): initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5
+Cohesion: 0.83
+Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 12 - "Community 12"
-Cohesion: 0.67
-Nodes (1): main()
+Cohesion: 0.83
+Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 13 - "Community 13"
-Cohesion: 1.0
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 14 - "Community 14"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5
 
 ### Community 15 - "Community 15"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.67
+Nodes (1): main()
 
 ### Community 16 - "Community 16"
 Cohesion: 1.0
-Nodes (1): Announcement
+Nodes (0): 
 
 ### Community 17 - "Community 17"
 Cohesion: 1.0
-Nodes (1): AnnouncementReceipt
+Nodes (0): 
 
 ### Community 18 - "Community 18"
 Cohesion: 1.0
-Nodes (1): ProgramHistory
+Nodes (0): 
 
 ### Community 19 - "Community 19"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): ProgramHistory
 
 ### Community 20 - "Community 20"
 Cohesion: 1.0
@@ -177,54 +180,66 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 28 - "Community 28"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 29 - "Community 29"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 30 - "Community 30"
+Cohesion: 1.0
+Nodes (1): # TODO: Implement actual API call via requests
+
 ## Knowledge Gaps
-- **4 isolated node(s):** `Run migrations in 'offline' mode.      This configures the context with just a U`, `Run migrations in 'online' mode.      In this scenario we need to create an Engi`, `initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5`, `# TODO: Implement actual API call via requests`
+- **5 isolated node(s):** `Create a new announcement (requires auth)`, `Run migrations in 'offline' mode.      This configures the context with just a U`, `Run migrations in 'online' mode.      In this scenario we need to create an Engi`, `initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5`, `# TODO: Implement actual API call via requests`
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 13`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
+- **Thin community `Community 16`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (2 nodes): `main.py`, `health_check()`
+- **Thin community `Community 17`** (2 nodes): `main.py`, `health_check()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (2 nodes): `database.py`, `get_db()`
+- **Thin community `Community 18`** (2 nodes): `database.py`, `get_db()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (2 nodes): `Announcement`, `announcement.py`
+- **Thin community `Community 19`** (2 nodes): `program_history.py`, `ProgramHistory`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (2 nodes): `AnnouncementReceipt`, `announcement_receipt.py`
+- **Thin community `Community 20`** (2 nodes): `App()`, `App.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (2 nodes): `program_history.py`, `ProgramHistory`
+- **Thin community `Community 21`** (2 nodes): `Layout.jsx`, `Layout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (2 nodes): `App()`, `App.jsx`
+- **Thin community `Community 22`** (2 nodes): `Inbox.jsx`, `Inbox()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (2 nodes): `Layout()`, `Layout.jsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 21`** (2 nodes): `Inbox()`, `Inbox.jsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (2 nodes): `Login()`, `Login.jsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (1 nodes): `__init__.py`
+- **Thin community `Community 23`** (2 nodes): `Login.jsx`, `Login()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 24`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 25`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (1 nodes): `vite.config.js`
+- **Thin community `Community 26`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (1 nodes): `main.jsx`
+- **Thin community `Community 27`** (1 nodes): `vite.config.js`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 28`** (1 nodes): `main.jsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 29`** (1 nodes): `api.js`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 30`** (1 nodes): `# TODO: Implement actual API call via requests`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `Community 0` to `Community 2`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
-- **Why does `DocumentResponse` connect `Community 0` to `Community 3`?**
+- **Why does `User` connect `Community 0` to `Community 3`, `Community 4`, `Community 5`, `Community 6`?**
+  _High betweenness centrality (0.126) - this node is a cross-community bridge._
+- **Why does `DocumentResponse` connect `Community 0` to `Community 2`?**
   _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **Why does `PendingChange` connect `Community 0` to `Community 5`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `PendingChange` connect `Community 0` to `Community 8`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Are the 19 inferred relationships involving `User` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
+  _`User` has 19 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 13 inferred relationships involving `Scholar` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
+  _`Scholar` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `PendingChange` (e.g. with `submit_grades()` and `upload_document()`) actually correct?**
   _`PendingChange` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 12 inferred relationships involving `User` (e.g. with `seed()` and `GradeInput`) actually correct?**
-  _`User` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 10 inferred relationships involving `Scholar` (e.g. with `seed()` and `GradeInput`) actually correct?**
-  _`Scholar` has 10 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 7 inferred relationships involving `AcademicRecord` (e.g. with `submit_grades()` and `GradeInput`) actually correct?**
-  _`AcademicRecord` has 7 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 3 inferred relationships involving `MainWindow` (e.g. with `LoginView` and `DashboardView`) actually correct?**
+  _`MainWindow` has 3 INFERRED edges - model-reasoned connections that need verification._

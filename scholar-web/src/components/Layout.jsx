@@ -1,8 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useApiCache } from '../hooks/useApiCache';
+import { API_BASE } from '../config/api';
+import { getAvatarColor } from '../utils/colors';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { data: profile } = useApiCache('profile', `${API_BASE}/scholars/me`);
 
   return (
     <div className="bg-surface-container-low text-on-surface min-h-screen pb-32">
@@ -12,7 +16,15 @@ const Layout = ({ children }) => {
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold tracking-tight text-emerald-800 dark:text-emerald-200 font-headline">PGC-ISKOnektado</h1>
           </div>
-          <div className="flex items-center gap-4"></div>
+          <div className="flex items-center gap-4">
+            {profile?.avatar_url ? (
+               <img src={profile.avatar_url} alt="Avatar" className="w-10 h-10 rounded-full object-cover border-2 border-primary/20" />
+            ) : profile ? (
+               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold font-headline ${getAvatarColor(profile.id)}`}>
+                 {profile.first_name?.[0]}{profile.last_name?.[0]}
+               </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
