@@ -1,13 +1,39 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
                                QFrame, QLineEdit, QComboBox, QTableWidget, QTableWidgetItem)
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QThread, Signal, QTimer
 import requests
 
+API_BASE = "http://localhost:8000"
+
+
+class FetchScholarsThread(QThread):
+    done = Signal(list)
+    error = Signal(str)
+
+    def __init__(self, token):
+        super().__init__()
+        self.token = token
+
+    def run(self):
+        try:
+            res = requests.get(
+                f"{API_BASE}/scholars/",
+                headers={"Authorization": f"Bearer {self.token}"},
+                timeout=10
+            )
+            if res.status_code == 200:
+                self.done.emit(res.json())
+            else:
+                self.error.emit(f"Error: {res.status_code}")
+        except Exception as e:
+            self.error.emit(str(e))
+
 class ScholarsDirectoryView(QWidget):
-    def __init__(self, token: str, on_back_callback):
+    def __init__(self, token: str, on_back_callback, on_show_submission_bins=None):
         super().__init__()
         self.token = token
         self.on_back_callback = on_back_callback
+        self.on_show_submission_bins = on_show_submission_bins
         self.scholars = []
         
         self.setObjectName("ContentArea")
@@ -28,19 +54,25 @@ class ScholarsDirectoryView(QWidget):
         nav_pending = QPushButton("Pending Documents")
         nav_pending.setObjectName("NavButton")
         nav_pending.clicked.connect(self.on_back_callback)
-        
+
         nav_scholars = QPushButton("Scholars Directory")
         nav_scholars.setObjectName("NavButton")
         nav_scholars.setProperty("active", "true")
-        
+
+        nav_bins = QPushButton("Submission Bins")
+        nav_bins.setObjectName("NavButton")
+        if self.on_show_submission_bins:
+            nav_bins.clicked.connect(self.on_show_submission_bins)
+
         logout_btn = QPushButton("Log Out")
         logout_btn.setObjectName("NavButton")
         logout_btn.clicked.connect(self.on_back_callback)
-        
+
         sidebar_layout.addWidget(brand)
         sidebar_layout.addSpacing(48)
         sidebar_layout.addWidget(nav_pending)
         sidebar_layout.addWidget(nav_scholars)
+        sidebar_layout.addWidget(nav_bins)
         sidebar_layout.addStretch()
         sidebar_layout.addWidget(logout_btn)
         
@@ -57,7 +89,10 @@ class ScholarsDirectoryView(QWidget):
         
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search by name...")
-        self.search_input.textChanged.connect(self.apply_filters)
+        self._search_timer = QTimer()
+        self._search_timer.setSingleShot(True)
+        self._search_timer.timeout.connect(self.apply_filters)
+        self.search_input.textChanged.connect(lambda _: self._search_timer.start(200))
         
         self.status_filter = QComboBox()
         self.status_filter.addItems(["All Status", "active", "inactive", "graduate"])
@@ -85,29 +120,42 @@ class ScholarsDirectoryView(QWidget):
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         
+        self._status_container = QVBoxLayout()
+        self._status_container.setSpacing(4)
+        
         content_layout.addWidget(header)
         content_layout.addSpacing(24)
         content_layout.addLayout(filters_layout)
         content_layout.addSpacing(16)
+        content_layout.addLayout(self._status_container)
         content_layout.addWidget(self.table, stretch=1)
         
         main_layout.addWidget(sidebar)
         main_layout.addWidget(content)
         
+        self._status_label = None
+        self._fetch_thread = None
         self.load_scholars()
 
     def load_scholars(self):
-        try:
-            response = requests.get(
-                "http://localhost:8000/scholars/",
-                headers={"Authorization": f"Bearer {self.token}"},
-                timeout=10
-            )
-            if response.status_code == 200:
-                self.scholars = response.json()
-                self.populate_table(self.scholars)
-        except Exception as e:
-            print(f"Error loading scholars: {e}")
+        self._status_label = QLabel("Loading scholars...")
+        self._status_label.setObjectName("Subtitle")
+        self._status_label.setStyleSheet("padding: 8px;")
+        self._status_container.addWidget(self._status_label)
+        
+        self._fetch_thread = FetchScholarsThread(self.token)
+        self._fetch_thread.done.connect(self.on_scholars_loaded)
+        self._fetch_thread.error.connect(self.on_fetch_error)
+        self._fetch_thread.start()
+
+    def on_scholars_loaded(self, scholars_data):
+        self.scholars = scholars_data
+        self._status_label.setText(f"{len(scholars_data)} scholar(s) found.")
+        self.populate_table(scholars_data)
+
+    def on_fetch_error(self, err):
+        if self._status_label:
+            self._status_label.setText(f"Error loading scholars: {err}")
 
     def apply_filters(self):
         search = self.search_input.text().lower() if self.search_input.text() else ""
@@ -130,11 +178,9 @@ class ScholarsDirectoryView(QWidget):
         self.populate_table(filtered)
 
     def populate_table(self, scholars_data):
-        self.table.setRowCount(0)
-        for scholar in scholars_data:
-            row = self.table.rowCount()
-            self.table.insertRow(row)
-            
+        row_count = len(scholars_data)
+        self.table.setRowCount(row_count)
+        for row, scholar in enumerate(scholars_data):
             name = f"{scholar.get('first_name', '')} {scholar.get('last_name', '')}".strip() or "Unknown"
             self.table.setItem(row, 0, QTableWidgetItem(name))
             self.table.setItem(row, 1, QTableWidgetItem(scholar.get("batch_number") or "-"))

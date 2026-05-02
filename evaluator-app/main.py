@@ -7,6 +7,8 @@ from PySide6.QtGui import QScreen, QWindow, QIcon
 from views.login import LoginView
 from views.dashboard import DashboardView
 from views.scholars_directory import ScholarsDirectoryView
+from views.submission_bins import SubmissionBinsView
+from views.bin_documents import BinDocumentsView
 
 def set_windows_titlebar_color(hwnd, color_hex):
     try:
@@ -49,8 +51,14 @@ class MainWindow(QWidget):
         self.content_layout.addWidget(self.stacked_widget)
         
         self.login_view = LoginView(self.handle_login_success)
-        self.dashboard_view = DashboardView(self.handle_show_scholars_directory, self.handle_logout)
+        self.dashboard_view = DashboardView(
+            self.handle_show_scholars_directory,
+            self.handle_show_submission_bins,
+            self.handle_logout
+        )
         self.scholars_directory_view = None
+        self.submission_bins_view = None
+        self.bin_documents_view = None
         
         self.stacked_widget.addWidget(self.login_view)
         self.stacked_widget.addWidget(self.dashboard_view)
@@ -65,11 +73,42 @@ class MainWindow(QWidget):
     def handle_show_scholars_directory(self):
         if not self.scholars_directory_view:
             self.scholars_directory_view = ScholarsDirectoryView(
-                self.dashboard_view.token, 
-                self.handle_back_to_dashboard
+                self.dashboard_view.token,
+                self.handle_back_to_dashboard,
+                self.handle_show_submission_bins
             )
             self.stacked_widget.addWidget(self.scholars_directory_view)
         self.stacked_widget.setCurrentWidget(self.scholars_directory_view)
+
+    def handle_show_submission_bins(self):
+        if not self.submission_bins_view:
+            self.submission_bins_view = SubmissionBinsView(
+                self.dashboard_view.token,
+                self.handle_back_to_dashboard,
+                self.handle_open_bin
+            )
+            self.stacked_widget.addWidget(self.submission_bins_view)
+        else:
+            self.submission_bins_view.load_bins()
+        self.stacked_widget.setCurrentWidget(self.submission_bins_view)
+
+    def handle_open_bin(self, bin_: dict):
+        # Always recreate so documents are fresh
+        if self.bin_documents_view:
+            self.stacked_widget.removeWidget(self.bin_documents_view)
+            self.bin_documents_view.deleteLater()
+        self.bin_documents_view = BinDocumentsView(
+            self.dashboard_view.token,
+            bin_,
+            self.handle_back_to_bins
+        )
+        self.stacked_widget.addWidget(self.bin_documents_view)
+        self.stacked_widget.setCurrentWidget(self.bin_documents_view)
+
+    def handle_back_to_bins(self):
+        if self.submission_bins_view:
+            self.submission_bins_view.load_bins()
+        self.stacked_widget.setCurrentWidget(self.submission_bins_view)
 
     def handle_back_to_dashboard(self):
         self.stacked_widget.setCurrentWidget(self.dashboard_view)

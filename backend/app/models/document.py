@@ -10,6 +10,7 @@ class Document(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     scholar_id = Column(UUID(as_uuid=True), ForeignKey("scholars.id"), nullable=False)
     academic_record_id = Column(UUID(as_uuid=True), ForeignKey("academic_records.id"), nullable=True)
+    submission_bin_id = Column(UUID(as_uuid=True), ForeignKey("submission_bins.id"), nullable=True)
     doc_type = Column(String, nullable=False) # COR, ROG, explanation_letter, completion_form, other
     file_name = Column(String, nullable=False)
     storage_path = Column(Text, nullable=False)
@@ -20,3 +21,4 @@ class Document(Base):
 
     scholar = relationship("Scholar", backref="documents")
     academic_record = relationship("AcademicRecord", backref="documents")
+    submission_bin = relationship("SubmissionBin", backref="documents")
