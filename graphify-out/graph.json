@@ -9,7 +9,7 @@
       "source_file": "main.py",
       "source_location": "L1",
       "id": "main_py",
-      "community": 15,
+      "community": 16,
       "norm_label": "main.py"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "backend\\main.py",
       "source_location": "L1",
       "id": "main_main",
-      "community": 15,
+      "community": 16,
       "norm_label": "main()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "backend\\main.py",
       "source_location": "L1",
       "id": "backend_main_py",
-      "community": 15,
+      "community": 16,
       "norm_label": "main.py"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_seed_py",
-      "community": 5,
+      "community": 6,
       "norm_label": "seed.py"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L19",
       "id": "seed_seed",
-      "community": 5,
+      "community": 6,
       "norm_label": "seed()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L62",
       "id": "seed_seed_fake_scholars",
-      "community": 5,
+      "community": 6,
       "norm_label": "seed_fake_scholars()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L103",
       "id": "seed_cleanup_fake_scholars",
-      "community": 5,
+      "community": 6,
       "norm_label": "cleanup_fake_scholars()"
     },
     {
@@ -71,7 +71,7 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L63",
-      "community": 5,
+      "community": 6,
       "norm_label": "creates fake scholars for testing purposes.",
       "id": "seed_rationale_63"
     },
@@ -80,7 +80,7 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\seed.py",
       "source_location": "L104",
-      "community": 5,
+      "community": 6,
       "norm_label": "deletes all fake scholars by email pattern.",
       "id": "seed_rationale_104"
     },
@@ -162,7 +162,7 @@
       "source_file": "backend\\test_supabase_direct.py",
       "source_location": "L1",
       "id": "backend_test_supabase_direct_py",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_supabase_direct.py"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "backend\\test_supabase_direct.py",
       "source_location": "L7",
       "id": "test_supabase_direct_test_upload",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_upload()"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\main.py",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_main_py",
-      "community": 17,
+      "community": 18,
       "norm_label": "main.py"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\main.py",
       "source_location": "L32",
       "id": "main_health_check",
-      "community": 17,
+      "community": 18,
       "norm_label": "health_check()"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "backend\\app\\core\\database.py",
       "source_location": "L1",
       "id": "backend_app_core_database_py",
-      "community": 18,
+      "community": 19,
       "norm_label": "database.py"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "backend\\app\\core\\database.py",
       "source_location": "L16",
       "id": "database_get_db",
-      "community": 18,
+      "community": 19,
       "norm_label": "get_db()"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_dependencies_py",
-      "community": 6,
+      "community": 7,
       "norm_label": "dependencies.py"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L11",
       "id": "dependencies_get_token_from_request",
-      "community": 6,
+      "community": 7,
       "norm_label": "get_token_from_request()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L21",
       "id": "dependencies_get_current_user",
-      "community": 6,
+      "community": 7,
       "norm_label": "get_current_user()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L56",
       "id": "dependencies_get_current_user_from_request",
-      "community": 6,
+      "community": 7,
       "norm_label": "get_current_user_from_request()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L90",
       "id": "dependencies_get_current_scholar",
-      "community": 6,
+      "community": 7,
       "norm_label": "get_current_scholar()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L95",
       "id": "dependencies_get_current_evaluator",
-      "community": 6,
+      "community": 7,
       "norm_label": "get_current_evaluator()"
     },
     {
@@ -269,7 +269,7 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\dependencies.py",
       "source_location": "L12",
-      "community": 6,
+      "community": 7,
       "norm_label": "extract token from authorization header or cookie.",
       "id": "dependencies_rationale_12"
     },
@@ -297,7 +297,7 @@
       "source_file": "backend\\app\\core\\security.py",
       "source_location": "L19",
       "id": "security_get_password_hash",
-      "community": 5,
+      "community": 6,
       "norm_label": "get_password_hash()"
     },
     {
@@ -321,17 +321,17 @@
     {
       "label": "storage.py",
       "file_type": "code",
-      "source_file": "backend\\app\\core\\storage.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
       "source_location": "L1",
-      "id": "backend_app_core_storage_py",
+      "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "community": 2,
       "norm_label": "storage.py"
     },
     {
       "label": "get_supabase()",
       "file_type": "code",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L16",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L18",
       "id": "storage_get_supabase",
       "community": 2,
       "norm_label": "get_supabase()"
@@ -339,8 +339,8 @@
     {
       "label": "upload_document()",
       "file_type": "code",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L19",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L21",
       "id": "storage_upload_document",
       "community": 2,
       "norm_label": "upload_document()"
@@ -348,20 +348,38 @@
     {
       "label": "create_signed_url()",
       "file_type": "code",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L28",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L30",
       "id": "storage_create_signed_url",
-      "community": 2,
+      "community": 8,
       "norm_label": "create_signed_url()"
     },
     {
       "label": "delete_document()",
       "file_type": "code",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L37",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L39",
       "id": "storage_delete_document",
       "community": 2,
       "norm_label": "delete_document()"
+    },
+    {
+      "label": "upload_avatar()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L44",
+      "id": "storage_upload_avatar",
+      "community": 2,
+      "norm_label": "upload_avatar()"
+    },
+    {
+      "label": "delete_avatar()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L75",
+      "id": "storage_delete_avatar",
+      "community": 2,
+      "norm_label": "delete_avatar()"
     },
     {
       "label": "academic_record.py",
@@ -396,7 +414,7 @@
       "source_file": "backend\\app\\models\\announcement.py",
       "source_location": "L1",
       "id": "backend_app_models_announcement_py",
-      "community": 4,
+      "community": 5,
       "norm_label": "announcement.py"
     },
     {
@@ -405,7 +423,7 @@
       "source_file": "backend\\app\\models\\announcement.py",
       "source_location": "L7",
       "id": "announcement_announcement",
-      "community": 4,
+      "community": 5,
       "norm_label": "announcement"
     },
     {
@@ -468,7 +486,7 @@
       "source_file": "backend\\app\\models\\program_history.py",
       "source_location": "L1",
       "id": "backend_app_models_program_history_py",
-      "community": 19,
+      "community": 0,
       "norm_label": "program_history.py"
     },
     {
@@ -477,7 +495,7 @@
       "source_file": "backend\\app\\models\\program_history.py",
       "source_location": "L7",
       "id": "program_history_programhistory",
-      "community": 19,
+      "community": 0,
       "norm_label": "programhistory"
     },
     {
@@ -501,16 +519,16 @@
     {
       "label": "scholar.py",
       "file_type": "code",
-      "source_file": "backend\\app\\models\\scholar.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\models\\scholar.py",
       "source_location": "L1",
-      "id": "backend_app_models_scholar_py",
+      "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_models_scholar_py",
       "community": 0,
       "norm_label": "scholar.py"
     },
     {
       "label": "Scholar",
       "file_type": "code",
-      "source_file": "backend\\app\\models\\scholar.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\models\\scholar.py",
       "source_location": "L7",
       "id": "scholar_scholar",
       "community": 0,
@@ -540,7 +558,7 @@
       "source_file": "backend\\app\\models\\__init__.py",
       "source_location": "L1",
       "id": "backend_app_models_init_py",
-      "community": 24,
+      "community": 23,
       "norm_label": "__init__.py"
     },
     {
@@ -639,7 +657,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_announcements_py",
-      "community": 4,
+      "community": 5,
       "norm_label": "announcements.py"
     },
     {
@@ -648,7 +666,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L14",
       "id": "announcements_createannouncementrequest",
-      "community": 4,
+      "community": 5,
       "norm_label": "createannouncementrequest"
     },
     {
@@ -657,7 +675,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L22",
       "id": "announcements_create_announcement",
-      "community": 4,
+      "community": 5,
       "norm_label": "create_announcement()"
     },
     {
@@ -666,7 +684,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L42",
       "id": "announcements_get_announcements",
-      "community": 4,
+      "community": 5,
       "norm_label": "get_announcements()"
     },
     {
@@ -674,7 +692,7 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L27",
-      "community": 4,
+      "community": 5,
       "norm_label": "create a new announcement (requires auth)",
       "id": "announcements_rationale_27"
     },
@@ -683,7 +701,7 @@
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\announcements.py",
       "source_location": "L45",
-      "community": 4,
+      "community": 5,
       "norm_label": "get announcements for the current scholar.     returns announcements filtered by",
       "id": "announcements_rationale_45"
     },
@@ -774,7 +792,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L1",
       "id": "backend_app_routers_documents_py",
-      "community": 2,
+      "community": 8,
       "norm_label": "documents.py"
     },
     {
@@ -801,7 +819,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L91",
       "id": "documents_get_own_documents",
-      "community": 2,
+      "community": 8,
       "norm_label": "get_own_documents()"
     },
     {
@@ -810,7 +828,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L99",
       "id": "documents_view_document_scholar",
-      "community": 2,
+      "community": 8,
       "norm_label": "view_document_scholar()"
     },
     {
@@ -819,7 +837,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L119",
       "id": "documents_view_document_evaluator",
-      "community": 2,
+      "community": 8,
       "norm_label": "view_document_evaluator()"
     },
     {
@@ -828,7 +846,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L132",
       "id": "documents_verify_document",
-      "community": 2,
+      "community": 8,
       "norm_label": "verify_document()"
     },
     {
@@ -837,7 +855,7 @@
       "source_file": "backend\\app\\routers\\documents.py",
       "source_location": "L142",
       "id": "documents_get_scholar_documents",
-      "community": 2,
+      "community": 8,
       "norm_label": "get_scholar_documents()"
     },
     {
@@ -897,17 +915,17 @@
     {
       "label": "scholars.py",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
       "source_location": "L1",
-      "id": "backend_app_routers_scholars_py",
-      "community": 8,
+      "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
+      "community": 2,
       "norm_label": "scholars.py"
     },
     {
       "label": "ScholarUpdate",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L16",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L17",
       "id": "scholars_scholarupdate",
       "community": 0,
       "norm_label": "scholarupdate"
@@ -915,8 +933,8 @@
     {
       "label": "ScholarResponse",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L33",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L34",
       "id": "scholars_scholarresponse",
       "community": 0,
       "norm_label": "scholarresponse"
@@ -924,46 +942,64 @@
     {
       "label": "get_own_profile()",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L55",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L57",
       "id": "scholars_get_own_profile",
-      "community": 8,
+      "community": 2,
       "norm_label": "get_own_profile()"
+    },
+    {
+      "label": "upload_scholar_avatar()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L64",
+      "id": "scholars_upload_scholar_avatar",
+      "community": 2,
+      "norm_label": "upload_scholar_avatar()"
+    },
+    {
+      "label": "remove_scholar_avatar()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L95",
+      "id": "scholars_remove_scholar_avatar",
+      "community": 2,
+      "norm_label": "remove_scholar_avatar()"
     },
     {
       "label": "request_profile_update()",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L62",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L117",
       "id": "scholars_request_profile_update",
-      "community": 8,
+      "community": 2,
       "norm_label": "request_profile_update()"
     },
     {
       "label": "list_scholars()",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L106",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L161",
       "id": "scholars_list_scholars",
-      "community": 8,
+      "community": 2,
       "norm_label": "list_scholars()"
     },
     {
       "label": "get_scholar()",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L131",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L186",
       "id": "scholars_get_scholar",
-      "community": 8,
+      "community": 2,
       "norm_label": "get_scholar()"
     },
     {
       "label": "edit_scholar()",
       "file_type": "code",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L138",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L193",
       "id": "scholars_edit_scholar",
-      "community": 8,
+      "community": 2,
       "norm_label": "edit_scholar()"
     },
     {
@@ -1046,6 +1082,42 @@
       "community": 14,
       "norm_label": "initial schema  revision id: 3b9970469f0e revises:  create date: 2026-04-13 04:5",
       "id": "3b9970469f0e_initial_schema_rationale_1"
+    },
+    {
+      "label": "ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L1",
+      "id": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "community": 15,
+      "norm_label": "ab66dfea0e7a_add_avatar_url_to_scholars.py"
+    },
+    {
+      "label": "upgrade()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L21",
+      "id": "ab66dfea0e7a_add_avatar_url_to_scholars_upgrade",
+      "community": 15,
+      "norm_label": "upgrade()"
+    },
+    {
+      "label": "downgrade()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L28",
+      "id": "ab66dfea0e7a_add_avatar_url_to_scholars_downgrade",
+      "community": 15,
+      "norm_label": "downgrade()"
+    },
+    {
+      "label": "add_avatar_url_to_scholars  Revision ID: ab66dfea0e7a Revises: 3b9970469f0e Crea",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L1",
+      "community": 15,
+      "norm_label": "add_avatar_url_to_scholars  revision id: ab66dfea0e7a revises: 3b9970469f0e crea",
+      "id": "ab66dfea0e7a_add_avatar_url_to_scholars_rationale_1"
     },
     {
       "label": "main.py",
@@ -1350,7 +1422,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\evaluator-app\\views\\__init__.py",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_evaluator_app_views_init_py",
-      "community": 25,
+      "community": 24,
       "norm_label": "__init__.py"
     },
     {
@@ -1359,7 +1431,7 @@
       "source_file": "scholar-web\\eslint.config.js",
       "source_location": "L1",
       "id": "scholar_web_eslint_config_js",
-      "community": 26,
+      "community": 25,
       "norm_label": "eslint.config.js"
     },
     {
@@ -1368,7 +1440,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\vite.config.js",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_vite_config_js",
-      "community": 27,
+      "community": 26,
       "norm_label": "vite.config.js"
     },
     {
@@ -1395,7 +1467,7 @@
       "source_file": "scholar-web\\src\\main.jsx",
       "source_location": "L1",
       "id": "scholar_web_src_main_jsx",
-      "community": 28,
+      "community": 27,
       "norm_label": "main.jsx"
     },
     {
@@ -1404,16 +1476,16 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\components\\Layout.jsx",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_components_layout_jsx",
-      "community": 21,
+      "community": 4,
       "norm_label": "layout.jsx"
     },
     {
       "label": "Layout()",
       "file_type": "code",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\components\\Layout.jsx",
-      "source_location": "L3",
+      "source_location": "L6",
       "id": "layout_layout",
-      "community": 21,
+      "community": 4,
       "norm_label": "layout()"
     },
     {
@@ -1422,7 +1494,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\config\\api.js",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_config_api_js",
-      "community": 29,
+      "community": 28,
       "norm_label": "api.js"
     },
     {
@@ -1431,7 +1503,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\hooks\\useApiCache.js",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_hooks_useapicache_js",
-      "community": 7,
+      "community": 4,
       "norm_label": "useapicache.js"
     },
     {
@@ -1440,7 +1512,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\hooks\\useApiCache.js",
       "source_location": "L7",
       "id": "useapicache_clearcache",
-      "community": 7,
+      "community": 4,
       "norm_label": "clearcache()"
     },
     {
@@ -1449,7 +1521,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\hooks\\useApiCache.js",
       "source_location": "L11",
       "id": "useapicache_useapicache",
-      "community": 7,
+      "community": 4,
       "norm_label": "useapicache()"
     },
     {
@@ -1458,7 +1530,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Dashboard.jsx",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_dashboard_jsx",
-      "community": 7,
+      "community": 4,
       "norm_label": "dashboard.jsx"
     },
     {
@@ -1467,7 +1539,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Dashboard.jsx",
       "source_location": "L6",
       "id": "dashboard_dashboard",
-      "community": 7,
+      "community": 4,
       "norm_label": "dashboard()"
     },
     {
@@ -1476,7 +1548,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Inbox.jsx",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_inbox_jsx",
-      "community": 22,
+      "community": 21,
       "norm_label": "inbox.jsx"
     },
     {
@@ -1485,7 +1557,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Inbox.jsx",
       "source_location": "L6",
       "id": "inbox_inbox",
-      "community": 22,
+      "community": 21,
       "norm_label": "inbox()"
     },
     {
@@ -1494,7 +1566,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Login.jsx",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_login_jsx",
-      "community": 23,
+      "community": 22,
       "norm_label": "login.jsx"
     },
     {
@@ -1503,7 +1575,7 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Login.jsx",
       "source_location": "L7",
       "id": "login_login",
-      "community": 23,
+      "community": 22,
       "norm_label": "login()"
     },
     {
@@ -1512,24 +1584,42 @@
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Profile.jsx",
       "source_location": "L1",
       "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_profile_jsx",
-      "community": 7,
+      "community": 4,
       "norm_label": "profile.jsx"
     },
     {
       "label": "Profile()",
       "file_type": "code",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Profile.jsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "profile_profile",
-      "community": 7,
+      "community": 4,
       "norm_label": "profile()"
+    },
+    {
+      "label": "colors.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\utils\\colors.js",
+      "source_location": "L1",
+      "id": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_utils_colors_js",
+      "community": 4,
+      "norm_label": "colors.js"
+    },
+    {
+      "label": "getAvatarColor()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\utils\\colors.js",
+      "source_location": "L1",
+      "id": "colors_getavatarcolor",
+      "community": 4,
+      "norm_label": "getavatarcolor()"
     },
     {
       "label": "# TODO: Implement actual API call via requests",
       "file_type": "rationale",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\evaluator-app\\views\\login.py",
       "source_location": "L77",
-      "community": 30,
+      "community": 29,
       "norm_label": "# todo: implement actual api call via requests",
       "id": "login_rationale_77"
     }
@@ -2114,49 +2204,73 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L16",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L18",
       "weight": 1.0,
-      "_src": "backend_app_core_storage_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "_tgt": "storage_get_supabase",
-      "source": "backend_app_core_storage_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "target": "storage_get_supabase",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L19",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L21",
       "weight": 1.0,
-      "_src": "backend_app_core_storage_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "_tgt": "storage_upload_document",
-      "source": "backend_app_core_storage_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "target": "storage_upload_document",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L28",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L30",
       "weight": 1.0,
-      "_src": "backend_app_core_storage_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "_tgt": "storage_create_signed_url",
-      "source": "backend_app_core_storage_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "target": "storage_create_signed_url",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\core\\storage.py",
-      "source_location": "L37",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L39",
       "weight": 1.0,
-      "_src": "backend_app_core_storage_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "_tgt": "storage_delete_document",
-      "source": "backend_app_core_storage_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
       "target": "storage_delete_document",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
+      "_tgt": "storage_upload_avatar",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
+      "target": "storage_upload_avatar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\core\\storage.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
+      "_tgt": "storage_delete_avatar",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_core_storage_py",
+      "target": "storage_delete_avatar",
       "confidence_score": 1.0
     },
     {
@@ -2182,6 +2296,30 @@
       "_tgt": "documents_view_document_evaluator",
       "source": "storage_create_signed_url",
       "target": "documents_view_document_evaluator"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_src": "storage_upload_avatar",
+      "_tgt": "scholars_upload_scholar_avatar",
+      "source": "storage_upload_avatar",
+      "target": "scholars_upload_scholar_avatar"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_src": "storage_delete_avatar",
+      "_tgt": "scholars_remove_scholar_avatar",
+      "source": "storage_delete_avatar",
+      "target": "scholars_remove_scholar_avatar"
     },
     {
       "relation": "contains",
@@ -2366,7 +2504,7 @@
     {
       "relation": "inherits",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\models\\scholar.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\models\\scholar.py",
       "source_location": "L7",
       "weight": 1.0,
       "_src": "scholar_scholar",
@@ -2520,6 +2658,30 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "_src": "pending_change_pendingchange",
+      "_tgt": "scholars_scholarupdate",
+      "confidence_score": 0.5,
+      "source": "pending_change_pendingchange",
+      "target": "scholars_scholarupdate"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "_src": "pending_change_pendingchange",
+      "_tgt": "scholars_scholarresponse",
+      "confidence_score": 0.5,
+      "source": "pending_change_pendingchange",
+      "target": "scholars_scholarresponse"
+    },
+    {
       "relation": "calls",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
@@ -2640,30 +2802,6 @@
       "target": "pending_changes_reviewrequest"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L12",
-      "weight": 0.8,
-      "_src": "pending_change_pendingchange",
-      "_tgt": "scholars_scholarupdate",
-      "confidence_score": 0.5,
-      "source": "pending_change_pendingchange",
-      "target": "scholars_scholarupdate"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L12",
-      "weight": 0.8,
-      "_src": "pending_change_pendingchange",
-      "_tgt": "scholars_scholarresponse",
-      "confidence_score": 0.5,
-      "source": "pending_change_pendingchange",
-      "target": "scholars_scholarresponse"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend\\app\\models\\program_history.py",
@@ -2750,14 +2888,38 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\models\\scholar.py",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\models\\scholar.py",
       "source_location": "L7",
       "weight": 1.0,
-      "_src": "backend_app_models_scholar_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_models_scholar_py",
       "_tgt": "scholar_scholar",
-      "source": "backend_app_models_scholar_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_models_scholar_py",
       "target": "scholar_scholar",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "_src": "scholar_scholar",
+      "_tgt": "scholars_scholarupdate",
+      "confidence_score": 0.5,
+      "source": "scholar_scholar",
+      "target": "scholars_scholarupdate"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "_src": "scholar_scholar",
+      "_tgt": "scholars_scholarresponse",
+      "confidence_score": 0.5,
+      "source": "scholar_scholar",
+      "target": "scholars_scholarresponse"
     },
     {
       "relation": "uses",
@@ -2844,30 +3006,6 @@
       "target": "pending_changes_reviewrequest"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L11",
-      "weight": 0.8,
-      "_src": "scholar_scholar",
-      "_tgt": "scholars_scholarupdate",
-      "confidence_score": 0.5,
-      "source": "scholar_scholar",
-      "target": "scholars_scholarupdate"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L11",
-      "weight": 0.8,
-      "_src": "scholar_scholar",
-      "_tgt": "scholars_scholarresponse",
-      "confidence_score": 0.5,
-      "source": "scholar_scholar",
-      "target": "scholars_scholarresponse"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend\\app\\models\\user.py",
@@ -2938,6 +3076,30 @@
       "confidence_score": 0.5,
       "source": "user_user",
       "target": "auth_rationale_21"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "_src": "user_user",
+      "_tgt": "scholars_scholarupdate",
+      "confidence_score": 0.5,
+      "source": "user_user",
+      "target": "scholars_scholarupdate"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend\\app\\routers\\scholars.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "_src": "user_user",
+      "_tgt": "scholars_scholarresponse",
+      "confidence_score": 0.5,
+      "source": "user_user",
+      "target": "scholars_scholarresponse"
     },
     {
       "relation": "uses",
@@ -3022,30 +3184,6 @@
       "confidence_score": 0.5,
       "source": "user_user",
       "target": "pending_changes_reviewrequest"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "_src": "user_user",
-      "_tgt": "scholars_scholarupdate",
-      "confidence_score": 0.5,
-      "source": "user_user",
-      "target": "scholars_scholarupdate"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "_src": "user_user",
-      "_tgt": "scholars_scholarresponse",
-      "confidence_score": 0.5,
-      "source": "user_user",
-      "target": "scholars_scholarresponse"
     },
     {
       "relation": "contains",
@@ -3266,8 +3404,8 @@
     {
       "relation": "inherits",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L16",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L17",
       "weight": 1.0,
       "_src": "scholars_scholarupdate",
       "_tgt": "basemodel",
@@ -3278,8 +3416,8 @@
     {
       "relation": "inherits",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L33",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L34",
       "weight": 1.0,
       "_src": "scholars_scholarresponse",
       "_tgt": "basemodel",
@@ -3626,84 +3764,108 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L16",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L17",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_scholarupdate",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_scholarupdate",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L33",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L34",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_scholarresponse",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_scholarresponse",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L55",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L57",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_get_own_profile",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_get_own_profile",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L62",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L64",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
+      "_tgt": "scholars_upload_scholar_avatar",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
+      "target": "scholars_upload_scholar_avatar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
+      "_tgt": "scholars_remove_scholar_avatar",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
+      "target": "scholars_remove_scholar_avatar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_request_profile_update",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_request_profile_update",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L106",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L161",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_list_scholars",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_list_scholars",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L131",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L186",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_get_scholar",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_get_scholar",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend\\app\\routers\\scholars.py",
-      "source_location": "L138",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\app\\routers\\scholars.py",
+      "source_location": "L193",
       "weight": 1.0,
-      "_src": "backend_app_routers_scholars_py",
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "_tgt": "scholars_edit_scholar",
-      "source": "backend_app_routers_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_app_routers_scholars_py",
       "target": "scholars_edit_scholar",
       "confidence_score": 1.0
     },
@@ -3789,6 +3951,42 @@
       "_tgt": "backend_migrations_versions_3b9970469f0e_initial_schema_py",
       "source": "backend_migrations_versions_3b9970469f0e_initial_schema_py",
       "target": "3b9970469f0e_initial_schema_rationale_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "_tgt": "ab66dfea0e7a_add_avatar_url_to_scholars_upgrade",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "target": "ab66dfea0e7a_add_avatar_url_to_scholars_upgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "_tgt": "ab66dfea0e7a_add_avatar_url_to_scholars_downgrade",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "target": "ab66dfea0e7a_add_avatar_url_to_scholars_downgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\backend\\migrations\\versions\\ab66dfea0e7a_add_avatar_url_to_scholars.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_src": "ab66dfea0e7a_add_avatar_url_to_scholars_rationale_1",
+      "_tgt": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_backend_migrations_versions_ab66dfea0e7a_add_avatar_url_to_scholars_py",
+      "target": "ab66dfea0e7a_add_avatar_url_to_scholars_rationale_1",
       "confidence_score": 1.0
     },
     {
@@ -4419,13 +4617,37 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\components\\Layout.jsx",
-      "source_location": "L3",
+      "source_location": "L6",
       "weight": 1.0,
       "_src": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_components_layout_jsx",
       "_tgt": "layout_layout",
       "source": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_components_layout_jsx",
       "target": "layout_layout",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\components\\Layout.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "layout_layout",
+      "_tgt": "useapicache_useapicache",
+      "source": "layout_layout",
+      "target": "useapicache_useapicache"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\components\\Layout.jsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "layout_layout",
+      "_tgt": "colors_getavatarcolor",
+      "source": "layout_layout",
+      "target": "colors_getavatarcolor"
     },
     {
       "relation": "contains",
@@ -4515,12 +4737,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Profile.jsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0,
       "_src": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_profile_jsx",
       "_tgt": "profile_profile",
       "source": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_pages_profile_jsx",
       "target": "profile_profile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\pages\\Profile.jsx",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_src": "profile_profile",
+      "_tgt": "colors_getavatarcolor",
+      "source": "profile_profile",
+      "target": "colors_getavatarcolor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\Eli\\Documents\\coding_projects\\scholar-ms\\scholar-web\\src\\utils\\colors.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_src": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_utils_colors_js",
+      "_tgt": "colors_getavatarcolor",
+      "source": "c_users_eli_documents_coding_projects_scholar_ms_scholar_web_src_utils_colors_js",
+      "target": "colors_getavatarcolor",
       "confidence_score": 1.0
     }
   ],
