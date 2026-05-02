@@ -3,7 +3,12 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushB
 from PySide6.QtCore import Qt, QThread, Signal, QTimer
 import requests
 
+from services.cache_service import get_cache_service
+from services.network_status import get_network_status
+
 API_BASE = "http://localhost:8000"
+CACHE_KEY = "scholars/list"
+CACHE_TTL = 300  # 5 minutes
 
 
 class FetchScholarsThread(QThread):
@@ -135,9 +140,88 @@ class ScholarsDirectoryView(QWidget):
         
         self._status_label = None
         self._fetch_thread = None
+        self._is_offline = False
+        
+        get_network_status().add_callback(self._on_network_change)
+        self._is_offline = not get_network_status().is_online()
+        
         self.load_scholars()
 
+    def _on_network_change(self, is_online: bool):
+        self._is_offline = not is_online
+        if is_online:
+            self.load_scholars()
+
     def load_scholars(self):
+        cache = get_cache_service()
+        network = get_network_status()
+        
+        if network.is_online():
+            self._fetch_from_api()
+        elif cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                self.scholars = cached
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self._status_label:
+                    self._status_label.setText(f"Showing cached data ({age // 60} min old).")
+                self.populate_table(cached)
+                return
+        
+        if cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                self.scholars = cached
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self._status_label:
+                    self._status_label.setText(f"Offline - showing cached data ({age // 60} min old).")
+                self.populate_table(cached)
+                return
+        
+        if self._status_label:
+            self._status_label.setText("No cached data available. Please reconnect to view scholars.")
+        self.scholars = []
+        self.populate_table([])
+
+    def on_scholars_loaded(self, scholars_data):
+        self.scholars = scholars_data
+        cache = get_cache_service()
+        cache.set(CACHE_KEY, scholars_data, CACHE_TTL)
+        
+        cached = cache.get(CACHE_KEY)
+        if cached:
+            age = cache.get_age_seconds(CACHE_KEY)
+            if age is not None and age < 60:
+                if self._status_label:
+                    self._status_label.setText(f"{len(scholars_data)} scholar(s) found.")
+            elif age is not None:
+                if self._status_label:
+                    self._status_label.setText(f"{len(scholars_data)} scholar(s) found (cached {age // 60} min ago).")
+            else:
+                if self._status_label:
+                    self._status_label.setText(f"{len(scholars_data)} scholar(s) found.")
+        else:
+            if self._status_label:
+                self._status_label.setText(f"{len(scholars_data)} scholar(s) found.")
+        
+        self.populate_table(scholars_data)
+
+    def on_fetch_error(self, err):
+        cache = get_cache_service()
+        if cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                self.scholars = cached
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self._status_label:
+                    self._status_label.setText(f"Offline - showing cached data ({age // 60} min old). Error: {err}")
+                self.populate_table(cached)
+                return
+        
+        if self._status_label:
+            self._status_label.setText(f"Error loading scholars: {err}")
+
+    def _fetch_from_api(self):
         self._status_label = QLabel("Loading scholars...")
         self._status_label.setObjectName("Subtitle")
         self._status_label.setStyleSheet("padding: 8px;")
@@ -147,15 +231,6 @@ class ScholarsDirectoryView(QWidget):
         self._fetch_thread.done.connect(self.on_scholars_loaded)
         self._fetch_thread.error.connect(self.on_fetch_error)
         self._fetch_thread.start()
-
-    def on_scholars_loaded(self, scholars_data):
-        self.scholars = scholars_data
-        self._status_label.setText(f"{len(scholars_data)} scholar(s) found.")
-        self.populate_table(scholars_data)
-
-    def on_fetch_error(self, err):
-        if self._status_label:
-            self._status_label.setText(f"Error loading scholars: {err}")
 
     def apply_filters(self):
         search = self.search_input.text().lower() if self.search_input.text() else ""

@@ -1,7 +1,7 @@
 import sys
 import os
 import ctypes
-from PySide6.QtWidgets import QApplication, QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QFrame
+from PySide6.QtWidgets import QApplication, QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QFrame, QMessageBox
 from PySide6.QtCore import Qt, QPoint
 from PySide6.QtGui import QScreen, QWindow, QIcon
 from views.login import LoginView
@@ -9,6 +9,8 @@ from views.dashboard import DashboardView
 from views.scholars_directory import ScholarsDirectoryView
 from views.submission_bins import SubmissionBinsView
 from views.bin_documents import BinDocumentsView
+from services.cache_service import get_cache_service, clear_auth_token
+from services.network_status import get_network_status
 
 def set_windows_titlebar_color(hwnd, color_hex):
     try:
@@ -39,29 +41,53 @@ class MainWindow(QWidget):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         
+        self.offline_banner = QFrame()
+        self.offline_banner.setObjectName("OfflineBanner")
+        self.offline_banner.setFixedHeight(36)
+        self.offline_banner.setStyleSheet("QFrame#OfflineBanner { background-color: #fef3c7; border-bottom: 1px solid #fcd34d; }")
+        self.offline_banner.setVisible(False)
+        banner_layout = QHBoxLayout(self.offline_banner)
+        banner_layout.setContentsMargins(16, 0, 16, 0)
+        
+        banner_icon = QLabel("⚠")
+        banner_icon.setStyleSheet("font-size: 14px;")
+        banner_text = QLabel("Offline — view only mode")
+        banner_text.setStyleSheet("color: #92400e; font-weight: 500; font-size: 13px;")
+        
+        banner_layout.addWidget(banner_icon)
+        banner_layout.addSpacing(8)
+        banner_layout.addWidget(banner_text)
+        banner_layout.addStretch()
+        
+        main_layout.addWidget(self.offline_banner)
+        
         self.content_container = QFrame()
         self.content_container.setObjectName("ContentContainer")
         self.content_layout = QVBoxLayout(self.content_container)
         self.content_layout.setContentsMargins(0, 0, 0, 0)
         self.content_layout.setSpacing(0)
         
+        network = get_network_status()
+        network.add_callback(self._on_network_change)
+        network.start()
+        
         main_layout.addWidget(self.content_container)
         
         self.stacked_widget = QStackedWidget(self.content_container)
         self.content_layout.addWidget(self.stacked_widget)
         
-        self.login_view = LoginView(self.handle_login_success)
         self.dashboard_view = DashboardView(
             self.handle_show_scholars_directory,
             self.handle_show_submission_bins,
             self.handle_logout
         )
+        self.login_view = LoginView(self.handle_login_success)
         self.scholars_directory_view = None
         self.submission_bins_view = None
         self.bin_documents_view = None
         
-        self.stacked_widget.addWidget(self.login_view)
         self.stacked_widget.addWidget(self.dashboard_view)
+        self.stacked_widget.addWidget(self.login_view)
         
         self.stacked_widget.setCurrentWidget(self.login_view)
         self.show()
@@ -112,6 +138,22 @@ class MainWindow(QWidget):
 
     def handle_back_to_dashboard(self):
         self.stacked_widget.setCurrentWidget(self.dashboard_view)
+
+    def _on_network_change(self, is_online: bool):
+        self.offline_banner.setVisible(not is_online)
+
+    def clear_cache(self):
+        reply = QMessageBox.question(
+            self, "Clear Cache",
+            "This will delete all cached data and sign you out. You will need to sign in again. Continue?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            cache = get_cache_service()
+            clear_auth_token()
+            cache.clear_all()
+            self.stacked_widget.setCurrentWidget(self.login_view)
+            QMessageBox.information(self, "Cache Cleared", "All cached data has been deleted. Please sign in again.")
 
     def handle_logout(self):
         self.stacked_widget.setCurrentWidget(self.login_view)

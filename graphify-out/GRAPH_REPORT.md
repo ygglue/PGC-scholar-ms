@@ -1,7 +1,7 @@
 # Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-02)
 
 ## Corpus Check
-- 54 files · ~46,691 words
+- 54 files · ~42,132 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -63,8 +63,8 @@
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\core\dependencies.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py
 - `PendingChange` --calls--> `request_profile_update()`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
-- `SubmissionBin` --calls--> `create_bin()`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\submission_bin.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\submission_bins.py
+- `create_bin()` --calls--> `SubmissionBin`  [INFERRED]
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\submission_bins.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\submission_bin.py
 - `User` --uses--> `Set httpOnly cookie with the access token.`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
 - `User` --uses--> `CreateAnnouncementRequest`  [INFERRED]

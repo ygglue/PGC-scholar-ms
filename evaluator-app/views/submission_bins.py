@@ -6,8 +6,13 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QThread, Signal
 
+from services.cache_service import get_cache_service
+from services.network_status import get_network_status
+
 
 API_BASE = "http://localhost:8000"
+CACHE_KEY = "bins/list"
+CACHE_TTL = 60  # 1 minute
 
 
 class FetchBinsThread(QThread):
@@ -144,8 +149,40 @@ class SubmissionBinsView(QWidget):
         self.load_bins()
 
     def load_bins(self):
-        self.status_label.setText("Loading bins...")
+        cache = get_cache_service()
+        network = get_network_status()
+        
         self.list_widget.clear()
+        
+        if network.is_online():
+            self._fetch_from_api()
+        elif cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                self.bins = cached
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self.status_label:
+                    self.status_label.setText(f"Offline - showing cached data ({age // 60} min old).")
+                self._display_bins(cached)
+                return
+        
+        if cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                self.bins = cached
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self.status_label:
+                    self.status_label.setText(f"Offline - showing cached data ({age // 60} min old).")
+                self._display_bins(cached)
+                return
+        
+        if self.status_label:
+            self.status_label.setText("No cached data available. Please reconnect to view bins.")
+        self.bins = []
+
+    def _fetch_from_api(self):
+        if self.status_label:
+            self.status_label.setText("Loading bins...")
         self._fetch_thread = FetchBinsThread(self.token)
         self._fetch_thread.done.connect(self.on_bins_loaded)
         self._fetch_thread.error.connect(self.on_fetch_error)
@@ -153,12 +190,32 @@ class SubmissionBinsView(QWidget):
 
     def on_bins_loaded(self, bins):
         self.bins = bins
-        self.list_widget.clear()
-        if not bins:
-            self.status_label.setText("No submission bins yet. Create one to allow scholars to upload documents.")
-            return
+        cache = get_cache_service()
+        cache.set(CACHE_KEY, bins, CACHE_TTL)
+        
+        cached = cache.get(CACHE_KEY)
+        if cached:
+            age = cache.get_age_seconds(CACHE_KEY)
+            if age is not None and age < 60:
+                if self.status_label:
+                    self.status_label.setText(f"{len(bins)} submission bin(s) found.")
+            elif age is not None:
+                if self.status_label:
+                    self.status_label.setText(f"{len(bins)} submission bin(s) found (cached {age // 60} min ago).")
+            else:
+                if self.status_label:
+                    self.status_label.setText(f"{len(bins)} submission bin(s) found.")
+        else:
+            if self.status_label:
+                self.status_label.setText(f"{len(bins)} submission bin(s) found.")
+        
+        self._display_bins(bins)
 
-        self.status_label.setText(f"{len(bins)} submission bin(s) found.")
+    def _display_bins(self, bins):
+        if not bins:
+            if self.status_label:
+                self.status_label.setText("No submission bins yet. Create one to allow scholars to upload documents.")
+            return
         for bin_ in bins:
             item = QListWidgetItem()
             item.setData(Qt.UserRole, bin_)
@@ -207,7 +264,19 @@ class SubmissionBinsView(QWidget):
         return row
 
     def on_fetch_error(self, err):
-        self.status_label.setText(f"Error loading bins: {err}")
+        cache = get_cache_service()
+        if cache.is_fresh(CACHE_KEY):
+            cached = cache.get(CACHE_KEY)
+            if cached:
+                age = cache.get_age_seconds(CACHE_KEY)
+                if self.status_label:
+                    self.status_label.setText(f"Offline - showing cached data ({age // 60} min old). Error: {err}")
+                self._display_bins(cached)
+                return
+        
+        if self.list_widget.count() == 0:
+            if self.status_label:
+                self.status_label.setText(f"Error loading bins: {err}")
 
     def open_create_dialog(self):
         dialog = CreateBinDialog(self)
