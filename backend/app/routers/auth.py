@@ -44,7 +44,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
     access_token = create_access_token(data={"sub": str(user.id), "role": user.role})
     _set_token_cookie(response, access_token)
-    return {"message": "Login successful"}
+    return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
 
 @router.post("/google")
 def google_login(req: GoogleLoginRequest, db: Session = Depends(get_db), response: Response = None):

@@ -3,9 +3,10 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout,
 from PySide6.QtCore import Qt
 
 class DashboardView(QWidget):
-    def __init__(self, on_show_scholars_directory, on_logout_callback):
+    def __init__(self, on_show_scholars_directory, on_show_submission_bins, on_logout_callback):
         super().__init__()
         self.on_show_scholars_directory = on_show_scholars_directory
+        self.on_show_submission_bins = on_show_submission_bins
         self.on_logout_callback = on_logout_callback
         self.token = None
         
@@ -31,7 +32,11 @@ class DashboardView(QWidget):
         nav_scholars = QPushButton("Scholars Directory")
         nav_scholars.setObjectName("NavButton")
         nav_scholars.clicked.connect(self.on_show_scholars_directory)
-        
+
+        nav_bins = QPushButton("Submission Bins")
+        nav_bins.setObjectName("NavButton")
+        nav_bins.clicked.connect(self.on_show_submission_bins)
+
         logout_btn = QPushButton("Log Out")
         logout_btn.setObjectName("NavButton")
         logout_btn.clicked.connect(self.on_logout_callback)
@@ -40,6 +45,7 @@ class DashboardView(QWidget):
         sidebar_layout.addSpacing(48)
         sidebar_layout.addWidget(nav_pending)
         sidebar_layout.addWidget(nav_scholars)
+        sidebar_layout.addWidget(nav_bins)
         sidebar_layout.addStretch()
         sidebar_layout.addWidget(logout_btn)
         
