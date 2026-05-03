@@ -18,6 +18,7 @@ class Document(Base):
     mime_type = Column(String, nullable=True)
     is_verified = Column(Boolean, default=False)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     scholar = relationship("Scholar", backref="documents")
     academic_record = relationship("AcademicRecord", backref="documents")

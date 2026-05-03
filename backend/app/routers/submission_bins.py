@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
@@ -25,6 +25,7 @@ class SubmissionBinResponse(BaseModel):
     semester: str
     is_approved: bool
     created_at: datetime
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -55,6 +56,7 @@ def create_bin(
 
 @router.get("/", response_model=List[SubmissionBinResponse])
 def list_bins(
+    updated_since: Optional[datetime] = Query(None),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -65,6 +67,10 @@ def list_bins(
     query = db.query(SubmissionBin)
     if current_user.role == "scholar":
         query = query.filter(SubmissionBin.is_approved == False)
+    
+    if updated_since:
+        query = query.filter(SubmissionBin.updated_at > updated_since)
+
     return query.order_by(
         SubmissionBin.school_year.desc(),
         SubmissionBin.semester.desc()

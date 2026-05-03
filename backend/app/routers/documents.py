@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
@@ -38,7 +38,20 @@ class DocumentResponse(BaseModel):
     file_name: str
     is_verified: bool
     uploaded_at: datetime.datetime
+    updated_at: datetime.datetime
     model_config = ConfigDict(from_attributes=True)
+
+
+@router.get("/", response_model=List[DocumentResponse])
+def list_documents(
+    updated_since: Optional[datetime.datetime] = Query(None),
+    current_user: User = Depends(get_current_evaluator),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Document)
+    if updated_since:
+        query = query.filter(Document.updated_at > updated_since)
+    return query.all()
 
 
 @router.post("/upload")

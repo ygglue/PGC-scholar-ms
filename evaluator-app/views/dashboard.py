@@ -1,6 +1,16 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, 
-                               QLabel, QPushButton, QFrame, QListWidget)
+                               QLabel, QPushButton, QFrame, QListWidget,
+                               QGraphicsDropShadowEffect)
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor
+
+def create_ambient_shadow():
+    shadow = QGraphicsDropShadowEffect()
+    shadow.setBlurRadius(32)
+    shadow.setXOffset(0)
+    shadow.setYOffset(8)
+    shadow.setColor(QColor(23, 29, 24, 15))
+    return shadow
 
 class DashboardView(QWidget):
     def __init__(self, on_show_scholars_directory, on_show_submission_bins, on_logout_callback):
@@ -62,10 +72,12 @@ class DashboardView(QWidget):
         
         self.list_widget = QListWidget()
         self.list_widget.setObjectName("Panel")
+        self.list_widget.setGraphicsEffect(create_ambient_shadow())
         
         detail_panel = QFrame()
         detail_panel.setObjectName("Panel")
         detail_panel.setFixedWidth(350)
+        detail_panel.setGraphicsEffect(create_ambient_shadow())
         detail_layout = QVBoxLayout(detail_panel)
         detail_layout.setContentsMargins(32, 32, 32, 32)
         

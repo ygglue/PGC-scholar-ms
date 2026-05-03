@@ -1,16 +1,18 @@
 import sys
 import os
 import ctypes
-from PySide6.QtWidgets import QApplication, QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QFrame, QMessageBox
-from PySide6.QtCore import Qt, QPoint
+from PySide6.QtWidgets import (QApplication, QStackedWidget, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QFrame, QMessageBox, QSizePolicy)
+from PySide6.QtCore import Qt, QPoint, QTimer
 from PySide6.QtGui import QScreen, QWindow, QIcon
 from views.login import LoginView
 from views.dashboard import DashboardView
 from views.scholars_directory import ScholarsDirectoryView
 from views.submission_bins import SubmissionBinsView
 from views.bin_documents import BinDocumentsView
-from services.cache_service import get_cache_service, clear_auth_token
+from views.splash import SplashView
+from services.cache_service import get_cache_service, clear_auth_token, save_auth_token, load_auth_token
 from services.network_status import get_network_status
+from services.sync_service import get_sync_service
 
 def set_windows_titlebar_color(hwnd, color_hex):
     try:
@@ -34,9 +36,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Evaluator Portal")
         self.resize(1200, 800)
         
-        # Set native titlebar color to match app background
-        set_windows_titlebar_color(int(self.winId()), "#f5fbf2")
-        
+        # (Translucent/Frameless temporarily disabled for debugging)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
@@ -74,6 +74,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.content_container)
         
         self.stacked_widget = QStackedWidget(self.content_container)
+        self.stacked_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.content_layout.addWidget(self.stacked_widget)
         
         self.dashboard_view = DashboardView(
@@ -82,19 +83,89 @@ class MainWindow(QWidget):
             self.handle_logout
         )
         self.login_view = LoginView(self.handle_login_success)
+        self.splash_view = SplashView()
         self.scholars_directory_view = None
         self.submission_bins_view = None
         self.bin_documents_view = None
-        
+
         self.stacked_widget.addWidget(self.dashboard_view)
         self.stacked_widget.addWidget(self.login_view)
+        self.stacked_widget.addWidget(self.splash_view)
+
+        self.stacked_widget.setCurrentWidget(self.splash_view)
+
+        # Sync Service Setup
+        self.sync = get_sync_service()
+        self.sync.sync_finished.connect(self._on_sync_finished)
+        self.sync.sync_progress.connect(self._on_sync_progress)
+        self.sync.session_expired.connect(self.handle_logout)
+
+        self.sync_timer = QTimer(self)
+        self.sync_timer.timeout.connect(self._trigger_background_sync)
+        self.sync_timer.setInterval(300000) # 5 minutes
+
+        # Check session after initialization
+        QTimer.singleShot(500, self.check_session)
+
+    def check_session(self):
+        print("DEBUG: Checking session...")
+        token = load_auth_token()
+        if token:
+            print("DEBUG: Token found, attempting login...")
+            self.handle_login_success(token)
+        else:
+            print("DEBUG: No token, showing login...")
+            self.stacked_widget.setCurrentWidget(self.login_view)
         
-        self.stacked_widget.setCurrentWidget(self.login_view)
+        print("DEBUG: Showing window...")
         self.show()
+        self.stacked_widget.show()
+        self.stacked_widget.currentWidget().show()
+
+    def _on_sync_progress(self, msg):
+        self.offline_banner.show()
+        # Find the text label and update it
+        for child in self.offline_banner.findChildren(QLabel):
+            if "Syncing" in child.text() or "view only" in child.text():
+                child.setText(f"Syncing: {msg}")
+                child.setStyleSheet("color: #065f46; font-weight: 500; font-size: 13px;") # Greenish
+        self.offline_banner.setStyleSheet("QFrame#OfflineBanner { background-color: #d1fae5; border-bottom: 1px solid #6ee7b7; }")
+
+    def _on_sync_finished(self, success, msg):
+        if not get_network_status().is_online():
+            self._update_banner_offline()
+        else:
+            self.offline_banner.hide()
+
+    def _update_banner_offline(self):
+        self.offline_banner.show()
+        for child in self.offline_banner.findChildren(QLabel):
+            if "Syncing" in child.text() or "view only" in child.text():
+                child.setText("Offline — view only mode")
+                child.setStyleSheet("color: #92400e; font-weight: 500; font-size: 13px;")
+        self.offline_banner.setStyleSheet("QFrame#OfflineBanner { background-color: #fef3c7; border-bottom: 1px solid #fcd34d; }")
+
+    def _trigger_background_sync(self):
+        # Only sync if logged in (not on login screen)
+        if self.stacked_widget.currentWidget() == self.login_view:
+            return
+
+        token = load_auth_token()
+        if token and get_network_status().is_online():
+            self.sync.start_sync(token)
 
     def handle_login_success(self, token: str):
+        print("DEBUG: handle_login_success called")
+        save_auth_token(token)
+        print("DEBUG: Token saved")
         self.dashboard_view.initialize_dashboard(token)
+        print("DEBUG: Dashboard initialized")
         self.stacked_widget.setCurrentWidget(self.dashboard_view)
+        print(f"DEBUG: Current widget is {self.stacked_widget.currentWidget()}")
+        # Trigger immediate sync
+        self.sync.start_sync(token)
+        self.sync_timer.start()
+        self.show()
 
     def handle_show_scholars_directory(self):
         if not self.scholars_directory_view:
@@ -140,7 +211,15 @@ class MainWindow(QWidget):
         self.stacked_widget.setCurrentWidget(self.dashboard_view)
 
     def _on_network_change(self, is_online: bool):
-        self.offline_banner.setVisible(not is_online)
+        if not is_online:
+            self._update_banner_offline()
+        else:
+            self.offline_banner.hide()
+            # Sync when coming back online, but ONLY if logged in
+            if self.stacked_widget.currentWidget() != self.login_view:
+                token = load_auth_token()
+                if token:
+                    self.sync.start_sync(token)
 
     def clear_cache(self):
         reply = QMessageBox.question(
@@ -156,6 +235,7 @@ class MainWindow(QWidget):
             QMessageBox.information(self, "Cache Cleared", "All cached data has been deleted. Please sign in again.")
 
     def handle_logout(self):
+        clear_auth_token()
         self.stacked_widget.setCurrentWidget(self.login_view)
 
     def quit_app(self):

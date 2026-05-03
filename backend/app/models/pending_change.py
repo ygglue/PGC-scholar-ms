@@ -19,6 +19,7 @@ class PendingChange(Base):
     status = Column(String, default="pending") # pending, approved, rejected, more_info
     submitted_at = Column(DateTime(timezone=True), server_default=func.now())
     reviewed_at = Column(DateTime(timezone=True), nullable=True)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     evaluator_note = Column(Text, nullable=True)
 
     scholar = relationship("Scholar", backref="pending_changes")

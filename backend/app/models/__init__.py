@@ -8,6 +8,7 @@ from app.models.pending_change import PendingChange
 from app.models.announcement import Announcement
 from app.models.announcement_receipt import AnnouncementReceipt
 from app.models.submission_bin import SubmissionBin
+from app.models.system_sync import SystemSync
 
 # Expose models so alembic can pick them up when importing app.models
 __all__ = [
@@ -20,4 +21,6 @@ __all__ = [
     "PendingChange",
     "Announcement",
     "AnnouncementReceipt",
+    "SubmissionBin",
+    "SystemSync",
 ]

@@ -24,6 +24,7 @@ class PendingChangeResponse(BaseModel):
     payload: Dict[str, Any]
     status: str
     submitted_at: datetime
+    updated_at: datetime
     evaluator_note: Optional[str]
     model_config = ConfigDict(from_attributes=True)
 
@@ -35,11 +36,20 @@ class ReviewRequest(BaseModel):
 def list_pending_changes(
     status: Optional[str] = "pending",
     change_type: Optional[str] = None,
+    updated_since: Optional[datetime] = Query(None),
     current_user: User = Depends(get_current_evaluator),
     db: Session = Depends(get_db)):
     
     query = db.query(PendingChange)
-    if status: query = query.filter(PendingChange.status == status)
+    
+    # If updated_since is provided, we ignore the default "pending" status to sync all changes
+    if updated_since:
+        query = query.filter(PendingChange.updated_at > updated_since)
+        if status and status != "all": # allow explicit status filter if needed
+             query = query.filter(PendingChange.status == status)
+    else:
+        if status: query = query.filter(PendingChange.status == status)
+        
     if change_type: query = query.filter(PendingChange.change_type == change_type)
     
     return query.order_by(PendingChange.submitted_at.desc()).all()

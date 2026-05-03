@@ -11,6 +11,8 @@ from typing import Callable
 
 CACHE_DIR = Path(os.environ.get("APPDATA", os.path.expanduser("~"))) / "PGC-ISKOnektado" / "evaluator-cache"
 AUTH_KEY = "auth/session"
+GLOBAL_SYNC_KEY = "system/sync"
+PERMANENT_TTL = -1
 
 
 class CacheService:
@@ -31,7 +33,7 @@ class CacheService:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def set(self, key: str, data: dict, ttl_seconds: int):
+    def set(self, key: str, data: dict | list, ttl_seconds: int = PERMANENT_TTL):
         data_file = self._get_data_path(key)
         meta_file = self._get_meta_path(key)
 
@@ -39,7 +41,7 @@ class CacheService:
 
         try:
             with open(data_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, default=list)
+                json.dump(data, f, indent=2, default=str) # use str for datetime
 
             meta = {
                 "key": key,
@@ -50,6 +52,41 @@ class CacheService:
                 json.dump(meta, f)
         except OSError as e:
             print(f"Cache write error for {key}: {e}")
+
+    def merge_data(self, key: str, new_items: list, id_field: str = "id"):
+        """
+        Loads existing list, replaces/adds items from new_items, and saves.
+        Useful for delta syncing.
+        """
+        existing = self.get(key)
+        if not isinstance(existing, list):
+            existing = []
+
+        # Create a map for faster replacement
+        items_map = {str(item[id_field]): item for item in existing}
+        
+        for item in new_items:
+            items_map[str(item[id_field])] = item
+            
+        merged = list(items_map.values())
+        self.set(key, merged, PERMANENT_TTL)
+        return merged
+
+    def get_last_updated_at(self, key: str) -> str | None:
+        """
+        Returns the latest 'updated_at' timestamp from the cached list.
+        """
+        data = self.get(key)
+        if not isinstance(data, list) or not data:
+            return None
+        
+        latest = None
+        for item in data:
+            ua = item.get("updated_at")
+            if ua:
+                if latest is None or ua > latest:
+                    latest = ua
+        return latest
 
     def is_fresh(self, key: str) -> bool:
         meta_file = self._get_meta_path(key)

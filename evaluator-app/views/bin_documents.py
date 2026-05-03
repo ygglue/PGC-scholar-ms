@@ -3,13 +3,21 @@ import webbrowser
 from pathlib import Path
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QFrame, QScrollArea, QMessageBox
+    QFrame, QScrollArea, QMessageBox, QGraphicsDropShadowEffect
 )
 from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QColor
 
 from services.cache_service import get_cache_service
 from services.network_status import get_network_status
 
+def create_ambient_shadow():
+    shadow = QGraphicsDropShadowEffect()
+    shadow.setBlurRadius(32)
+    shadow.setXOffset(0)
+    shadow.setYOffset(8)
+    shadow.setColor(QColor(23, 29, 24, 15))
+    return shadow
 
 API_BASE = os.environ.get("API_BASE", "http://localhost:8000")
 
@@ -263,6 +271,7 @@ class BinDocumentsView(QWidget):
         for doc in docs:
             layout.addWidget(self._make_doc_row(doc))
 
+        frame.setGraphicsEffect(create_ambient_shadow())
         return frame
 
     def _make_doc_row(self, doc: dict) -> QFrame:

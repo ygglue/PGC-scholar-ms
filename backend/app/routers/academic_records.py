@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import BaseModel, ConfigDict
@@ -56,7 +56,19 @@ class AcademicRecordResponse(BaseModel):
     submission_status: str
     submitted_at: Optional[datetime]
     reviewed_at: Optional[datetime]
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
+
+@router.get("/", response_model=List[AcademicRecordResponse])
+def list_academic_records(
+    updated_since: Optional[datetime] = Query(None),
+    current_user: User = Depends(get_current_evaluator),
+    db: Session = Depends(get_db)
+):
+    query = db.query(AcademicRecord)
+    if updated_since:
+        query = query.filter(AcademicRecord.updated_at > updated_since)
+    return query.all()
 
 @router.get("/me", response_model=List[AcademicRecordResponse])
 def get_own_records(current_user: User = Depends(get_current_scholar), db: Session = Depends(get_db)):

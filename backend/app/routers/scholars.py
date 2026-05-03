@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from pydantic import BaseModel, ConfigDict
-from datetime import date
+from datetime import date, datetime
 import uuid
 
 from app.core.database import get_db
@@ -51,6 +51,7 @@ class ScholarResponse(BaseModel):
     address: Optional[str]
     contact_number: Optional[str]
     avatar_url: Optional[str]
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 @router.get("/me", response_model=ScholarResponse)
@@ -165,6 +166,7 @@ def list_scholars(
     status: Optional[str] = None,
     student_type: Optional[str] = None,
     search: Optional[str] = None,
+    updated_since: Optional[datetime] = Query(None),
     current_user: User = Depends(get_current_evaluator), 
     db: Session = Depends(get_db)):
     
@@ -174,6 +176,7 @@ def list_scholars(
     if course: query = query.filter(Scholar.course == course)
     if status: query = query.filter(Scholar.status == status)
     if student_type: query = query.filter(Scholar.student_type == student_type)
+    if updated_since: query = query.filter(Scholar.updated_at > updated_since)
     if search:
         query = query.filter(
             (Scholar.first_name.ilike(f"%{search}%")) | 
