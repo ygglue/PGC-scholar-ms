@@ -15,8 +15,9 @@ The system is split into three core components sharing a single backend API and 
 ## 🚀 Quick Setup Guide
 
 ### Prerequisites
-- **Python 3.10+** (for Backend and Evaluator App)
-- **Node.js 18+** (for Scholar Web App)
+- **Python 3.10+** (for Backend)
+- **Node.js 18+** (for Scholar Web App and Tauri App)
+- **Rust** (for Tauri Evaluator App)
 - **uv** (recommended Python package manager)
 
 ### 1. Backend Setup (FastAPI)
@@ -44,18 +45,17 @@ uvicorn app.main:app --reload
 ```
 *The API docs will be available at `http://localhost:8000/docs`.*
 
-### 2. Evaluator Desktop App Setup (PySide6)
-The evaluator app is a desktop application built with Qt6.
+### 2. Evaluator Desktop App (Tauri - Active)
+The modern desktop application built with Tauri and React.
 
 ```bash
-cd evaluator-app
+cd evaluator-tauri
 
-# Ensure your virtual environment is activated
 # Install dependencies
-uv pip install -r requirements.txt
+npm install
 
-# Run the desktop application
-python main.py
+# Run in development mode
+npm run tauri dev
 ```
 
 ### 3. Scholar Web App Setup (React + Vite)
@@ -71,6 +71,20 @@ npm install
 npm run dev
 ```
 *The web app will be available at `http://localhost:5173`.*
+
+### 4. Legacy Evaluator App (PySide6)
+*Note: This version is deprecated and kept for reference.*
+
+```bash
+cd evaluator-app
+
+# Ensure your virtual environment is activated
+# Install dependencies
+uv pip install -r requirements.txt
+
+# Run the desktop application
+python main.py
+```
 
 ---
 
