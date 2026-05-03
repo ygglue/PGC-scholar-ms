@@ -1,7 +1,7 @@
 # Agent Instructions
 
 ## HARD GATE — Read this before anything else
-
+You are running on PowerShell 7.
 **Do NOT write, edit, or search any code until you have read `graphify-out/GRAPH_REPORT.md` in full.**
 
 Reading the graph first is mandatory because:
@@ -24,4 +24,4 @@ After reading it, briefly summarize: god nodes, relevant communities, and any su
 7. `.agents/workflows/graphify.md` - Graphify command (~10 lines)
 
 For detailed skills/patterns, reference:
-- `.agents/skills/scholar-ms-skill/SKILL.md` - On-demand reference (~680 lines)
+- `.agents/skills/scholar-ms-skill/SKILL.md` - On-demand reference (~680 lines)

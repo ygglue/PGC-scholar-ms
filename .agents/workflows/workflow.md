@@ -177,11 +177,11 @@ Evaluators can broadcast messages to all or a filtered subset of scholars.
 
 Evaluators use username (email) and password — no OAuth.
 
-1. Evaluator enters email and password in the PySide6 desktop app
+1. Evaluator enters email and password in the Tauri desktop app
 2. Backend verifies credentials against `users` table using bcrypt
 3. If valid and `role = evaluator`, a JWT is issued (expires in 8 hours)
-4. JWT is stored in memory for the session — not written to disk
-5. All subsequent API calls include the JWT as a Bearer token
+4. JWT is stored in the app's local storage for the session
+5. All subsequent API calls include the JWT as a Bearer token via a centralized `apiService.ts`
 
 ---
 

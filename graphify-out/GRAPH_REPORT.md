@@ -1,12 +1,12 @@
-# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-03)
+# Graph Report - C:\Users\Eli\Documents\coding_projects\scholar-ms  (2026-05-04)
 
 ## Corpus Check
-- 63 files · ~64,556 words
+- 83 files · ~72,140 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 382 nodes · 757 edges · 35 communities detected
-- Extraction: 64% EXTRACTED · 36% INFERRED · 0% AMBIGUOUS · INFERRED: 276 edges (avg confidence: 0.69)
+- 431 nodes · 821 edges · 45 communities detected
+- Extraction: 63% EXTRACTED · 37% INFERRED · 0% AMBIGUOUS · INFERRED: 306 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -45,6 +45,16 @@
 - [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
 - [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 35|Community 35]]
+- [[_COMMUNITY_Community 36|Community 36]]
+- [[_COMMUNITY_Community 37|Community 37]]
+- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 39|Community 39]]
+- [[_COMMUNITY_Community 40|Community 40]]
+- [[_COMMUNITY_Community 41|Community 41]]
+- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 43|Community 43]]
+- [[_COMMUNITY_Community 44|Community 44]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 30 edges
@@ -61,10 +71,10 @@
 ## Surprising Connections (you probably didn't know these)
 - `Extract token from Authorization header or cookie.` --uses--> `User`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\core\dependencies.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py
-- `PendingChange` --calls--> `request_profile_update()`  [INFERRED]
-  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
 - `User` --uses--> `Set httpOnly cookie with the access token.`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\user.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\auth.py
+- `PendingChange` --calls--> `request_profile_update()`  [INFERRED]
+  C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\pending_change.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\routers\scholars.py
 - `Scholar` --uses--> `Creates fake scholars for testing purposes.`  [INFERRED]
   C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\app\models\scholar.py → C:\Users\Eli\Documents\coding_projects\scholar-ms\backend\seed.py
 - `Scholar` --uses--> `Deletes all fake scholars by email pattern.`  [INFERRED]
@@ -73,96 +83,96 @@
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.07
-Nodes (44): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), AnnouncementReceipt, DevLoginRequest (+36 more)
+Cohesion: 0.05
+Nodes (46): AcademicRecord, AcademicRecordResponse, GradeInput, GradeSubmitRequest, ProspectusGradeResponse, submit_grades(), AnnouncementReceipt, Base (+38 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (17): clear_auth_token(), _get_machine_id(), load_auth_token(), save_auth_token(), _simple_decrypt(), _simple_encrypt(), create_ambient_shadow(), DashboardView (+9 more)
+Cohesion: 0.07
+Nodes (18): BinDocumentsView, _get_machine_id(), load_auth_token(), save_auth_token(), _simple_decrypt(), _simple_encrypt(), create_ambient_shadow(), DashboardView (+10 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.08
-Nodes (16): QFrame, QMainWindow, QWidget, create_ambient_shadow(), FetchScholarDocsThread, FetchScholarsThread, get_avatar_color(), get_initials() (+8 more)
+Cohesion: 0.07
+Nodes (13): handleView(), loadDocuments(), CacheService, clear_auth_token(), get_cache_service(), Loads existing list, replaces/adds items from new_items, and saves.         Use, Returns the latest 'updated_at' timestamp from the cached list., QDialog (+5 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.12
-Nodes (8): CacheService, Loads existing list, replaces/adds items from new_items, and saves.         Use, Returns the latest 'updated_at' timestamp from the cached list., get_current_user(), get_current_user_from_request(), get_token_from_request(), Extract token from Authorization header or cookie., review_change()
+Cohesion: 0.08
+Nodes (14): getAvatarColor(), Dashboard(), Layout(), Profile(), create_ambient_shadow(), get_avatar_color(), get_initials(), PaginationControl (+6 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.09
-Nodes (9): get_bin_documents(), view_document_evaluator(), view_document_scholar(), remove_scholar_avatar(), request_profile_update(), upload_scholar_avatar(), create_signed_url(), delete_avatar() (+1 more)
+Nodes (11): create_ambient_shadow(), DownloadDocThread, FetchBinDocsThread, ViewDocThread, QObject, QThread, FetchScholarDocsThread, FetchScholarsThread (+3 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.16
-Nodes (6): BinDocumentsView, create_ambient_shadow(), DownloadDocThread, FetchBinDocsThread, ViewDocThread, QThread
+Cohesion: 0.11
+Nodes (5): handleReview(), loadPendingChanges(), NetworkStatusService, loadScholars(), SyncService
 
 ### Community 6 - "Community 6"
-Cohesion: 0.17
-Nodes (6): get_cache_service(), QDialog, create_ambient_shadow(), CreateBinDialog, FetchBinsThread, SubmissionBinsView
+Cohesion: 0.25
+Nodes (1): ScholarsDirectoryView
 
 ### Community 7 - "Community 7"
-Cohesion: 0.16
-Nodes (6): getAvatarColor(), Dashboard(), Layout(), Profile(), ScholarDetailPanel, useApiCache()
+Cohesion: 0.24
+Nodes (10): dev_login(), DevLoginRequest, google_login(), GoogleLoginRequest, login(), Set httpOnly cookie with the access token., _set_token_cookie(), create_access_token() (+2 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.31
-Nodes (8): dev_login(), google_login(), login(), Set httpOnly cookie with the access token., _set_token_cookie(), create_access_token(), verify_google_token(), verify_password()
+Cohesion: 0.18
+Nodes (7): view_document_evaluator(), view_document_scholar(), remove_scholar_avatar(), upload_scholar_avatar(), create_signed_url(), delete_avatar(), upload_avatar()
 
 ### Community 9 - "Community 9"
 Cohesion: 0.32
 Nodes (6): Announcement, create_announcement(), CreateAnnouncementRequest, get_announcements(), Create a new announcement (requires auth), Get announcements for the current scholar.     Returns announcements filtered by
 
 ### Community 10 - "Community 10"
-Cohesion: 0.32
-Nodes (4): QObject, get_sync_service(), SyncService, SyncWorker
+Cohesion: 0.25
+Nodes (4): App(), async(), removeToken(), saveToken()
 
 ### Community 11 - "Community 11"
+Cohesion: 0.38
+Nodes (4): get_current_user(), get_current_user_from_request(), get_token_from_request(), Extract token from Authorization header or cookie.
+
+### Community 12 - "Community 12"
+Cohesion: 0.29
+Nodes (2): run(), main()
+
+### Community 13 - "Community 13"
 Cohesion: 0.4
 Nodes (4): Run migrations in 'offline' mode.      This configures the context with just a U, Run migrations in 'online' mode.      In this scenario we need to create an Engi, run_migrations_offline(), run_migrations_online()
 
-### Community 12 - "Community 12"
-Cohesion: 0.83
-Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
-
-### Community 13 - "Community 13"
-Cohesion: 0.83
-Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
-
 ### Community 14 - "Community 14"
 Cohesion: 0.5
-Nodes (1): initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5
+Nodes (3): QMainWindow, create_ambient_shadow(), MainWindow
 
 ### Community 15 - "Community 15"
-Cohesion: 0.5
-Nodes (1): add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date
+Cohesion: 0.83
+Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 16 - "Community 16"
-Cohesion: 0.5
-Nodes (1): add_avatar_url_to_scholars  Revision ID: ab66dfea0e7a Revises: 3b9970469f0e Crea
+Cohesion: 0.83
+Nodes (3): get_evaluator_token(), get_scholar_token(), start_tests()
 
 ### Community 17 - "Community 17"
 Cohesion: 0.5
-Nodes (1): add_is_approved_to_submission_bins  Revision ID: cd81366cd8dd Revises: 5ee10ec12
+Nodes (1): initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5
 
 ### Community 18 - "Community 18"
 Cohesion: 0.5
-Nodes (1): add_updated_at_and_system_sync  Revision ID: eeb1e72caa3a Revises: cd81366cd8dd
+Nodes (1): add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date
 
 ### Community 19 - "Community 19"
-Cohesion: 0.67
-Nodes (1): main()
+Cohesion: 0.5
+Nodes (1): add_avatar_url_to_scholars  Revision ID: ab66dfea0e7a Revises: 3b9970469f0e Crea
 
 ### Community 20 - "Community 20"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): add_is_approved_to_submission_bins  Revision ID: cd81366cd8dd Revises: 5ee10ec12
 
 ### Community 21 - "Community 21"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): add_updated_at_and_system_sync  Revision ID: eeb1e72caa3a Revises: cd81366cd8dd
 
 ### Community 22 - "Community 22"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.67
+Nodes (1): Login()
 
 ### Community 23 - "Community 23"
 Cohesion: 1.0
@@ -202,57 +212,113 @@ Nodes (0):
 
 ### Community 32 - "Community 32"
 Cohesion: 1.0
-Nodes (1): Generate initials: Juan + Dela Cruz -> "JDC"
+Nodes (0): 
 
 ### Community 33 - "Community 33"
 Cohesion: 1.0
-Nodes (1): Generate consistent color from name hash
+Nodes (0): 
 
 ### Community 34 - "Community 34"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 35 - "Community 35"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 36 - "Community 36"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 37 - "Community 37"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 38 - "Community 38"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 39 - "Community 39"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 40 - "Community 40"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 41 - "Community 41"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 42 - "Community 42"
+Cohesion: 1.0
+Nodes (1): Generate initials: Juan + Dela Cruz -> "JDC"
+
+### Community 43 - "Community 43"
+Cohesion: 1.0
+Nodes (1): Generate consistent color from name hash
+
+### Community 44 - "Community 44"
 Cohesion: 1.0
 Nodes (1): # TODO: Implement actual API call via requests
 
 ## Knowledge Gaps
 - **15 isolated node(s):** `Create a new announcement (requires auth)`, `Run migrations in 'offline' mode.      This configures the context with just a U`, `Run migrations in 'online' mode.      In this scenario we need to create an Engi`, `initial schema  Revision ID: 3b9970469f0e Revises:  Create Date: 2026-04-13 04:5`, `add_submission_bins  Revision ID: 5ee10ec12f32 Revises: ab66dfea0e7a Create Date` (+10 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 20`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
+- **Thin community `Community 23`** (2 nodes): `test_supabase_direct.py`, `test_upload()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 21`** (2 nodes): `main.py`, `health_check()`
+- **Thin community `Community 24`** (2 nodes): `main.py`, `health_check()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (2 nodes): `sync.py`, `get_last_changed()`
+- **Thin community `Community 25`** (2 nodes): `sync.py`, `get_last_changed()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (2 nodes): `App()`, `App.jsx`
+- **Thin community `Community 26`** (2 nodes): `Modal.tsx`, `getTypeStyles()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (2 nodes): `Inbox.jsx`, `Inbox()`
+- **Thin community `Community 27`** (2 nodes): `main()`, `build.rs`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (2 nodes): `Login.jsx`, `Login()`
+- **Thin community `Community 28`** (2 nodes): `Inbox.jsx`, `Inbox()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (1 nodes): `__init__.py`
+- **Thin community `Community 29`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (1 nodes): `__init__.py`
+- **Thin community `Community 30`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 31`** (1 nodes): `postcss.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (1 nodes): `vite.config.js`
+- **Thin community `Community 32`** (1 nodes): `tailwind.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (1 nodes): `main.jsx`
+- **Thin community `Community 33`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (1 nodes): `api.js`
+- **Thin community `Community 34`** (1 nodes): `main.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (1 nodes): `Generate initials: Juan + Dela Cruz -> "JDC"`
+- **Thin community `Community 35`** (1 nodes): `vite-env.d.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (1 nodes): `Generate consistent color from name hash`
+- **Thin community `Community 36`** (1 nodes): `apiService.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `# TODO: Implement actual API call via requests`
+- **Thin community `Community 37`** (1 nodes): `cacheService.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 38`** (1 nodes): `eslint.config.js`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 39`** (1 nodes): `vite.config.js`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 40`** (1 nodes): `main.jsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 41`** (1 nodes): `api.js`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 42`** (1 nodes): `Generate initials: Juan + Dela Cruz -> "JDC"`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 43`** (1 nodes): `Generate consistent color from name hash`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 44`** (1 nodes): `# TODO: Implement actual API call via requests`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `Community 0` to `Community 8`, `Community 9`, `Community 3`?**
-  _High betweenness centrality (0.195) - this node is a cross-community bridge._
-- **Why does `LoginView` connect `Community 1` to `Community 2`?**
-  _High betweenness centrality (0.114) - this node is a cross-community bridge._
+- **Why does `User` connect `Community 0` to `Community 9`, `Community 11`, `Community 7`?**
+  _High betweenness centrality (0.176) - this node is a cross-community bridge._
+- **Why does `get_token_from_request()` connect `Community 11` to `Community 2`?**
+  _High betweenness centrality (0.115) - this node is a cross-community bridge._
+- **Why does `Extract token from Authorization header or cookie.` connect `Community 11` to `Community 0`?**
+  _High betweenness centrality (0.110) - this node is a cross-community bridge._
 - **Are the 28 inferred relationships involving `User` (e.g. with `Creates fake scholars for testing purposes.` and `Deletes all fake scholars by email pattern.`) actually correct?**
   _`User` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `MainWindow` (e.g. with `LoginView` and `DashboardView`) actually correct?**
@@ -261,5 +327,3 @@ _Questions this graph is uniquely positioned to answer:_
   _`Scholar` has 19 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `ScholarsDirectoryView` (e.g. with `MainWindow` and `EvaluatorApp`) actually correct?**
   _`ScholarsDirectoryView` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 16 inferred relationships involving `PendingChange` (e.g. with `Updates the global last_updated_at timestamp in the system_sync table.     We u` and `GradeInput`) actually correct?**
-  _`PendingChange` has 16 INFERRED edges - model-reasoned connections that need verification._

@@ -26,6 +26,8 @@ class PendingChangeResponse(BaseModel):
     submitted_at: datetime
     updated_at: datetime
     evaluator_note: Optional[str]
+    scholar_first_name: Optional[str] = None
+    scholar_last_name: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 class ReviewRequest(BaseModel):
@@ -40,7 +42,21 @@ def list_pending_changes(
     current_user: User = Depends(get_current_evaluator),
     db: Session = Depends(get_db)):
     
-    query = db.query(PendingChange)
+    query = db.query(
+        PendingChange.id,
+        PendingChange.scholar_id,
+        PendingChange.submitted_by,
+        PendingChange.reviewed_by,
+        PendingChange.claimed_by,
+        PendingChange.change_type,
+        PendingChange.payload,
+        PendingChange.status,
+        PendingChange.submitted_at,
+        PendingChange.updated_at,
+        PendingChange.evaluator_note,
+        Scholar.first_name.label("scholar_first_name"),
+        Scholar.last_name.label("scholar_last_name")
+    ).join(Scholar, PendingChange.scholar_id == Scholar.id)
     
     # If updated_since is provided, we ignore the default "pending" status to sync all changes
     if updated_since:

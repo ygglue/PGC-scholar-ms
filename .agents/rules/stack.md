@@ -12,7 +12,7 @@ The system is split into three separate applications sharing one backend API and
 
 ```
 Scholar web app (React PWA)
-Evaluator desktop app (PySide6)
+Evaluator desktop app (Tauri + React)
         ↓
 FastAPI backend (Python)
         ↓
@@ -47,22 +47,24 @@ The service worker caches the app shell and the scholar's own data (profile, gra
 
 ## Evaluator desktop app
 
-**Framework:** PySide6 (Qt6 bindings for Python)  
-**Platform:** Windows only  
-**Distribution:** PyInstaller executable (.exe)  
+**Framework:** Tauri 2 (Rust core + React frontend)  
+**Build tool:** Vite + Tauri CLI  
+**Platform:** Windows, macOS, Linux (primarily Windows for this project)  
+**Distribution:** Native installer (.msi, .exe)  
 **Runs on:** Office workstations
 
 | Package | Purpose |
 |---|---|
-| `PySide6` | Desktop UI framework (Qt6) |
-| `requests` | HTTP requests to FastAPI backend |
-| `python-dotenv` | Load environment variables |
+| `@tauri-apps/api` | Tauri JS API for system access |
+| `react` | UI framework |
+| `axios` | Centralized HTTP requests (apiService.ts) |
+| `tailwindcss` | Styling |
 
-**Why PySide6 over PyQt6:**  
-PySide6 is the official Qt binding maintained by The Qt Company and is LGPL licensed — safe for internal commercial use without purchasing a license. PyQt6 requires a commercial license for proprietary software. The APIs are nearly identical.
+**Why Tauri over PySide6:**  
+Tauri provides a modern web-based frontend with a lightweight native core. It results in smaller binaries, better security, and a more consistent UI experience using React. It also shares the same frontend stack as the scholar web app.
 
 **Why a desktop app for evaluators:**  
-Evaluators are office-based on Windows workstations. A desktop app gives richer UI for document previewing, bulk actions, report generation, and complex filtering — all of which are awkward in a browser for power users.
+Evaluators are office-based on Windows workstations. A desktop app gives richer UI for document previewing (using native openers), bulk actions, and deep system integration — while keeping the memory footprint much lower than Electron.
 
 ---
 
@@ -190,7 +192,7 @@ A `backend/.env.example` with empty values is committed to git as a reference fo
 | Component | Development | Production |
 |---|---|---|
 | Scholar web app | `localhost:5173` (Vite dev server) | Vercel / Netlify |
-| Evaluator desktop | `python main.py` | PyInstaller `.exe` |
+| Evaluator desktop | `npm run dev` (Tauri dev) | Tauri Bundle (`.exe` / `.msi`) |
 | FastAPI backend | `localhost:8000` (Uvicorn) | Railway / Render |
 | Database | Supabase (same instance) | Supabase (same instance) |
 | File storage | Supabase (same instance) | Supabase (same instance) |
@@ -241,12 +243,14 @@ scholar-management-system/
 │   │   └── api/
 │   ├── public/
 │   └── package.json
-├── evaluator-app/              # PySide6
+├── evaluator-tauri/            # Active Evaluator App (Tauri + React)
+│   ├── src/
+│   ├── src-tauri/
+│   └── package.json
+├── evaluator-app/              # LEGACY Evaluator App (PySide6)
 │   ├── main.py
-│   ├── views/
-│   ├── api/
 │   └── requirements.txt
-├── docs/                       # this folder
+├── docs/                       # documentation
 │   ├── schema.md
 │   ├── workflow.md
 │   ├── api_endpoints.md
