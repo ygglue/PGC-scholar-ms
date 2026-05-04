@@ -16,7 +16,11 @@ interface Scholar {
   avatar_url?: string;
 }
 
-export const ScholarsDirectory: React.FC = () => {
+interface ScholarsDirectoryProps {
+  onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
+}
+
+export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModal }) => {
   const [scholars, setScholars] = useState<Scholar[]>([]);
   const [filtered, setFiltered] = useState<Scholar[]>([]);
   const [search, setSearch] = useState('');
@@ -60,23 +64,36 @@ export const ScholarsDirectory: React.FC = () => {
   }, [scholars, search, statusFilter]);
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-serif">Scholars Directory</h1>
-        <div className="flex gap-2 bg-[#F7F9F7] p-1 rounded-full border border-[#E0E6E0]">
-          <button onClick={() => setViewType('list')} className={`px-4 py-2 rounded-full ${viewType === 'list' ? 'bg-white' : ''}`}>List</button>
-          <button onClick={() => setViewType('card')} className={`px-4 py-2 rounded-full ${viewType === 'card' ? 'bg-white' : ''}`}>Card</button>
+    <div className="p-8 h-full flex flex-col">
+      <div className="flex justify-between items-center mb-8 shrink-0">
+        <div>
+          <h1 className="text-2xl font-serif text-[#1A1A1A]">Scholars Directory</h1>
+          <p className="text-sm text-[#4A5568] mt-1">Manage and monitor all active scholars.</p>
+        </div>
+        <div className="flex gap-1 bg-[#F0F2F0] p-1 rounded-full border border-[#E0E6E0]">
+          <button 
+            onClick={() => setViewType('card')} 
+            className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'card' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+          >
+            Card View
+          </button>
+          <button 
+            onClick={() => setViewType('list')} 
+            className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'list' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+          >
+            List View
+          </button>
         </div>
       </div>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-8 shrink-0">
         <input 
-          placeholder="Search name..." 
-          className="input-field max-w-xs" 
+          placeholder="Search by name..." 
+          className="input-field w-full max-w-sm" 
           value={search} 
           onChange={(e) => setSearch(e.target.value)} 
         />
-        <select className="input-field max-w-[150px]" onChange={(e) => setStatusFilter(e.target.value)}>
+        <select className="input-field max-w-[200px]" onChange={(e) => setStatusFilter(e.target.value)}>
           <option>All Status</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
@@ -84,41 +101,57 @@ export const ScholarsDirectory: React.FC = () => {
         </select>
       </div>
 
-      {viewType === 'card' ? (
-        <div className="grid grid-cols-4 gap-6">
-          {filtered.map(s => (
-            <div key={s.id} className="card flex flex-col items-center text-center p-6 hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center font-bold mb-4">
-                {s.first_name[0]}{s.last_name[0]}
-              </div>
-              <h3 className="font-semibold">{s.first_name} {s.last_name}</h3>
-              <p className="text-sm text-gray-500">{s.school}</p>
-              <span className={`mt-2 px-3 py-1 text-[10px] font-bold uppercase rounded-full ${
-                s.status === 'active' ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100'
-              }`}>{s.status}</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <table className="w-full bg-white rounded-lg border border-[#E0E6E0]">
-          <thead>
-            <tr className="border-b border-[#E0E6E0]">
-              <th className="p-4 text-left">Name</th>
-              <th className="p-4 text-left">School</th>
-              <th className="p-4 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="flex-1 overflow-y-auto">
+        {viewType === 'card' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8">
             {filtered.map(s => (
-              <tr key={s.id} className="border-b border-[#E0E6E0]">
-                <td className="p-4">{s.first_name} {s.last_name}</td>
-                <td className="p-4">{s.school}</td>
-                <td className="p-4">{s.status}</td>
-              </tr>
+              <div key={s.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-[#E8F5ED] flex items-center justify-center font-bold text-[#1A8C3C] mb-4">
+                  {s.first_name[0]}{s.last_name[0]}
+                </div>
+                <h3 className="font-semibold text-[#1A1A1A]">{s.first_name} {s.last_name}</h3>
+                <p className="text-xs text-[#4A5568] mt-1">{s.school}</p>
+                <div className="mt-4">
+                  <span className={`px-3 py-1 text-[10px] font-bold uppercase rounded-full ${
+                    s.status === 'active' ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100 text-gray-600'
+                  }`}>{s.status}</span>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      )}
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-[#E0E6E0] overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-[#F7F9F7]">
+                <tr className="border-b border-[#E0E6E0]">
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Name</th>
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">School</th>
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Batch</th>
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Course</th>
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Year</th>
+                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(s => (
+                  <tr key={s.id} className="border-b border-[#F0F2F0] hover:bg-[#F7F9F7] transition-colors">
+                    <td className="p-4 font-medium text-[#1A1A1A]">{s.first_name} {s.last_name}</td>
+                    <td className="p-4 text-[#4A5568] text-sm">{s.school}</td>
+                    <td className="p-4 text-[#4A5568] text-sm">{s.batch_number}</td>
+                    <td className="p-4 text-[#4A5568] text-sm">{s.course}</td>
+                    <td className="p-4 text-[#4A5568] text-sm">{s.year_level}</td>
+                    <td className="p-4">
+                      <span className={`px-3 py-1 text-[10px] font-bold uppercase rounded-full ${
+                        s.status === 'active' ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100 text-gray-600'
+                      }`}>{s.status}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

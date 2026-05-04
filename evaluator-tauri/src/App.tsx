@@ -4,6 +4,7 @@ import { ScholarsDirectory } from "./components/ScholarsDirectory";
 import { SubmissionBins } from "./components/SubmissionBins";
 import { BinDocuments } from "./components/BinDocuments";
 import { Dashboard } from "./components/Dashboard";
+import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
 import { syncService } from "./services/syncService";
@@ -12,7 +13,7 @@ import "./index.css";
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'dashboard' | 'directory' | 'bins'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'directory' | 'bins' | 'settings'>('dashboard');
   const [selectedBin, setSelectedBin] = useState<any>(null);
 
   // Global Modal State
@@ -60,6 +61,7 @@ function App() {
 
   const renderContent = () => {
     const commonProps = { onShowModal: showModal };
+    if (view === 'settings') return <Settings />;
     if (view === 'directory') return <ScholarsDirectory {...commonProps} />;
     if (view === 'bins') {
       if (selectedBin) return <BinDocuments bin={selectedBin} onBack={() => setSelectedBin(null)} {...commonProps} />;
@@ -69,7 +71,7 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Global Modal */}
       {modalConfig && (
         <Modal 
@@ -86,12 +88,13 @@ function App() {
         />
       )}
 
-      <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col">
+      <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col shrink-0">
         <h2 className="font-serif text-xl mb-12">PGC-Scholar<br/>Evaluator</h2>
         <nav className="flex flex-col gap-4">
           <button onClick={() => {setView('dashboard'); setSelectedBin(null);}} className="text-left py-2">Pending Docs</button>
           <button onClick={() => {setView('directory'); setSelectedBin(null);}} className="text-left py-2">Scholars Directory</button>
           <button onClick={() => {setView('bins'); setSelectedBin(null);}} className="text-left py-2">Submission Bins</button>
+          <button onClick={() => {setView('settings'); setSelectedBin(null);}} className="text-left py-2">Settings</button>
         </nav>
         <button 
           className="mt-auto text-left py-2 text-white/70 hover:text-white"
@@ -104,7 +107,7 @@ function App() {
         </button>
       </aside>
 
-      <main className="flex-1 bg-[#F0F2F0]">
+      <main className="flex-1 h-screen overflow-hidden">
         {renderContent()}
       </main>
     </div>

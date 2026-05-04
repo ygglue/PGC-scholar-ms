@@ -14,7 +14,8 @@
       {
         "title": "evaluator-tauri",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "backgroundColor": "#F0F2F0"
       }
     ],
     "security": {

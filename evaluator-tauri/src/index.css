@@ -1,34 +1,40 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
-    --green-primary: #1A8C3C;
-    --green-dark: #0F5C27;
-    --page-bg: #F0F2F0;
-    --border: #E0E6E0;
-    --text-primary: #1A1A1A;
-    --text-secondary: #4A5568;
-  }
+    :root {
+        --green-primary: #1a8c3c;
+        --green-dark: #0f5c27;
+        --page-bg: #f0f2f0;
+        --border: #e0e6e0;
+        --text-primary: #1a1a1a;
+        --text-secondary: #4a5568;
+    }
+    html, body {
+        height: 100%;
+        margin: 0;
+        overscroll-behavior: none;
+    }
 
-  body {
-    background-color: var(--page-bg);
-    color: var(--text-primary);
-  }
+    body {
+        background-color: var(--page-bg);
+        color: var(--text-primary);
+        overflow-y: auto;
+    }
 }
 
 @layer components {
-  /* Auth Card */
-  .auth-card {
-    @apply bg-white p-10 rounded-[20px] shadow-lg border border-[#E0E6E0] w-[450px];
-  }
+    /* Auth Card */
+    .auth-card {
+        @apply bg-white p-10 rounded-[20px] shadow-lg border border-[#E0E6E0] w-[450px];
+    }
 
-  /* Buttons */
-  .btn-primary {
-    @apply w-full mt-4 bg-gradient-to-tr from-[#1A8C3C] to-[#0F5C27] text-white p-3 rounded-full font-semibold hover:opacity-90 transition-opacity;
-  }
+    /* Buttons */
+    .btn-primary {
+        @apply w-full mt-4 bg-gradient-to-tr from-[#1A8C3C] to-[#0F5C27] text-white p-3 rounded-full font-semibold hover:opacity-90 transition-opacity;
+    }
 
-  /* Form Inputs */
-  .input-field {
-    @apply w-full p-3 rounded-[8px] border border-[#E0E6E0] focus:ring-2 focus:ring-[#1A8C3C] outline-none;
-  }
+    /* Form Inputs */
+    .input-field {
+        @apply w-full p-3 rounded-[8px] border border-[#E0E6E0] focus:ring-2 focus:ring-[#1A8C3C] outline-none;
+    }
 }
