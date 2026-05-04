@@ -2,7 +2,21 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/apiService';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
+import { getToken } from '../services/secureStore';
+import { DocumentService } from '../services/documentService';
+import { openPath } from '@tauri-apps/plugin-opener';
 import { ModalProps } from './shared/Modal';
+
+// Helper to get user ID from JWT
+const getUserIdFromToken = (token: string | null): string | null => {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub;
+  } catch (e) {
+    return null;
+  }
+};
 
 interface PendingChange {
   id: string;
@@ -16,19 +30,25 @@ interface PendingChange {
   claimed_by?: string;
 }
 
-interface DashboardProps {
+interface PendingSubmissionsProps {
   onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
+export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowModal }) => {
   const [changes, setChanges] = useState<PendingChange[]>([]);
   const [selectedChange, setSelectedChange] = useState<PendingChange | null>(null);
   const [loading, setLoading] = useState(true);
   const [reviewNote, setReviewNote] = useState('');
   const [reviewStatus, setReviewStatus] = useState<'approved' | 'rejected' | 'more_info'>('approved');
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
     loadPendingChanges();
+    const initUser = async () => {
+      const token = await getToken();
+      setCurrentUserId(getUserIdFromToken(token));
+    };
+    initUser();
   }, []);
 
   const loadPendingChanges = async () => {
@@ -58,6 +78,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
   };
 
   const handleClaimAndSelect = async (change: PendingChange) => {
+    if (selectedChange?.id === change.id) return;
+
     try {
       await api.post(`/pending-changes/${change.id}/claim`);
       setSelectedChange(change);
@@ -71,19 +93,44 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
           onConfirm: () => {}
         });
       } else {
+        onShowModal({
+          title: 'Claim Failed',
+          message: 'Failed to claim submission. Please try again.',
+          type: 'danger',
+          onConfirm: () => {}
+        });
+      }
+    }
+  };
+
+  const handleViewDocument = async (docId: string, scholarId: string) => {
+    try {
+      const res = await api.get(`/documents/${docId}/view-evaluator`);
+      const localPath = await DocumentService.downloadAndCacheDocument(docId, scholarId, res.data.url);
+      await openPath(localPath.replace(/\\/g, '/'));
+    } catch (err) {
       onShowModal({
-        title: 'Claim Failed',
-        message: 'Failed to claim submission. Please try again.',
+        title: 'Open Failed',
+        message: `Could not open document: ${err}`,
         type: 'danger',
         onConfirm: () => {}
       });
-      }
     }
   };
 
   const handleReview = async () => {
     if (!selectedChange) return;
     
+    if ((reviewStatus === 'rejected' || reviewStatus === 'more_info') && !reviewNote.trim()) {
+      onShowModal({
+        title: 'Note Required',
+        message: 'Please provide a reason in the Evaluator Notes for your decision.',
+        type: 'danger',
+        onConfirm: () => {}
+      });
+      return;
+    }
+
     try {
       await api.post(`/pending-changes/${selectedChange.id}/review`, {
         status: reviewStatus,
@@ -98,6 +145,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
       });
       
       setSelectedChange(null);
+      setReviewNote('');
+      setReviewStatus('approved');
       loadPendingChanges();
     } catch (err) {
       onShowModal({
@@ -126,8 +175,50 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
         </div>
       );
     }
+    if (change.change_type === 'grades') {
+      return (
+        <div className="bg-[#F7F9F7] p-4 rounded-xl text-xs space-y-2">
+          <p className="font-bold uppercase text-[#A0AEC0]">Grade Changes</p>
+          {Object.entries(change.payload).map(([subject, grades]: [string, any]) => (
+            <div key={subject} className="flex justify-between">
+              <span className="font-medium">{subject}</span>
+              <span className="font-bold text-[#1A8C3C]">{grades.from} → {grades.to}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (change.change_type === 'documents') {
+      return (
+        <div className="bg-[#F7F9F7] p-4 rounded-xl text-xs space-y-3">
+          <p className="font-bold uppercase text-[#A0AEC0]">Submitted Document</p>
+          <div className="bg-white p-3 rounded-lg border border-[#E0E6E0]">
+            <p className="font-medium text-[#1A1A1A] truncate">{change.payload.doc_type || 'Document'}</p>
+          </div>
+          <button 
+            onClick={() => handleViewDocument(change.payload.document_id, change.scholar_id)}
+            className="w-full bg-[#1A8C3C] text-white py-2 rounded-lg font-semibold hover:bg-[#0F5C27] transition-colors"
+          >
+            View Document
+          </button>
+        </div>
+      );
+    }
     return <pre className="text-xs bg-[#F7F9F7] p-4 rounded-xl overflow-auto">{JSON.stringify(change.payload, null, 2)}</pre>;
   };
+
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+
+  const toggleGroup = (scholarName: string) => {
+    setExpandedGroups(prev => ({ ...prev, [scholarName]: !prev[scholarName] }));
+  };
+
+  const grouped = changes.reduce((acc, change) => {
+    const key = `${change.scholar_first_name} ${change.scholar_last_name}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(change);
+    return acc;
+  }, {} as Record<string, PendingChange[]>);
 
   return (
     <div className="p-8 h-full flex flex-col">
@@ -143,28 +234,59 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal }) => {
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="p-8 text-center text-[#4A5568]">Loading submissions...</div>
-            ) : changes.length === 0 ? (
+            ) : Object.keys(grouped).length === 0 ? (
               <div className="p-8 text-center text-[#4A5568]">No pending submissions found.</div>
             ) : (
-              changes.map(change => (
-                <div 
-                  key={change.id} 
-                  onClick={() => handleClaimAndSelect(change)}
-                  className={`p-5 border-b border-[#F0F2F0] cursor-pointer hover:bg-[#F7F9F7] transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] border-l-4 border-l-[#1A8C3C]' : ''}`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-bold text-[#1A1A1A]">{change.scholar_first_name} {change.scholar_last_name}</span>
-                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${
-                      change.change_type === 'profile' ? 'bg-[#EBF8FF] text-[#3182CE]' :
-                      change.change_type === 'grades' ? 'bg-[#FAF5FF] text-[#805AD5]' :
-                      'bg-[#FFF5F5] text-[#DD6B20]'
-                    }`}>
-                      {change.change_type}
-                    </span>
+              Object.entries(grouped).map(([scholarName, scholarChanges]) => {
+                const isExpanded = expandedGroups[scholarName] ?? true;
+                return (
+                  <div key={scholarName} className="mb-2">
+                    <div 
+                        onClick={() => toggleGroup(scholarName)}
+                        className="px-5 py-3 bg-[#F0F2F0] text-[#4A5568] font-bold text-xs uppercase tracking-wider cursor-pointer flex justify-between items-center hover:bg-[#E0E6E0] transition-colors"
+                    >
+                        <span>{scholarName}</span>
+                        <div className="flex items-center gap-3">
+                            <span className="bg-white px-2 py-0.5 rounded text-[10px]">{scholarChanges.length} Pending</span>
+                            <span className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                        </div>
+                    </div>
+                    <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                        <div className="overflow-hidden">
+                            {scholarChanges.map(change => (
+                                <div 
+                                key={change.id} 
+                                onClick={() => handleClaimAndSelect(change)}
+                                className={`p-5 border-b border-[#F0F2F0] cursor-pointer hover:bg-[#F7F9F7] transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] border-l-4 border-l-[#1A8C3C]' : ''} ${change.claimed_by ? 'opacity-70' : ''}`}
+                                >
+                                <div className="flex justify-between items-start mb-2">
+                                    <span className={`font-bold text-[#1A1A1A] ${change.claimed_by ? 'flex items-center gap-2' : ''}`}>
+                                    {change.change_type.toUpperCase()}
+                                    {change.claimed_by && <span className="text-[10px] bg-gray-200 px-2 py-0.5 rounded italic">Locked</span>}
+                                    </span>
+                                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${
+                                    change.change_type === 'profile' ? 'bg-[#EBF8FF] text-[#3182CE]' :
+                                    change.change_type === 'grades' ? 'bg-[#FAF5FF] text-[#805AD5]' :
+                                    'bg-[#FFF5F5] text-[#DD6B20]'
+                                    }`}>
+                                    {change.status}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p className="text-[11px] text-[#A0AEC0] font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
+                                    {change.claimed_by && (
+                                    <p className="text-[10px] text-[#DD6B20] font-semibold">
+                                        In Review By: {change.claimed_by === currentUserId ? 'You' : 'Evaluator'}
+                                    </p>
+                                    )}
+                                </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                   </div>
-                  <p className="text-[11px] text-[#A0AEC0] font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>

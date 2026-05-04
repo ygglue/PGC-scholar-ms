@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
 import api from '../services/apiService';
+import { getViewPreference, saveViewPreference } from '../services/settingsStore';
+import { ModalProps } from './shared/Modal';
 
 interface Scholar {
   id: string;
@@ -25,18 +27,37 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
   const [filtered, setFiltered] = useState<Scholar[]>([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All Status');
+  const [batchFilter, setBatchFilter] = useState('All Batches');
+  const [courseFilter, setCourseFilter] = useState('All Courses');
   const [viewType, setViewType] = useState<'card' | 'list'>('card');
+  const [loading, setLoading] = useState(true);
+
+  // Derive unique options
+  const batches = Array.from(new Set(scholars.map(s => s.batch_number))).sort();
+  const courses = Array.from(new Set(scholars.map(s => s.course))).sort();
 
   useEffect(() => {
-    loadScholars();
+    const init = async () => {
+      const pref = await getViewPreference();
+      if (pref) setViewType(pref as 'card' | 'list');
+      await loadScholars();
+    };
+    init();
   }, []);
 
+  const toggleView = async (type: 'card' | 'list') => {
+    setViewType(type);
+    await saveViewPreference(type);
+  };
+
   const loadScholars = async () => {
+    setLoading(true);
     const CACHE_KEY = "scholars/list";
     const cached = CacheService.get<Scholar[]>(CACHE_KEY);
 
     if (cached) {
       setScholars(cached);
+      setLoading(false);
       return;
     }
 
@@ -49,6 +70,8 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
         CacheService.set(CACHE_KEY, data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -58,10 +81,12 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
       const name = `${s.first_name} ${s.last_name}`.toLowerCase();
       const matchesSearch = name.includes(search.toLowerCase());
       const matchesStatus = statusFilter === 'All Status' || s.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      const matchesBatch = batchFilter === 'All Batches' || s.batch_number === batchFilter;
+      const matchesCourse = courseFilter === 'All Courses' || s.course === courseFilter;
+      return matchesSearch && matchesStatus && matchesBatch && matchesCourse;
     });
     setFiltered(result);
-  }, [scholars, search, statusFilter]);
+  }, [scholars, search, statusFilter, batchFilter, courseFilter]);
 
   return (
     <div className="p-8 h-full flex flex-col">
@@ -72,13 +97,13 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
         </div>
         <div className="flex gap-1 bg-[#F0F2F0] p-1 rounded-full border border-[#E0E6E0]">
           <button 
-            onClick={() => setViewType('card')} 
+            onClick={() => toggleView('card')} 
             className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'card' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
           >
             Card View
           </button>
           <button 
-            onClick={() => setViewType('list')} 
+            onClick={() => toggleView('list')} 
             className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'list' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
           >
             List View
@@ -93,16 +118,31 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
           value={search} 
           onChange={(e) => setSearch(e.target.value)} 
         />
-        <select className="input-field max-w-[200px]" onChange={(e) => setStatusFilter(e.target.value)}>
+        <select className="input-field max-w-[150px]" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
           <option>All Status</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
           <option value="graduate">Graduate</option>
         </select>
+        <select className="input-field max-w-[150px]" onChange={(e) => setBatchFilter(e.target.value)} value={batchFilter}>
+          <option>All Batches</option>
+          {batches.map(b => <option key={b} value={b}>{b}</option>)}
+        </select>
+        <select className="input-field max-w-[200px]" onChange={(e) => setCourseFilter(e.target.value)} value={courseFilter}>
+          <option>All Courses</option>
+          {courses.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {viewType === 'card' ? (
+        {loading ? (
+          <div className="text-center p-20 text-[#A0AEC0]">Loading scholars...</div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center p-20 text-[#A0AEC0] bg-white rounded-2xl border border-[#E0E6E0] border-dashed">
+            <span className="text-4xl block mb-2">🔍</span>
+            No scholars found matching your criteria.
+          </div>
+        ) : viewType === 'card' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8">
             {filtered.map(s => (
               <div key={s.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">

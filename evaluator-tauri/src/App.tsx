@@ -3,7 +3,7 @@ import { Login } from "./components/Login";
 import { ScholarsDirectory } from "./components/ScholarsDirectory";
 import { SubmissionBins } from "./components/SubmissionBins";
 import { BinDocuments } from "./components/BinDocuments";
-import { Dashboard } from "./components/Dashboard";
+import { PendingSubmissions } from "./components/PendingSubmissions";
 import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
@@ -13,7 +13,7 @@ import "./index.css";
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'dashboard' | 'directory' | 'bins' | 'settings'>('dashboard');
+  const [view, setView] = useState<'submissions' | 'directory' | 'bins' | 'settings'>('submissions');
   const [selectedBin, setSelectedBin] = useState<any>(null);
 
   // Global Modal State
@@ -67,7 +67,7 @@ function App() {
       if (selectedBin) return <BinDocuments bin={selectedBin} onBack={() => setSelectedBin(null)} {...commonProps} />;
       return <SubmissionBins onOpenBin={(b) => setSelectedBin(b)} {...commonProps} />;
     }
-    return <Dashboard {...commonProps} />;
+    return <PendingSubmissions {...commonProps} />;
   };
 
   return (
@@ -91,7 +91,7 @@ function App() {
       <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col shrink-0">
         <h2 className="font-serif text-xl mb-12">PGC-Scholar<br/>Evaluator</h2>
         <nav className="flex flex-col gap-4">
-          <button onClick={() => {setView('dashboard'); setSelectedBin(null);}} className="text-left py-2">Pending Docs</button>
+          <button onClick={() => {setView('submissions'); setSelectedBin(null);}} className="text-left py-2">Pending Submissions</button>
           <button onClick={() => {setView('directory'); setSelectedBin(null);}} className="text-left py-2">Scholars Directory</button>
           <button onClick={() => {setView('bins'); setSelectedBin(null);}} className="text-left py-2">Submission Bins</button>
           <button onClick={() => {setView('settings'); setSelectedBin(null);}} className="text-left py-2">Settings</button>
