@@ -10,9 +10,20 @@ class SyncService {
   private syncInterval: number | null = null;
   private readonly INTERVAL_MS = 60000; // 1 minute sync
 
+  private isSyncing = false;
+  private retryCount = 0;
+  private readonly MAX_RETRIES = 3;
+
+  constructor() {
+    this.handleNetworkChange = this.handleNetworkChange.bind(this);
+  }
+
   start() {
     if (this.syncInterval) return;
     console.log('SyncService: Starting background sync...');
+    
+    // Listen to network status changes
+    NetworkStatus.addCallback(this.handleNetworkChange);
     
     // Sync immediately on start
     this.performSync();
@@ -25,36 +36,51 @@ class SyncService {
     if (this.syncInterval) {
       clearInterval(this.syncInterval);
       this.syncInterval = null;
+      NetworkStatus.removeCallback(this.handleNetworkChange);
       console.log('SyncService: Stopped.');
     }
   }
 
+  private handleNetworkChange(isOnline: boolean) {
+    if (isOnline) {
+      console.log('SyncService: Connection restored. Triggering immediate sync.');
+      this.performSync();
+    }
+  }
+
   private async performSync() {
+    if (this.isSyncing) return;
+    this.isSyncing = true;
+
     const isOnline = await NetworkStatus.checkApiConnection();
     if (!isOnline) {
       console.log('SyncService: Offline, skipping sync.');
+      this.isSyncing = false;
       return;
     }
 
     console.log('SyncService: Fetching fresh data...');
 
-    try {
-      // Sync list views
-      const [scholars, bins, changes] = await Promise.all([
-        api.get('/scholars/'),
-        api.get('/submission-bins/'),
-        api.get('/pending-changes/')
-      ]);
+    const endpoints = [
+      { key: 'scholars/list', path: '/scholars/' },
+      { key: 'bins/list', path: '/submission-bins/' },
+      { key: 'pending_changes/list', path: '/pending-changes/' }
+    ];
 
-      // Update persistent caches
-      CacheService.set('scholars/list', scholars.data);
-      CacheService.set('bins/list', bins.data);
-      CacheService.set('pending_changes/list', changes.data);
+    const results = await Promise.allSettled(
+      endpoints.map(ep => api.get(ep.path))
+    );
 
-      console.log('SyncService: Sync successful.');
-    } catch (err) {
-      console.error('SyncService: Error during sync:', err);
-    }
+    results.forEach((res, index) => {
+      if (res.status === 'fulfilled') {
+        CacheService.set(endpoints[index].key, res.value.data);
+      } else {
+        console.error(`SyncService: Failed to sync ${endpoints[index].path}:`, res.reason);
+      }
+    });
+
+    this.isSyncing = false;
+    console.log('SyncService: Sync cycle complete.');
   }
 }
 

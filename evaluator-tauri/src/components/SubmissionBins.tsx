@@ -81,6 +81,59 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
     });
   };
 
+  const createBin = async (school_year: string, semester: string) => {
+    try {
+      const res = await api.post(`/submission-bins/`, { school_year, semester });
+      if (res.status === 201 || res.status === 200) {
+        onShowModal({
+          title: 'Bin Created',
+          message: `Submission bin for AY ${school_year} (${semester} Sem) created.`,
+          type: 'success',
+          onConfirm: () => {}
+        });
+        loadBins();
+      }
+    } catch (err: any) {
+      onShowModal({
+        title: 'Error',
+        message: err.response?.status === 409 ? 'A bin for this semester already exists.' : `Failed to create bin: ${err}`,
+        type: 'danger',
+        onConfirm: () => {}
+      });
+    }
+  };
+
+  const openCreateDialog = () => {
+    let year = '';
+    let sem = '1st';
+    onShowModal({
+        title: 'Create Submission Bin',
+        message: (
+            <div className="flex flex-col gap-4 mt-4">
+                <input 
+                    placeholder="Academic Year (e.g. 2025-2026)" 
+                    className="input-field" 
+                    onChange={(e) => year = e.target.value}
+                />
+                <select className="input-field" onChange={(e) => sem = e.target.value}>
+                    <option value="1st">1st Semester</option>
+                    <option value="2nd">2nd Semester</option>
+                    <option value="summer">Summer</option>
+                </select>
+            </div>
+        ) as any,
+        confirmLabel: 'Create',
+        cancelLabel: 'Cancel',
+        onConfirm: () => {
+            if (!year) {
+                onShowModal({ title: 'Validation', message: 'Enter an Academic Year.', type: 'danger', onConfirm: () => {} });
+                return;
+            }
+            createBin(year, sem);
+        }
+    });
+  };
+
   return (
     <ViewLayout>
       <div className="flex justify-between items-center mb-8 shrink-0">
@@ -88,7 +141,7 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
           <h1 className="text-2xl font-serif text-[#1A1A1A]">Submission Bins</h1>
           <p className="text-sm text-[#4A5568] mt-1">Manage scholar document collection windows.</p>
         </div>
-        <button className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27] transition-all">
+        <button onClick={openCreateDialog} className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27] transition-all">
           + Create New Bin
         </button>
       </div>

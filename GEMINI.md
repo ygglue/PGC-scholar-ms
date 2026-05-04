@@ -27,3 +27,4 @@ Every new session must begin by reading the following in order:
 ## Evaluator App (Tauri)
 - **Styles:** Use Tailwind CSS for all new components.
 - **Components:** Prefer functional components with TypeScript.
+- **Offline Behavior:** The application is strictly **view-only** when offline. No write operations (submissions, reviews, creations) are permitted.

@@ -4,6 +4,7 @@ import { ScholarsDirectory } from "./components/ScholarsDirectory";
 import { SubmissionBins } from "./components/SubmissionBins";
 import { BinDocuments } from "./components/BinDocuments";
 import { PendingSubmissions } from "./components/PendingSubmissions";
+import { Announcements } from "./components/Announcements";
 import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
@@ -13,7 +14,7 @@ import "./index.css";
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'submissions' | 'directory' | 'bins' | 'settings'>('submissions');
+  const [view, setView] = useState<'submissions' | 'directory' | 'bins' | 'announcements' | 'settings'>('submissions');
   const [selectedBin, setSelectedBin] = useState<any>(null);
 
   // Global Modal State
@@ -63,6 +64,7 @@ function App() {
     const commonProps = { onShowModal: showModal };
     if (view === 'settings') return <Settings />;
     if (view === 'directory') return <ScholarsDirectory {...commonProps} />;
+    if (view === 'announcements') return <Announcements {...commonProps} />;
     if (view === 'bins') {
       if (selectedBin) return <BinDocuments bin={selectedBin} onBack={() => setSelectedBin(null)} {...commonProps} />;
       return <SubmissionBins onOpenBin={(b) => setSelectedBin(b)} {...commonProps} />;
@@ -94,6 +96,7 @@ function App() {
           <button onClick={() => {setView('submissions'); setSelectedBin(null);}} className="text-left py-2">Pending Submissions</button>
           <button onClick={() => {setView('directory'); setSelectedBin(null);}} className="text-left py-2">Scholars Directory</button>
           <button onClick={() => {setView('bins'); setSelectedBin(null);}} className="text-left py-2">Submission Bins</button>
+          <button onClick={() => {setView('announcements'); setSelectedBin(null);}} className="text-left py-2">Announcements</button>
           <button onClick={() => {setView('settings'); setSelectedBin(null);}} className="text-left py-2">Settings</button>
         </nav>
         <button 

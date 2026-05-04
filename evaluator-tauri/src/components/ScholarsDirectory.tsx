@@ -98,15 +98,17 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
         <div className="flex gap-1 bg-[#F0F2F0] p-1 rounded-full border border-[#E0E6E0]">
           <button 
             onClick={() => toggleView('card')} 
-            className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'card' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+            className={`p-2 rounded-full transition-all ${viewType === 'card' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+            title="Card View"
           >
-            Card View
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           </button>
           <button 
             onClick={() => toggleView('list')} 
-            className={`px-6 py-2 rounded-full font-semibold text-sm transition-all ${viewType === 'list' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+            className={`p-2 rounded-full transition-all ${viewType === 'list' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
+            title="List View"
           >
-            List View
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           </button>
         </div>
       </div>
@@ -146,9 +148,13 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8">
             {filtered.map(s => (
               <div key={s.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-[#E8F5ED] flex items-center justify-center font-bold text-[#1A8C3C] mb-4">
-                  {s.first_name[0]}{s.last_name[0]}
-                </div>
+                {s.avatar_url ? (
+                  <img src={s.avatar_url} alt={`${s.first_name} ${s.last_name}`} className="w-16 h-16 rounded-full object-cover mb-4" />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-[#E8F5ED] flex items-center justify-center font-bold text-[#1A8C3C] mb-4">
+                    {s.first_name[0]}{s.last_name[0]}
+                  </div>
+                )}
                 <h3 className="font-semibold text-[#1A1A1A]">{s.first_name} {s.last_name}</h3>
                 <p className="text-xs text-[#4A5568] mt-1">{s.school}</p>
                 <div className="mt-4">
@@ -160,9 +166,9 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-[#E0E6E0] overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-[#F7F9F7]">
+          <div className="bg-white rounded-2xl border border-[#E0E6E0] flex-1 overflow-y-auto">
+            <table className="w-full border-collapse">
+              <thead className="bg-[#F7F9F7] sticky top-0 z-10">
                 <tr className="border-b border-[#E0E6E0]">
                   <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Name</th>
                   <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">School</th>
