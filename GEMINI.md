@@ -8,6 +8,13 @@ Every new session must begin by reading the following in order:
 4. `.agents/rules/api_endpoints.md` — API endpoints.
 5. `.agents/workflows/workflow.md` — System workflows.
 
+## Graphify Rules
+This project has a Graphify knowledge graph at `graphify-out/`.
+- Before answering architecture or codebase questions, read `graphify-out/GRAPH_REPORT.md` for god nodes and community structure.
+- If `graphify-out/wiki/index.md` exists, navigate it instead of reading raw files.
+- If the Graphify MCP server is active, utilize tools like `query_graph`, `get_node`, and `shortest_path` for precise architecture navigation instead of falling back to `grep`.
+- After modifying code files in this session, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
 ## Architecture & Tech Stack
 - **Backend:** FastAPI (Python)
 - **Frontend (Scholar):** React PWA

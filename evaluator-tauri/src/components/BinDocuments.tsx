@@ -99,7 +99,7 @@ export const BinDocuments: React.FC<BinDocumentsProps> = ({ bin, onBack, onShowM
       </button>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-serif text-[#1A1A1A]">AY {bin.school_year} — {bin.semester} Semester</h1>
+        <h1 className="text-2xl text-[#1A1A1A]">AY {bin.school_year} — {bin.semester} Semester</h1>
         <p className="text-[10px] uppercase font-bold tracking-wider text-[#A0AEC0] mt-1">{status}</p>
       </div>
 

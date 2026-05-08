@@ -99,7 +99,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess, onShowModal }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0] p-4">
       <div className="auth-card">
-        <h1 className="font-serif text-[32px] text-[#1A1A1A] mb-2">Evaluator Portal</h1>
+        <h1 className="font-bold text-[32px] text-[#1A1A1A] mb-2">Evaluator Portal</h1>
         <p className="text-[#4A5568] mb-6">Sign in to manage scholars</p>
 
         {status && <p className="text-[#1A8C3C] text-sm mb-4">{status}</p>}

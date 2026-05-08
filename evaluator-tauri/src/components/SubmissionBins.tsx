@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FolderOpen, Plus } from 'lucide-react';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
 import api from '../services/apiService';
@@ -138,11 +139,11 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
     <ViewLayout>
       <div className="flex justify-between items-center mb-8 shrink-0">
         <div>
-          <h1 className="text-2xl font-serif text-[#1A1A1A]">Submission Bins</h1>
+          <h1 className="text-2xl text-[#1A1A1A]">Submission Bins</h1>
           <p className="text-sm text-[#4A5568] mt-1">Manage scholar document collection windows.</p>
         </div>
-        <button onClick={openCreateDialog} className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27] transition-all">
-          + Create New Bin
+        <button onClick={openCreateDialog} className="flex items-center gap-2 bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27] transition-all">
+          <Plus size={16} /> Create New Bin
         </button>
       </div>
 
@@ -154,8 +155,10 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
             <div key={bin.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
               <div>
                 <div className='flex items-center gap-3 mb-4'>
-                  <span className='text-3xl'>📁</span>
-                  <h3 className="font-serif text-lg text-[#1A1A1A]">AY {bin.school_year}</h3>
+                  <div className="p-3 bg-[#F7F9F7] rounded-xl text-[#1A8C3C]">
+                    <FolderOpen size={24} />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#1A1A1A]">AY {bin.school_year}</h3>
                 </div>
                 <p className="text-sm text-[#4A5568] mb-1 font-semibold">{bin.semester} Semester</p>
                 <p className="text-[11px] text-[#A0AEC0] font-mono">Created: {bin.created_at.slice(0, 10)}</p>

@@ -36,7 +36,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-serif text-[#1A1A1A] mb-8">Settings</h1>
+      <h1 className="text-2xl text-[#1A1A1A] mb-8">Settings</h1>
       
       <div className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm max-w-2xl">
         <h2 className="font-semibold text-[#1A1A1A] mb-4">Cache Location</h2>

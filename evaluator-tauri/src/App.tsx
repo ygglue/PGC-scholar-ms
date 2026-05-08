@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Login } from "./components/Login";
+import { Dashboard } from "./components/Dashboard";
 import { ScholarsDirectory } from "./components/ScholarsDirectory";
 import { SubmissionBins } from "./components/SubmissionBins";
 import { BinDocuments } from "./components/BinDocuments";
@@ -14,7 +15,7 @@ import "./index.css";
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'submissions' | 'directory' | 'bins' | 'announcements' | 'settings'>('submissions');
+  const [view, setView] = useState<'dashboard' | 'submissions' | 'directory' | 'bins' | 'announcements' | 'settings'>('dashboard');
   const [selectedBin, setSelectedBin] = useState<any>(null);
 
   // Global Modal State
@@ -51,7 +52,7 @@ function App() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0]">
-        <p className="text-[#1A8C3C] font-serif text-xl">Initializing secure session...</p>
+        <p className="text-[#1A8C3C] text-xl">Initializing secure session...</p>
       </div>
     );
   }
@@ -63,6 +64,7 @@ function App() {
   const renderContent = () => {
     const commonProps = { onShowModal: showModal };
     if (view === 'settings') return <Settings />;
+    if (view === 'dashboard') return <Dashboard onNavigate={(v) => {setView(v); setSelectedBin(null);}} {...commonProps} />;
     if (view === 'directory') return <ScholarsDirectory {...commonProps} />;
     if (view === 'announcements') return <Announcements {...commonProps} />;
     if (view === 'bins') {
@@ -91,13 +93,44 @@ function App() {
       )}
 
       <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col shrink-0">
-        <h2 className="font-serif text-xl mb-12">PGC-Scholar<br/>Evaluator</h2>
+        <h2 className="text-xl font-bold mb-12">PGC-Scholar<br/>Evaluator</h2>
         <nav className="flex flex-col gap-4">
-          <button onClick={() => {setView('submissions'); setSelectedBin(null);}} className="text-left py-2">Pending Submissions</button>
-          <button onClick={() => {setView('directory'); setSelectedBin(null);}} className="text-left py-2">Scholars Directory</button>
-          <button onClick={() => {setView('bins'); setSelectedBin(null);}} className="text-left py-2">Submission Bins</button>
-          <button onClick={() => {setView('announcements'); setSelectedBin(null);}} className="text-left py-2">Announcements</button>
-          <button onClick={() => {setView('settings'); setSelectedBin(null);}} className="text-left py-2">Settings</button>
+          <button 
+            onClick={() => {setView('dashboard'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'dashboard' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Dashboard
+          </button>
+          <button 
+            onClick={() => {setView('submissions'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'submissions' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Pending Submissions
+          </button>
+          <button 
+            onClick={() => {setView('directory'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'directory' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Scholars Directory
+          </button>
+          <button 
+            onClick={() => {setView('bins'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'bins' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Submission Bins
+          </button>
+          <button 
+            onClick={() => {setView('announcements'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'announcements' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Announcements
+          </button>
+          <button 
+            onClick={() => {setView('settings'); setSelectedBin(null);}} 
+            className={`text-left py-2 transition-all ${view === 'settings' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
+          >
+            Settings
+          </button>
         </nav>
         <button 
           className="mt-auto text-left py-2 text-white/70 hover:text-white"
@@ -110,7 +143,7 @@ function App() {
         </button>
       </aside>
 
-      <main className="flex-1 h-screen overflow-hidden">
+      <main className="flex-1 h-screen overflow-hidden bg-[#F0F2F0]">
         {renderContent()}
       </main>
     </div>

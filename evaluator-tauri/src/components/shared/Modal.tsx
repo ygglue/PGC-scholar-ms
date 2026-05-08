@@ -63,7 +63,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className={`p-8 ${styles.bg}`}>
           <div className="text-4xl mb-4">{styles.icon}</div>
-          <h2 className={`text-2xl font-serif mb-2 ${styles.title}`}>{title}</h2>
+          <h2 className={`text-2xl font-bold mb-2 ${styles.title}`}>{title}</h2>
           <p className="text-[#4A5568] leading-relaxed">{message}</p>
         </div>
         

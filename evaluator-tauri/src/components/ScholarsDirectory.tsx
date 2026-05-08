@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Search, LayoutGrid, List, UserCircle } from 'lucide-react';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
 import api from '../services/apiService';
@@ -92,7 +93,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
     <div className="p-8 h-full flex flex-col">
       <div className="flex justify-between items-center mb-8 shrink-0">
         <div>
-          <h1 className="text-2xl font-serif text-[#1A1A1A]">Scholars Directory</h1>
+          <h1 className="text-2xl text-[#1A1A1A]">Scholars Directory</h1>
           <p className="text-sm text-[#4A5568] mt-1">Manage and monitor all active scholars.</p>
         </div>
         <div className="flex gap-1 bg-[#F0F2F0] p-1 rounded-full border border-[#E0E6E0]">
@@ -101,25 +102,28 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
             className={`p-2 rounded-full transition-all ${viewType === 'card' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
             title="Card View"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <LayoutGrid size={20} />
           </button>
           <button 
             onClick={() => toggleView('list')} 
             className={`p-2 rounded-full transition-all ${viewType === 'list' ? 'bg-white shadow-sm text-[#1A8C3C]' : 'text-[#4A5568]'}`}
             title="List View"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <List size={20} />
           </button>
         </div>
       </div>
 
       <div className="flex gap-4 mb-8 shrink-0">
-        <input 
-          placeholder="Search by name..." 
-          className="input-field w-full max-w-sm" 
-          value={search} 
-          onChange={(e) => setSearch(e.target.value)} 
-        />
+        <div className="relative flex-1 max-w-sm">
+            <Search size={18} className="absolute left-3 top-3 text-[#A0AEC0]" />
+            <input 
+              placeholder="Search by name..." 
+              className="input-field w-full pl-10" 
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)} 
+            />
+        </div>
         <select className="input-field max-w-[150px]" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
           <option>All Status</option>
           <option value="active">Active</option>
@@ -141,7 +145,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
           <div className="text-center p-20 text-[#A0AEC0]">Loading scholars...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center p-20 text-[#A0AEC0] bg-white rounded-2xl border border-[#E0E6E0] border-dashed">
-            <span className="text-4xl block mb-2">🔍</span>
+            <Search size={40} className="mx-auto mb-2 opacity-50" />
             No scholars found matching your criteria.
           </div>
         ) : viewType === 'card' ? (
@@ -152,7 +156,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
                   <img src={s.avatar_url} alt={`${s.first_name} ${s.last_name}`} className="w-16 h-16 rounded-full object-cover mb-4" />
                 ) : (
                   <div className="w-16 h-16 rounded-full bg-[#E8F5ED] flex items-center justify-center font-bold text-[#1A8C3C] mb-4">
-                    {s.first_name[0]}{s.last_name[0]}
+                    <UserCircle size={40} />
                   </div>
                 )}
                 <h3 className="font-semibold text-[#1A1A1A]">{s.first_name} {s.last_name}</h3>

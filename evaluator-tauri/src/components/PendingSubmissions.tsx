@@ -222,7 +222,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
 
   return (
     <div className="p-8 h-full flex flex-col">
-      <h1 className="text-2xl font-serif text-[#1A1A1A] mb-8 shrink-0">Pending Submissions</h1>
+      <h1 className="text-2xl text-[#1A1A1A] mb-8 shrink-0">Pending Submissions</h1>
 
       <div className="flex-1 flex gap-8 min-h-0">
         <div className="flex-1 bg-white rounded-2xl border border-[#E0E6E0] shadow-sm overflow-hidden flex flex-col">
@@ -294,7 +294,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
         <div className="w-[400px] bg-white rounded-2xl border border-[#E0E6E0] shadow-sm flex flex-col p-8 overflow-hidden">
           {selectedChange ? (
             <>
-              <h2 className="text-xl font-serif text-[#1A1A1A] mb-1 shrink-0">Review Details</h2>
+              <h2 className="text-xl text-[#1A1A1A] mb-1 shrink-0">Review Details</h2>
               <p className="text-sm text-[#4A5568] mb-6 shrink-0">
                 Scholar: {selectedChange.scholar_first_name} {selectedChange.scholar_last_name}
               </p>
@@ -339,7 +339,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center text-[#A0AEC0]">
               <span className="text-5xl mb-4">📋</span>
-              <h2 className="text-lg font-serif text-[#4A5568]">No Submission Selected</h2>
+              <h2 className="text-lg text-[#4A5568]">No Submission Selected</h2>
               <p className="text-sm">Select an item on the left to begin your review.</p>
             </div>
           )}
