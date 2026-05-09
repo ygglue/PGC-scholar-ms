@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/apiService';
+import { CacheService } from '../services/cacheService';
+import { NetworkStatus } from '../services/networkStatus';
 import { ViewLayout } from './shared/ViewLayout';
 import { ModalProps } from './shared/Modal';
 
@@ -24,13 +26,28 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
   }, []);
 
   const loadAnnouncements = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get('/announcements/');
-      setAnnouncements(res.data);
-    } catch (err) {
-      console.error('Failed to load announcements:', err);
-    } finally {
+    setLoading(true);
+    const CACHE_KEY = 'announcements/list';
+    const cached = CacheService.get<Announcement[]>(CACHE_KEY);
+
+    if (cached) {
+      setAnnouncements(cached);
+      setLoading(false);
+      return;
+    }
+
+    const isOnline = await NetworkStatus.checkApiConnection();
+    if (isOnline) {
+      try {
+        const res = await api.get('/announcements/');
+        setAnnouncements(res.data);
+        CacheService.set(CACHE_KEY, res.data);
+      } catch (err) {
+        console.error('Failed to load announcements:', err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
       setLoading(false);
     }
   };

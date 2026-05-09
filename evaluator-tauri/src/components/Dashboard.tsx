@@ -24,44 +24,54 @@ export const Dashboard: React.FC<DashboardProps> = ({ onShowModal, onNavigate })
   useEffect(() => {
     loadStats();
   }, []);
+const loadStats = async () => {
+  const SCHOLARS_CACHE = "scholars/list";
+  const PENDING_CACHE = "pending_changes/list";
 
-  const loadStats = async () => {
-    setLoading(true);
-    
-    const SCHOLARS_CACHE = "scholars/list";
-    const PENDING_CACHE = "pending_changes/list";
+  const cachedScholars = CacheService.get<any[]>(SCHOLARS_CACHE);
+  const cachedPending = CacheService.get<any[]>(PENDING_CACHE);
 
-    let scholars = CacheService.get<any[]>(SCHOLARS_CACHE) || [];
-    let pending = CacheService.get<any[]>(PENDING_CACHE) || [];
-
-    const isOnline = await NetworkStatus.checkApiConnection();
-    if (isOnline) {
-      try {
-        const [scholarsRes, pendingRes] = await Promise.all([
-          api.get("/scholars/"),
-          api.get("/pending-changes/")
-        ]);
-        scholars = scholarsRes.data;
-        pending = pendingRes.data;
-        CacheService.set(SCHOLARS_CACHE, scholars);
-        CacheService.set(PENDING_CACHE, pending);
-      } catch (err) {
-        console.error("Failed to fetch dashboard stats:", err);
-      }
-    }
-
+  if (cachedScholars || cachedPending) {
     setStats({
-      totalScholars: scholars.length,
-      activeScholars: scholars.filter(s => s.status === 'active').length,
-      pendingSubmissions: pending.length,
-      pendingProfiles: pending.filter(p => p.change_type === 'profile').length,
-      pendingGrades: pending.filter(p => p.change_type === 'grades').length,
-      pendingDocs: pending.filter(p => p.change_type === 'documents').length
+      totalScholars: (cachedScholars || []).length,
+      activeScholars: (cachedScholars || []).filter(s => s.status === 'active').length,
+      pendingSubmissions: (cachedPending || []).length,
+      pendingProfiles: (cachedPending || []).filter(p => p.change_type === 'profile').length,
+      pendingGrades: (cachedPending || []).filter(p => p.change_type === 'grades').length,
+      pendingDocs: (cachedPending || []).filter(p => p.change_type === 'documents').length
     });
     setLoading(false);
-  };
+    // Return if we have cache, no need to fetch if we prioritize fast display
+    return;
+  }
 
-  const StatCard = ({ title, value, icon, onClick }: any) => (
+  setLoading(true);
+  const isOnline = await NetworkStatus.checkApiConnection();
+  if (isOnline) {
+    try {
+      const [scholarsRes, pendingRes] = await Promise.all([
+        api.get("/scholars/"),
+        api.get("/pending-changes/")
+      ]);
+
+      CacheService.set(SCHOLARS_CACHE, scholarsRes.data);
+      CacheService.set(PENDING_CACHE, pendingRes.data);
+
+      setStats({
+        totalScholars: scholarsRes.data.length,
+        activeScholars: scholarsRes.data.filter((s: any) => s.status === 'active').length,
+        pendingSubmissions: pendingRes.data.length,
+        pendingProfiles: pendingRes.data.filter((p: any) => p.change_type === 'profile').length,
+        pendingGrades: pendingRes.data.filter((p: any) => p.change_type === 'grades').length,
+        pendingDocs: pendingRes.data.filter((p: any) => p.change_type === 'documents').length
+      });
+    } catch (err) {
+      console.error("Failed to fetch dashboard stats:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+};  const StatCard = ({ title, value, icon, onClick }: any) => (
     <div 
       onClick={onClick}
       className={`bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all cursor-pointer group`}
