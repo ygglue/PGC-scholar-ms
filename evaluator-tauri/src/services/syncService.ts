@@ -9,10 +9,13 @@ import { NetworkStatus } from './networkStatus';
 class SyncService {
   private syncInterval: number | null = null;
   private readonly INTERVAL_MS = 60000; // 1 minute sync
+  private resourceTimestamps: Record<string, string | null> = {
+    'scholars': null,
+    'submission_bins': null,
+    'pending_changes': null
+  };
 
   private isSyncing = false;
-  private retryCount = 0;
-  private readonly MAX_RETRIES = 3;
 
   constructor() {
     this.handleNetworkChange = this.handleNetworkChange.bind(this);
@@ -54,33 +57,40 @@ class SyncService {
 
     const isOnline = await NetworkStatus.checkApiConnection();
     if (!isOnline) {
-      console.log('SyncService: Offline, skipping sync.');
       this.isSyncing = false;
       return;
     }
 
-    console.log('SyncService: Fetching fresh data...');
+    try {
+      const endpoints = [
+        { key: 'scholars/list', resource: 'scholars', path: '/scholars/' },
+        { key: 'bins/list', resource: 'submission_bins', path: '/submission-bins/' },
+        { key: 'pending_changes/list', resource: 'pending_changes', path: '/pending-changes/' }
+      ];
 
-    const endpoints = [
-      { key: 'scholars/list', path: '/scholars/' },
-      { key: 'bins/list', path: '/submission-bins/' },
-      { key: 'pending_changes/list', path: '/pending-changes/' }
-    ];
+      for (const ep of endpoints) {
+        const res = await api.get(`/sync/last-changed?resource=${ep.resource}`);
+        const remoteTimestamp = res.data.last_updated_at;
 
-    const results = await Promise.allSettled(
-      endpoints.map(ep => api.get(ep.path))
-    );
+        // If local is null (initial load) or remote timestamp is different, fetch data.
+        if (this.resourceTimestamps[ep.resource] !== null && remoteTimestamp === this.resourceTimestamps[ep.resource]) {
+          console.log(`SyncService: No changes for ${ep.resource}.`);
+          continue; // No changes for this resource
+        }
 
-    results.forEach((res, index) => {
-      if (res.status === 'fulfilled') {
-        CacheService.set(endpoints[index].key, res.value.data);
-      } else {
-        console.error(`SyncService: Failed to sync ${endpoints[index].path}:`, res.reason);
+        console.log(`SyncService: Fetching fresh data for ${ep.resource}.`);
+        
+        // Fetch fresh data
+        const dataRes = await api.get(ep.path);
+        CacheService.set(ep.key, dataRes.data);
+        this.resourceTimestamps[ep.resource] = remoteTimestamp;
       }
-    });
 
-    this.isSyncing = false;
-    console.log('SyncService: Sync cycle complete.');
+    } catch (err) {
+      console.error('SyncService: Error during sync:', err);
+    } finally {
+      this.isSyncing = false;
+    }
   }
 }
 

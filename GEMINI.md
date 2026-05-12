@@ -30,6 +30,7 @@ This project has a Graphify knowledge graph at `graphify-out/`.
 - **API Calls:** Always use the centralized `apiService.ts` in `evaluator-tauri/src/services/` for all backend communication. This service handles JWT injection and global error handling.
 - **CORS:** Ensure `backend/app/main.py` includes Tauri origins (`http://localhost:1420`, `tauri://localhost`, `http://tauri.localhost`) in the `CORSMiddleware` configuration.
 - **Offline Support:** UI components should utilize `NetworkStatus` and `CacheService` to handle offline/cached states where appropriate.
+- **Command Execution (Windows):** Avoid using `&&` as a command separator in PowerShell/Windows terminals, as it is not supported. Use `;` or execute commands sequentially (e.g., `cd backend; python ...`).
 
 ## Evaluator App (Tauri)
 - **Styles:** Use Tailwind CSS for all new components.

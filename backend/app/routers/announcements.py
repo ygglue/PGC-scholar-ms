@@ -4,7 +4,7 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_scholar, get_current_user
 from app.models.announcement import Announcement
 from app.models.user import User
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -36,6 +36,46 @@ def create_announcement(
     db.commit()
     db.refresh(announcement)
     return {"id": str(announcement.id), "message": "Announcement created"}
+
+
+@router.put("/{announcement_id}")
+def update_announcement(
+    announcement_id: str,
+    req: CreateAnnouncementRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Update an existing announcement"""
+    announcement = db.query(Announcement).filter(Announcement.id == announcement_id).first()
+    if not announcement:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    if announcement.created_by != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to edit this announcement")
+
+    announcement.title = req.title
+    announcement.message = req.message
+    announcement.type = req.type
+    announcement.recipient_filter = req.recipient_filter
+    db.commit()
+    return {"message": "Announcement updated"}
+
+
+@router.delete("/{announcement_id}")
+def delete_announcement(
+    announcement_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Delete an existing announcement"""
+    announcement = db.query(Announcement).filter(Announcement.id == announcement_id).first()
+    if not announcement:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    if announcement.created_by != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this announcement")
+
+    db.delete(announcement)
+    db.commit()
+    return {"message": "Announcement deleted"}
 
 
 @router.get("/")

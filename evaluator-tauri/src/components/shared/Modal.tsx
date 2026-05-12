@@ -1,4 +1,5 @@
 import React from 'react';
+import { CheckCircle, AlertCircle, Info } from 'lucide-react';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -27,21 +28,21 @@ export const Modal: React.FC<ModalProps> = ({
     switch (type) {
       case 'success':
         return {
-          icon: '✅',
+          icon: <CheckCircle size={48} className="text-[#1A8C3C]" />,
           bg: 'bg-green-50',
           btn: 'bg-[#1A8C3C] hover:bg-[#147030]',
           title: 'text-[#1A8C3C]',
         };
       case 'danger':
         return {
-          icon: '⚠️',
+          icon: <AlertCircle size={48} className="text-red-600" />,
           bg: 'bg-red-50',
           btn: 'bg-red-600 hover:bg-red-700',
           title: 'text-red-700',
         };
       default:
         return {
-          icon: 'ℹ️',
+          icon: <Info size={48} className="text-blue-600" />,
           bg: 'bg-blue-50',
           btn: 'bg-[#1A8C3C] hover:bg-[#147030]',
           title: 'text-gray-900',
@@ -62,7 +63,7 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal Container */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className={`p-8 ${styles.bg}`}>
-          <div className="text-4xl mb-4">{styles.icon}</div>
+          <div className="mb-4">{styles.icon}</div>
           <h2 className={`text-2xl font-bold mb-2 ${styles.title}`}>{title}</h2>
           <p className="text-[#4A5568] leading-relaxed">{message}</p>
         </div>

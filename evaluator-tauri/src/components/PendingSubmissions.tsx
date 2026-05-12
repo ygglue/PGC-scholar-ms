@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ClipboardList, RefreshCw, Unlock } from 'lucide-react';
 import api from '../services/apiService';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
@@ -51,14 +52,16 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
     initUser();
   }, []);
 
-  const loadPendingChanges = async () => {
+  const loadPendingChanges = async (forceRefresh: boolean = false) => {
     const CACHE_KEY = "pending_changes/list";
-    const cached = CacheService.get<PendingChange[]>(CACHE_KEY);
-
-    if (cached) {
-      setChanges(cached);
-      setLoading(false);
-      return;
+    
+    if (!forceRefresh) {
+      const cached = CacheService.get<PendingChange[]>(CACHE_KEY);
+      if (cached) {
+        setChanges(cached);
+        setLoading(false);
+        return;
+      }
     }
 
     setLoading(true);
@@ -80,11 +83,24 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
   const handleClaimAndSelect = async (change: PendingChange) => {
     if (selectedChange?.id === change.id) return;
 
+    // Optimistic UI Update
+    const previousChanges = [...changes];
+    const newChanges = changes.map(c => 
+      c.id === change.id ? { ...c, claimed_by: currentUserId || 'local' } : c
+    );
+    setChanges(newChanges);
+    CacheService.set("pending_changes/list", newChanges);
+    setSelectedChange({ ...change, claimed_by: currentUserId || 'local' });
+    setReviewNote('');
+
     try {
       await api.post(`/pending-changes/${change.id}/claim`);
-      setSelectedChange(change);
-      setReviewNote('');
+      // No need to reload, the UI is already updated.
     } catch (err: any) {
+      // Revert on failure
+      setChanges(previousChanges);
+      CacheService.set("pending_changes/list", previousChanges);
+      setSelectedChange(null);
       if (err.response?.status === 409) {
         onShowModal({
           title: 'Already Claimed',
@@ -158,6 +174,16 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
     }
   };
 
+  const handleUnlock = async (changeId: string) => {
+    try {
+        await api.post(`/pending-changes/${changeId}/unlock`);
+        setChanges(changes.map(c => c.id === changeId ? { ...c, claimed_by: undefined } : c));
+        setSelectedChange(null);
+    } catch (err) {
+        console.error("Failed to unlock:", err);
+    }
+  };
+
   const renderPayload = (change: PendingChange) => {
     if (change.change_type === 'profile') {
       return (
@@ -207,86 +233,76 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
     return <pre className="text-xs bg-[#F7F9F7] p-4 rounded-xl overflow-auto">{JSON.stringify(change.payload, null, 2)}</pre>;
   };
 
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const [filterType, setFilterType] = useState<string>('all');
 
-  const toggleGroup = (scholarName: string) => {
-    setExpandedGroups(prev => ({ ...prev, [scholarName]: !prev[scholarName] }));
-  };
+  // ... (inside component)
 
-  const grouped = changes.reduce((acc, change) => {
-    const key = `${change.scholar_first_name} ${change.scholar_last_name}`;
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(change);
-    return acc;
-  }, {} as Record<string, PendingChange[]>);
+  const filteredChanges = changes
+    .filter(c => filterType === 'all' || c.change_type === filterType)
+    .sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
 
+  // ... (in JSX return)
   return (
     <div className="p-8 h-full flex flex-col">
       <h1 className="text-2xl text-[#1A1A1A] mb-8 shrink-0">Pending Submissions</h1>
-
       <div className="flex-1 flex gap-8 min-h-0">
         <div className="flex-1 bg-white rounded-2xl border border-[#E0E6E0] shadow-sm overflow-hidden flex flex-col">
           <div className="p-4 border-b border-[#E0E6E0] bg-[#F7F9F7] flex justify-between items-center shrink-0">
-            <span className="font-bold text-[11px] uppercase tracking-wider text-[#A0AEC0]">{changes.length} Items Pending</span>
-            <button onClick={loadPendingChanges} className="text-[#1A8C3C] text-sm font-semibold hover:underline">Refresh</button>
+            <div className="flex items-center gap-4">
+                <span className="font-bold text-[11px] uppercase tracking-wider text-[#A0AEC0]">{filteredChanges.length} Items Pending</span>
+                <select 
+                    className="text-[11px] font-semibold text-[#1A1A1A] border border-[#E0E6E0] rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#1A8C3C] outline-none transition-all cursor-pointer"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                >
+                    <option value="all">All Types</option>
+                    <option value="profile">Profile</option>
+                    <option value="grades">Grades</option>
+                    <option value="documents">Documents</option>
+                </select>
+            </div>
+            <button onClick={() => loadPendingChanges(true)} className="text-[#1A8C3C] p-2 hover:bg-[#E8F5ED] rounded-full transition-colors" title="Refresh">
+                <RefreshCw size={16} />
+            </button>
           </div>
           
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="p-8 text-center text-[#4A5568]">Loading submissions...</div>
-            ) : Object.keys(grouped).length === 0 ? (
+            ) : filteredChanges.length === 0 ? (
               <div className="p-8 text-center text-[#4A5568]">No pending submissions found.</div>
             ) : (
-              Object.entries(grouped).map(([scholarName, scholarChanges]) => {
-                const isExpanded = expandedGroups[scholarName] ?? true;
-                return (
-                  <div key={scholarName} className="mb-2">
+              <>
+                {filteredChanges.map(change => (
                     <div 
-                        onClick={() => toggleGroup(scholarName)}
-                        className="px-5 py-3 bg-[#F0F2F0] text-[#4A5568] font-bold text-xs uppercase tracking-wider cursor-pointer flex justify-between items-center hover:bg-[#E0E6E0] transition-colors"
+                    key={change.id} 
+                    onClick={() => handleClaimAndSelect(change)}
+                    className={`p-5 border-b border-[#F0F2F0] cursor-pointer hover:bg-[#F7F9F7] transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] border-l-4 border-l-[#1A8C3C]' : ''} ${change.claimed_by ? 'opacity-70' : ''}`}
                     >
-                        <span>{scholarName}</span>
-                        <div className="flex items-center gap-3">
-                            <span className="bg-white px-2 py-0.5 rounded text-[10px]">{scholarChanges.length} Pending</span>
-                            <span className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
-                        </div>
+                    <div className="flex justify-between items-start mb-2">
+                        <span className={`font-bold text-[#1A1A1A] ${change.claimed_by ? 'flex items-center gap-2' : ''}`}>
+                        {change.scholar_first_name} {change.scholar_last_name} — {change.change_type.toUpperCase()}
+                        {change.claimed_by && <span className="text-[10px] bg-gray-200 px-2 py-0.5 rounded italic">Locked</span>}
+                        </span>
+                        <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${
+                        change.change_type === 'profile' ? 'bg-[#EBF8FF] text-[#3182CE]' :
+                        change.change_type === 'grades' ? 'bg-[#FAF5FF] text-[#805AD5]' :
+                        'bg-[#FFF5F5] text-[#DD6B20]'
+                        }`}>
+                        {change.status}
+                        </span>
                     </div>
-                    <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-                        <div className="overflow-hidden">
-                            {scholarChanges.map(change => (
-                                <div 
-                                key={change.id} 
-                                onClick={() => handleClaimAndSelect(change)}
-                                className={`p-5 border-b border-[#F0F2F0] cursor-pointer hover:bg-[#F7F9F7] transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] border-l-4 border-l-[#1A8C3C]' : ''} ${change.claimed_by ? 'opacity-70' : ''}`}
-                                >
-                                <div className="flex justify-between items-start mb-2">
-                                    <span className={`font-bold text-[#1A1A1A] ${change.claimed_by ? 'flex items-center gap-2' : ''}`}>
-                                    {change.change_type.toUpperCase()}
-                                    {change.claimed_by && <span className="text-[10px] bg-gray-200 px-2 py-0.5 rounded italic">Locked</span>}
-                                    </span>
-                                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${
-                                    change.change_type === 'profile' ? 'bg-[#EBF8FF] text-[#3182CE]' :
-                                    change.change_type === 'grades' ? 'bg-[#FAF5FF] text-[#805AD5]' :
-                                    'bg-[#FFF5F5] text-[#DD6B20]'
-                                    }`}>
-                                    {change.status}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p className="text-[11px] text-[#A0AEC0] font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
-                                    {change.claimed_by && (
-                                    <p className="text-[10px] text-[#DD6B20] font-semibold">
-                                        In Review By: {change.claimed_by === currentUserId ? 'You' : 'Evaluator'}
-                                    </p>
-                                    )}
-                                </div>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="flex justify-between items-center">
+                        <p className="text-[11px] text-[#A0AEC0] font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
+                        {change.claimed_by && (
+                        <p className="text-[10px] text-[#DD6B20] font-semibold">
+                            In Review By: {change.claimed_by === currentUserId ? 'You' : 'Evaluator'}
+                        </p>
+                        )}
                     </div>
-                  </div>
-                );
-              })
+                    </div>
+                ))}
+              </>
             )}
           </div>
         </div>
@@ -294,7 +310,14 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
         <div className="w-[400px] bg-white rounded-2xl border border-[#E0E6E0] shadow-sm flex flex-col p-8 overflow-hidden">
           {selectedChange ? (
             <>
-              <h2 className="text-xl text-[#1A1A1A] mb-1 shrink-0">Review Details</h2>
+              <div className="flex justify-between items-start mb-1 shrink-0">
+                  <h2 className="text-xl text-[#1A1A1A]">Review Details</h2>
+                  {selectedChange.claimed_by === currentUserId && (
+                    <button onClick={() => handleUnlock(selectedChange.id)} className="text-[#A0AEC0] hover:text-blue-600 p-2" title="Unlock">
+                        <Unlock size={18} />
+                    </button>
+                  )}
+              </div>
               <p className="text-sm text-[#4A5568] mb-6 shrink-0">
                 Scholar: {selectedChange.scholar_first_name} {selectedChange.scholar_last_name}
               </p>
@@ -338,7 +361,9 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center text-[#A0AEC0]">
-              <span className="text-5xl mb-4">📋</span>
+              <div className="p-4 bg-[#F7F9F7] rounded-2xl mb-4">
+                <ClipboardList size={48} className="text-[#A0AEC0]" />
+              </div>
               <h2 className="text-lg text-[#4A5568]">No Submission Selected</h2>
               <p className="text-sm">Select an item on the left to begin your review.</p>
             </div>

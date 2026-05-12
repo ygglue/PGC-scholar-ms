@@ -170,35 +170,37 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-[#E0E6E0] flex-1 overflow-y-auto">
-            <table className="w-full border-collapse">
-              <thead className="bg-[#F7F9F7] sticky top-0 z-10">
-                <tr className="border-b border-[#E0E6E0]">
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Name</th>
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">School</th>
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Batch</th>
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Course</th>
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Year</th>
-                  <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(s => (
-                  <tr key={s.id} className="border-b border-[#F0F2F0] hover:bg-[#F7F9F7] transition-colors">
-                    <td className="p-4 font-medium text-[#1A1A1A]">{s.first_name} {s.last_name}</td>
-                    <td className="p-4 text-[#4A5568] text-sm">{s.school}</td>
-                    <td className="p-4 text-[#4A5568] text-sm">{s.batch_number}</td>
-                    <td className="p-4 text-[#4A5568] text-sm">{s.course}</td>
-                    <td className="p-4 text-[#4A5568] text-sm">{s.year_level}</td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 text-[10px] font-bold uppercase rounded-full ${
-                        s.status === 'active' ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100 text-gray-600'
-                      }`}>{s.status}</span>
-                    </td>
+          <div className="bg-white rounded-2xl border border-[#E0E6E0] flex-1 h-full overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-y-auto">
+              <table className="w-full border-collapse">
+                <thead className="sticky top-0 bg-[#F7F9F7] z-10 shadow-[0_1px_0_0_#E0E6E0]">
+                  <tr className="border-b border-[#E0E6E0]">
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Name</th>
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">School</th>
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Batch</th>
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Course</th>
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Year</th>
+                    <th className="p-4 text-left text-[11px] font-bold uppercase text-[#A0AEC0]">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filtered.map(s => (
+                    <tr key={s.id} className="border-b border-[#F0F2F0] hover:bg-[#F7F9F7] transition-colors">
+                      <td className="p-4 font-medium text-[#1A1A1A]">{s.first_name} {s.last_name}</td>
+                      <td className="p-4 text-[#4A5568] text-sm">{s.school}</td>
+                      <td className="p-4 text-[#4A5568] text-sm">{s.batch_number}</td>
+                      <td className="p-4 text-[#4A5568] text-sm">{s.course}</td>
+                      <td className="p-4 text-[#4A5568] text-sm">{s.year_level}</td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 text-[10px] font-bold uppercase rounded-full ${
+                          s.status === 'active' ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100 text-gray-600'
+                        }`}>{s.status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

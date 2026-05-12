@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { Trash2, Edit2 } from 'lucide-react';
 import api from '../services/apiService';
 import { CacheService } from '../services/cacheService';
 import { NetworkStatus } from '../services/networkStatus';
 import { ViewLayout } from './shared/ViewLayout';
 import { ModalProps } from './shared/Modal';
+import { getToken } from '../services/secureStore';
+
+// Helper to get user ID from JWT
+const getUserIdFromToken = (token: string | null): string | null => {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub;
+  } catch (e) {
+    return null;
+  }
+};
 
 interface Announcement {
   id: string;
@@ -11,6 +24,7 @@ interface Announcement {
   message: string;
   type: string;
   created_at: string;
+  created_by: string;
 }
 
 interface AnnouncementsProps {
@@ -20,22 +34,21 @@ interface AnnouncementsProps {
 export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
     loadAnnouncements();
+    const initUser = async () => {
+      const token = await getToken();
+      setCurrentUserId(getUserIdFromToken(token));
+    };
+    initUser();
   }, []);
 
   const loadAnnouncements = async () => {
     setLoading(true);
     const CACHE_KEY = 'announcements/list';
-    const cached = CacheService.get<Announcement[]>(CACHE_KEY);
-
-    if (cached) {
-      setAnnouncements(cached);
-      setLoading(false);
-      return;
-    }
-
+    
     const isOnline = await NetworkStatus.checkApiConnection();
     if (isOnline) {
       try {
@@ -48,52 +61,65 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
         setLoading(false);
       }
     } else {
+      const cached = CacheService.get<Announcement[]>(CACHE_KEY);
+      if (cached) setAnnouncements(cached);
       setLoading(false);
     }
   };
 
   const createAnnouncement = async (title: string, message: string, type: string) => {
     try {
-      const res = await api.post('/announcements/', { title, message, type });
-      console.log('Announcement created:', res.data);
-      
-      onShowModal({
-        title: 'Success',
-        message: 'Announcement created successfully.',
-        type: 'success',
-        onConfirm: () => {}
-      });
+      await api.post('/announcements/', { title, message, type });
       await loadAnnouncements();
     } catch (err) {
       console.error('Error creating announcement:', err);
-      onShowModal({
-        title: 'Error',
-        message: 'Failed to create announcement.',
-        type: 'danger',
-        onConfirm: () => {}
-      });
     }
   };
 
-  const openCreateModal = () => {
-    let title = '';
-    let message = '';
-    let type = 'general';
+  const deleteAnnouncement = async (id: string) => {
     onShowModal({
-      title: 'New Announcement',
+        title: 'Delete Announcement',
+        message: 'Are you sure you want to delete this announcement?',
+        type: 'danger',
+        confirmLabel: 'Delete',
+        onConfirm: async () => {
+            await api.delete(`/announcements/${id}`);
+            await loadAnnouncements();
+        }
+    });
+  };
+
+  const editAnnouncement = async (id: string, title: string, message: string, type: string) => {
+    try {
+        await api.put(`/announcements/${id}`, { title, message, type });
+        await loadAnnouncements();
+    } catch (err) {
+        console.error('Error updating:', err);
+    }
+  };
+
+  const openModal = (announcement?: Announcement) => {
+    let title = announcement?.title || '';
+    let message = announcement?.message || '';
+    let type = announcement?.type || 'general';
+
+    onShowModal({
+      title: announcement ? 'Edit Announcement' : 'New Announcement',
       message: (
         <div className="flex flex-col gap-4 mt-4">
-          <input className="input-field" placeholder="Title" onChange={(e) => title = e.target.value} />
-          <textarea className="input-field min-h-[100px]" placeholder="Message" onChange={(e) => message = e.target.value} />
-          <select className="input-field" onChange={(e) => type = e.target.value}>
+          <input className="border p-2 rounded" placeholder="Title" defaultValue={title} onChange={(e) => title = e.target.value} />
+          <textarea className="border p-2 rounded min-h-[100px]" placeholder="Message" defaultValue={message} onChange={(e) => message = e.target.value} />
+          <select className="border p-2 rounded" defaultValue={type} onChange={(e) => type = e.target.value}>
             <option value="general">General</option>
             <option value="urgent">Urgent</option>
           </select>
         </div>
       ) as any,
-      confirmLabel: 'Post',
+      confirmLabel: announcement ? 'Save' : 'Post',
       cancelLabel: 'Cancel',
-      onConfirm: () => createAnnouncement(title, message, type)
+      onConfirm: () => announcement 
+        ? editAnnouncement(announcement.id, title, message, type)
+        : createAnnouncement(title, message, type)
     });
   };
 
@@ -104,7 +130,7 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
           <h1 className="text-2xl text-[#1A1A1A]">Announcements</h1>
           <p className="text-sm text-[#4A5568] mt-1">Broadcast important updates to scholars.</p>
         </div>
-        <button onClick={openCreateModal} className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27]">
+        <button onClick={() => openModal()} className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27]">
           + New Announcement
         </button>
       </div>
@@ -119,9 +145,17 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
             <div key={a.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm">
               <div className="flex justify-between items-start">
                 <h3 className="font-semibold text-[#1A1A1A]">{a.title}</h3>
-                <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${a.type === 'urgent' ? 'bg-red-50 text-red-600' : 'bg-gray-100'}`}>
-                  {a.type}
-                </span>
+                <div className="flex items-center gap-4">
+                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${a.type === 'urgent' ? 'bg-red-50 text-red-600' : 'bg-gray-100'}`}>
+                    {a.type}
+                    </span>
+                    {currentUserId === a.created_by && (
+                        <div className="flex gap-2">
+                            <button onClick={() => openModal(a)} className="text-gray-400 hover:text-green-600"><Edit2 size={16} /></button>
+                            <button onClick={() => deleteAnnouncement(a.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button>
+                        </div>
+                    )}
+                </div>
               </div>
               <p className="text-sm text-[#4A5568] mt-2">{a.message}</p>
               <p className="text-[10px] text-[#A0AEC0] mt-4">{new Date(a.created_at).toLocaleString()}</p>

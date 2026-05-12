@@ -11,6 +11,7 @@ from app.models.user import User
 from app.models.scholar import Scholar
 from app.models.pending_change import PendingChange
 from app.models.academic_record import AcademicRecord
+from app.models.system_sync import SystemSync
 
 router = APIRouter(prefix="/pending-changes", tags=["pending-changes"])
 
@@ -41,6 +42,18 @@ def list_pending_changes(
     updated_since: Optional[datetime] = Query(None),
     current_user: User = Depends(get_current_evaluator),
     db: Session = Depends(get_db)):
+    
+    # Lazy cleanup: Clear expired locks (older than 30 mins)
+    expiration_time = datetime.now(timezone.utc) - timedelta(minutes=30)
+    expired_count = db.query(PendingChange).filter(
+        PendingChange.claimed_at < expiration_time
+    ).update({"claimed_by": None, "claimed_at": None}, synchronize_session=False)
+    
+    if expired_count > 0:
+        sync = db.query(SystemSync).filter(SystemSync.id == "global").first()
+        if sync:
+            sync.last_updated_at = datetime.now(timezone.utc)
+        db.commit()
     
     query = db.query(
         PendingChange.id,
@@ -95,6 +108,26 @@ def claim_change(change_id: str, current_user: User = Depends(get_current_evalua
     db.commit()
     
     return {"claimed": True}
+
+@router.post("/{change_id}/unlock")
+def unlock_change(
+    change_id: str, 
+    current_user: User = Depends(get_current_evaluator), 
+    db: Session = Depends(get_db)):
+    
+    change = db.query(PendingChange).filter(PendingChange.id == change_id).first()
+    if not change:
+        raise HTTPException(status_code=404, detail="Pending change not found")
+        
+    # Only allow unlocking if it was claimed by the current user
+    if change.claimed_by != current_user.id:
+         raise HTTPException(status_code=403, detail="Cannot unlock a submission claimed by another evaluator")
+    
+    change.claimed_by = None
+    change.claimed_at = None
+    db.commit()
+    
+    return {"message": "Submission unlocked"}
 
 @router.post("/{change_id}/review")
 def review_change(
