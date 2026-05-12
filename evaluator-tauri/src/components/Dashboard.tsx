@@ -172,7 +172,34 @@ const loadStats = async () => {
                 <h2 className="text-lg mb-4">Quick Actions</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <button 
-                    onClick={() => onNavigate('bins')}
+                    onClick={() => {
+                        let year = '';
+                        let sem = '1st';
+                        onShowModal({
+                            title: 'Create Submission Bin',
+                            message: (
+                                <div className="flex flex-col gap-4 mt-4">
+                                    <input placeholder="Academic Year (e.g. 2025-2026)" className="border p-2 rounded" onChange={(e) => year = e.target.value} />
+                                    <select className="border p-2 rounded" onChange={(e) => sem = e.target.value}>
+                                        <option value="1st">1st Semester</option>
+                                        <option value="2nd">2nd Semester</option>
+                                        <option value="summer">Summer</option>
+                                    </select>
+                                </div>
+                            ) as any,
+                            confirmLabel: 'Create',
+                            cancelLabel: 'Cancel',
+                            onConfirm: async () => {
+                                if (!year) return;
+                                try {
+                                    await api.post('/submission-bins/', { school_year: year, semester: sem });
+                                    onShowModal({ title: 'Success', message: 'Bin created successfully', type: 'success', onConfirm: () => {} });
+                                } catch (err) {
+                                    onShowModal({ title: 'Error', message: 'Failed to create bin', type: 'danger', onConfirm: () => {} });
+                                }
+                            }
+                        });
+                    }}
                     className="p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-left group"
                   >
                     <FolderPlus size={24} className="mb-2" />
@@ -180,7 +207,34 @@ const loadStats = async () => {
                     <p className="text-[10px] text-white/60">Open new submission window</p>
                   </button>
                   <button 
-                    onClick={() => onNavigate('announcements')}
+                    onClick={() => {
+                        let title = '';
+                        let message = '';
+                        let type = 'general';
+                        onShowModal({
+                            title: 'New Announcement',
+                            message: (
+                                <div className="flex flex-col gap-4 mt-4">
+                                    <input className="border p-2 rounded" placeholder="Title" onChange={(e) => title = e.target.value} />
+                                    <textarea className="border p-2 rounded min-h-[100px]" placeholder="Message" onChange={(e) => message = e.target.value} />
+                                    <select className="border p-2 rounded" onChange={(e) => type = e.target.value}>
+                                        <option value="general">General</option>
+                                        <option value="urgent">Urgent</option>
+                                    </select>
+                                </div>
+                            ) as any,
+                            confirmLabel: 'Post',
+                            cancelLabel: 'Cancel',
+                            onConfirm: async () => {
+                                try {
+                                    await api.post('/announcements/', { title, message, type });
+                                    onShowModal({ title: 'Success', message: 'Announcement posted!', type: 'success', onConfirm: () => {} });
+                                } catch (err) {
+                                    onShowModal({ title: 'Error', message: 'Failed to post announcement', type: 'danger', onConfirm: () => {} });
+                                }
+                            }
+                        });
+                    }}
                     className="p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-left group"
                   >
                     <Megaphone size={24} className="mb-2" />

@@ -123,6 +123,12 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
     });
   };
 
+  // Export openModal via ref or by moving logic to a context? 
+  // Actually, simplest approach: expose a ref or just keep the logic accessible.
+  // Given I cannot easily export a function from a component file without refactoring,
+  // I will just make it available via a shared service or move the modal logic to a hook.
+
+
   return (
     <ViewLayout>
       <div className="flex justify-between items-center mb-8">

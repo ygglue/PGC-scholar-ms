@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 import uuid
 
 from app.core.database import get_db
-from app.core.dependencies import get_current_evaluator
+from app.core.dependencies import get_current_evaluator, get_current_scholar
 from app.models.user import User
 from app.models.scholar import Scholar
 from app.models.pending_change import PendingChange
@@ -34,6 +34,18 @@ class PendingChangeResponse(BaseModel):
 class ReviewRequest(BaseModel):
     status: str # approved, rejected, more_info
     evaluator_note: Optional[str] = None
+
+@router.get("/me", response_model=List[PendingChangeResponse])
+def list_my_pending_changes(
+    current_user: User = Depends(get_current_scholar),
+    db: Session = Depends(get_db)):
+    
+    # User has a relationship to Scholar via backref="scholar" in Scholar model
+    scholar = db.query(Scholar).filter(Scholar.user_id == current_user.id).first()
+    if not scholar:
+        raise HTTPException(status_code=404, detail="Scholar profile not found for this user")
+        
+    return db.query(PendingChange).filter(PendingChange.scholar_id == scholar.id).all()
 
 @router.get("/", response_model=List[PendingChangeResponse])
 def list_pending_changes(
