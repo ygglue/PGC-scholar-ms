@@ -153,6 +153,11 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
         evaluator_note: reviewNote
       });
       
+      // Immediate UI update
+      const updatedChanges = changes.filter(c => c.id !== selectedChange.id);
+      setChanges(updatedChanges);
+      CacheService.set("pending_changes/list", updatedChanges);
+      
       onShowModal({
         title: 'Review Submitted',
         message: `The submission has been ${reviewStatus} successfully.`,
@@ -163,7 +168,6 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
       setSelectedChange(null);
       setReviewNote('');
       setReviewStatus('approved');
-      loadPendingChanges();
     } catch (err) {
       onShowModal({
         title: 'Review Failed',

@@ -22,7 +22,7 @@ const Profile = () => {
     fetchPending();
   }, []);
 
-  const hasPendingProfileChanges = pendingChanges.some(c => c.change_type === 'profile');
+  const hasPendingProfileChanges = pendingChanges.some(c => c.change_type === 'profile' && c.status === 'pending');
 
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});

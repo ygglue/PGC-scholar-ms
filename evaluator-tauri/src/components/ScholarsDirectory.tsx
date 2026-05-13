@@ -39,6 +39,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
   const [statusFilter, setStatusFilter] = useState('All Status');
   const [batchFilter, setBatchFilter] = useState('All Batches');
   const [courseFilter, setCourseFilter] = useState('All Courses');
+  const [sortBy, setSortBy] = useState('name');
   const [viewType, setViewType] = useState<'card' | 'list'>('card');
   const [selectedScholar, setSelectedScholar] = useState<Scholar | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,8 +97,17 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
       const matchesCourse = courseFilter === 'All Courses' || s.course === courseFilter;
       return matchesSearch && matchesStatus && matchesBatch && matchesCourse;
     });
+
+    result.sort((a, b) => {
+        if (sortBy === 'name') return (a.first_name + a.last_name).localeCompare(b.first_name + b.last_name);
+        if (sortBy === 'batch') return a.batch_number.localeCompare(b.batch_number);
+        if (sortBy === 'course') return a.course.localeCompare(b.course);
+        if (sortBy === 'status') return a.status.localeCompare(b.status);
+        return 0;
+    });
+
     setFiltered(result);
-  }, [scholars, search, statusFilter, batchFilter, courseFilter]);
+  }, [scholars, search, statusFilter, batchFilter, courseFilter, sortBy]);
 
   return (
     <div className="p-8 h-full flex flex-col">
@@ -147,6 +157,12 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
         <select className="input-field max-w-[200px]" onChange={(e) => setCourseFilter(e.target.value)} value={courseFilter}>
           <option>All Courses</option>
           {courses.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+        <select className="input-field max-w-[150px]" onChange={(e) => setSortBy(e.target.value)} value={sortBy}>
+          <option value="name">Sort by Name</option>
+          <option value="batch">Sort by Batch</option>
+          <option value="course">Sort by Course</option>
+          <option value="status">Sort by Status</option>
         </select>
       </div>
 
