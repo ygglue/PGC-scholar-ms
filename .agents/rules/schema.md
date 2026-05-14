@@ -124,7 +124,7 @@ Uploaded files stored in Supabase Storage (private bucket). Access controlled vi
 
 **Storage path format:** `scholars/{scholar_id}/{doc_type}/{uuid}_{filename}`  
 **Allowed file types:** JPEG, PNG, PDF  
-**Max file size:** 10MB  
+**Max file size:** 1MB  
 **Signed URL expiry:** 120 seconds
 
 ---

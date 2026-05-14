@@ -10,11 +10,13 @@ import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
 import { syncService } from "./services/syncService";
+import { getTheme, saveTheme } from "./services/settingsStore";
 import "./index.css";
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [view, setView] = useState<'dashboard' | 'submissions' | 'directory' | 'bins' | 'announcements' | 'settings'>('dashboard');
   const [selectedBin, setSelectedBin] = useState<any>(null);
 
@@ -30,13 +32,22 @@ function App() {
   };
 
   useEffect(() => {
-    const initAuth = async () => {
+    const init = async () => {
       const t = await getToken();
       setToken(t);
       if (t) syncService.start();
+
+      const saved = await getTheme();
+      setTheme(saved as 'light' | 'dark');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
       setLoading(false);
     };
-    initAuth();
+    init();
     return () => syncService.stop();
   }, []);
 
@@ -51,7 +62,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0] dark:bg-dark-page">
         <p className="text-[#1A8C3C] text-xl">Initializing secure session...</p>
       </div>
     );
@@ -61,9 +72,20 @@ function App() {
     return <Login onSuccess={(t) => setToken(t)} onShowModal={showModal} />;
   }
 
+  const handleToggleTheme = async () => {
+    const next = theme === 'light' ? 'dark' : 'light';
+    setTheme(next);
+    await saveTheme(next);
+    if (next === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   const renderContent = () => {
     const commonProps = { onShowModal: showModal };
-    if (view === 'settings') return <Settings />;
+    if (view === 'settings') return <Settings theme={theme} onToggleTheme={handleToggleTheme} />;
     if (view === 'dashboard') return <Dashboard onNavigate={(v) => {setView(v); setSelectedBin(null);}} {...commonProps} />;
     if (view === 'directory') return <ScholarsDirectory {...commonProps} />;
     if (view === 'announcements') return <Announcements {...commonProps} />;
@@ -143,7 +165,7 @@ function App() {
         </button>
       </aside>
 
-      <main className="flex-1 h-screen overflow-hidden bg-[#F0F2F0]">
+      <main className="flex-1 h-screen overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">
         {renderContent()}
       </main>
     </div>

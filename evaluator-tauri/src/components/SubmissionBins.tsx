@@ -139,33 +139,33 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
     <ViewLayout>
       <div className="flex justify-between items-center mb-8 shrink-0">
         <div>
-          <h1 className="text-2xl text-[#1A1A1A]">Submission Bins</h1>
-          <p className="text-sm text-[#4A5568] mt-1">Manage scholar document collection windows.</p>
+          <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text">Submission Bins</h1>
+          <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mt-1">Manage scholar document collection windows.</p>
         </div>
         <button onClick={openCreateDialog} className="flex items-center gap-2 bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27] transition-all">
           <Plus size={16} /> Create New Bin
         </button>
       </div>
 
-      <p className="text-[10px] uppercase font-bold tracking-wider text-[#A0AEC0] mb-4 shrink-0">{status}</p>
+      <p className="text-[10px] uppercase font-bold tracking-wider text-[#A0AEC0] dark:text-dark-text-muted mb-4 shrink-0">{status}</p>
 
       <div className="flex-1 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
           {bins.map(bin => (
-            <div key={bin.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div key={bin.id} className="bg-white dark:bg-dark-card p-6 rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
               <div>
                 <div className='flex items-center gap-3 mb-4'>
-                  <div className="p-3 bg-[#F7F9F7] rounded-xl text-[#1A8C3C]">
+                  <div className="p-3 bg-[#F7F9F7] dark:bg-dark-surface rounded-xl text-[#1A8C3C]">
                     <FolderOpen size={24} />
                   </div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A]">AY {bin.school_year}</h3>
+                  <h3 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text">AY {bin.school_year}</h3>
                 </div>
-                <p className="text-sm text-[#4A5568] mb-1 font-semibold">{bin.semester} Semester</p>
-                <p className="text-[11px] text-[#A0AEC0] font-mono">Created: {bin.created_at.slice(0, 10)}</p>
+                <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mb-1 font-semibold">{bin.semester} Semester</p>
+                <p className="text-[11px] text-[#A0AEC0] dark:text-dark-text-muted font-mono">Created: {bin.created_at.slice(0, 10)}</p>
               </div>
               
               <div className="flex gap-3 mt-6">
-                <button onClick={() => onOpenBin(bin)} className="flex-1 bg-[#F7F9F7] text-[#1A8C3C] py-2 rounded-xl font-semibold text-sm hover:bg-[#E8F5ED] transition-colors">
+                <button onClick={() => onOpenBin(bin)} className="flex-1 bg-[#F7F9F7] dark:bg-dark-surface text-[#1A8C3C] py-2 rounded-xl font-semibold text-sm hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors">
                   View
                 </button>
                 <button onClick={() => deleteBin(bin.id)} className="px-4 py-2 rounded-xl font-semibold text-sm bg-red-50 text-red-600 hover:bg-red-100 transition-colors">

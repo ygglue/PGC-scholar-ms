@@ -94,37 +94,37 @@ export const BinDocuments: React.FC<BinDocumentsProps> = ({ bin, onBack, onShowM
 
   return (
     <div className="p-8">
-      <button onClick={onBack} className="text-[#4A5568] hover:text-[#1A8C3C] text-sm mb-6 flex items-center gap-2 font-semibold">
+      <button onClick={onBack} className="text-[#4A5568] dark:text-dark-text-sec hover:text-[#1A8C3C] text-sm mb-6 flex items-center gap-2 font-semibold">
         ← Back to All Bins
       </button>
 
       <div className="mb-8">
-        <h1 className="text-2xl text-[#1A1A1A]">AY {bin.school_year} — {bin.semester} Semester</h1>
-        <p className="text-[10px] uppercase font-bold tracking-wider text-[#A0AEC0] mt-1">{status}</p>
+        <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text">AY {bin.school_year} — {bin.semester} Semester</h1>
+        <p className="text-[10px] uppercase font-bold tracking-wider text-[#A0AEC0] dark:text-dark-text-muted mt-1">{status}</p>
       </div>
 
       <div className="flex flex-col gap-6">
         {Object.entries(grouped).map(([scholarId, scholarDocs]) => (
-          <div key={scholarId} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm">
-            <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#F0F2F0]">
-              <div className="w-10 h-10 rounded-full bg-[#E8F5ED] flex items-center justify-center text-[#1A8C3C] font-bold text-sm">
+          <div key={scholarId} className="bg-white dark:bg-dark-card p-6 rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm">
+            <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#F0F2F0] dark:border-dark-border">
+              <div className="w-10 h-10 rounded-full bg-[#E8F5ED] dark:bg-dark-green-bg flex items-center justify-center text-[#1A8C3C] font-bold text-sm">
                 {scholarId.slice(0, 2).toUpperCase()}
               </div>
-              <p className="text-xs font-mono text-[#A0AEC0]">Scholar ID: {scholarId}</p>
+              <p className="text-xs font-mono text-[#A0AEC0] dark:text-dark-text-muted">Scholar ID: {scholarId}</p>
             </div>
             
             <div className="flex flex-col gap-3">
               {scholarDocs.map(doc => (
-                <div key={doc.id} className="bg-[#F7F9F7] p-4 rounded-xl flex items-center justify-between border border-[#E0E6E0]/50 hover:border-[#1A8C3C]/30 transition-colors">
+                <div key={doc.id} className="bg-[#F7F9F7] dark:bg-dark-surface p-4 rounded-xl flex items-center justify-between border border-[#E0E6E0]/50 dark:border-dark-border/50 hover:border-[#1A8C3C]/30 transition-colors">
                   <div>
-                    <p className="font-semibold text-sm text-[#1A1A1A]">{DOC_TYPE_LABELS[doc.doc_type] || doc.doc_type}</p>
-                    <p className="text-[11px] text-[#4A5568] mt-0.5">{doc.file_name} • {doc.uploaded_at.slice(0, 10)}</p>
+                    <p className="font-semibold text-sm text-[#1A1A1A] dark:text-dark-text">{DOC_TYPE_LABELS[doc.doc_type] || doc.doc_type}</p>
+                    <p className="text-[11px] text-[#4A5568] dark:text-dark-text-sec mt-0.5">{doc.file_name} • {doc.uploaded_at.slice(0, 10)}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${doc.is_verified ? 'bg-[#E8F5ED] text-[#1A8C3C]' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${doc.is_verified ? 'bg-[#E8F5ED] text-[#1A8C3C] dark:bg-dark-green-badge dark:text-dark-green' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-dark-text-sec'}`}>
                       {doc.is_verified ? 'Verified' : 'Pending'}
                     </span>
-                    <button onClick={() => handleView(doc)} className="text-[#1A8C3C] font-semibold text-sm hover:underline">
+                    <button onClick={() => handleView(doc)} className="text-[#1A8C3C] dark:text-dark-green font-semibold text-sm hover:underline">
                       View
                     </button>
                   </div>

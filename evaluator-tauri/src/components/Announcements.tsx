@@ -133,8 +133,8 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
     <ViewLayout>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl text-[#1A1A1A]">Announcements</h1>
-          <p className="text-sm text-[#4A5568] mt-1">Broadcast important updates to scholars.</p>
+          <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text">Announcements</h1>
+          <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mt-1">Broadcast important updates to scholars.</p>
         </div>
         <button onClick={() => openModal()} className="bg-[#1A8C3C] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-[#0F5C27]">
           + New Announcement
@@ -143,28 +143,28 @@ export const Announcements: React.FC<AnnouncementsProps> = ({ onShowModal }) => 
 
       <div className="flex-1 overflow-y-auto space-y-4">
         {loading ? (
-          <p className="text-[#A0AEC0] text-center">Loading...</p>
+          <p className="text-[#A0AEC0] dark:text-dark-text-muted text-center">Loading...</p>
         ) : announcements.length === 0 ? (
-          <p className="text-[#A0AEC0] text-center">No announcements.</p>
+          <p className="text-[#A0AEC0] dark:text-dark-text-muted text-center">No announcements.</p>
         ) : (
           announcements.map(a => (
-            <div key={a.id} className="bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm">
+            <div key={a.id} className="bg-white dark:bg-dark-card p-6 rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm">
               <div className="flex justify-between items-start">
-                <h3 className="font-semibold text-[#1A1A1A]">{a.title}</h3>
+                <h3 className="font-semibold text-[#1A1A1A] dark:text-dark-text">{a.title}</h3>
                 <div className="flex items-center gap-4">
-                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${a.type === 'urgent' ? 'bg-red-50 text-red-600' : 'bg-gray-100'}`}>
+                    <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${a.type === 'urgent' ? 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 dark:bg-dark-surface dark:text-dark-text-sec'}`}>
                     {a.type}
                     </span>
                     {currentUserId === a.created_by && (
                         <div className="flex gap-2">
-                            <button onClick={() => openModal(a)} className="text-gray-400 hover:text-green-600"><Edit2 size={16} /></button>
-                            <button onClick={() => deleteAnnouncement(a.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button>
+                            <button onClick={() => openModal(a)} className="text-gray-400 hover:text-green-600 dark:text-dark-text-muted"><Edit2 size={16} /></button>
+                            <button onClick={() => deleteAnnouncement(a.id)} className="text-gray-400 hover:text-red-500 dark:text-dark-text-muted"><Trash2 size={16} /></button>
                         </div>
                     )}
                 </div>
               </div>
-              <p className="text-sm text-[#4A5568] mt-2">{a.message}</p>
-              <p className="text-[10px] text-[#A0AEC0] mt-4">{new Date(a.created_at).toLocaleString()}</p>
+              <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mt-2">{a.message}</p>
+              <p className="text-[10px] text-[#A0AEC0] dark:text-dark-text-muted mt-4">{new Date(a.created_at).toLocaleString()}</p>
             </div>
           ))
         )}

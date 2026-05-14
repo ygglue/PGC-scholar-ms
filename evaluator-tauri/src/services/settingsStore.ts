@@ -23,3 +23,14 @@ export const saveViewPreference = async (pref: string) => {
   await store.set('view_pref', pref);
   await store.save();
 };
+
+export const getTheme = async (): Promise<string> => {
+  const store = await load(STORE_PATH);
+  return await store.get<string>('theme') || 'light';
+};
+
+export const saveTheme = async (theme: string) => {
+  const store = await load(STORE_PATH);
+  await store.set('theme', theme);
+  await store.save();
+};

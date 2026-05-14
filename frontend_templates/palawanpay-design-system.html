@@ -32,34 +32,52 @@
     --text-secondary: #4A5568;
     --text-muted: #8A9BAA;
 
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
-
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-full: 9999px;
-
     --page-bg: #F0F2F0;
     --card-bg: #FFFFFF;
     --rule: #E4E9E4;
   }
 
+  .dark {
+    --page-bg: #121212;
+    --card-bg: #1E1E1E;
+    --border: #333333;
+    --rule: #333333;
+
+    --text-primary: #F0F0F0;
+    --text-secondary: #B0B0B0;
+    --text-muted: #707070;
+    --surface: #2A2A2A;
+  }
+  
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--page-bg);
     color: var(--text-primary);
     min-height: 100vh;
     padding: 0 0 80px;
+    transition: background 0.3s, color 0.3s;
   }
-
-  /* ── HEADER ── */
-  header {
-    background: var(--green-dark);
-    padding: 48px 64px 40px;
-    position: relative;
-    overflow: hidden;
+  
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  
+  #theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: var(--green-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    z-index: 1000;
   }
   header::before {
     content: '';
@@ -309,7 +327,7 @@
     gap: 24px;
   }
   .elevation-chip {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: var(--radius-md);
     padding: 24px;
     display: flex;
@@ -337,7 +355,7 @@
     gap: 24px;
   }
   .comp-card {
-    background: var(--off-white);
+    background: var(--card-bg);
     border-radius: var(--radius-md);
     padding: 28px;
     border: 1px solid var(--border);
@@ -367,7 +385,7 @@
     width: 100%;
   }
   .demo-btn-outline {
-    background: #fff;
+    background: var(--card-bg);
     color: var(--green-primary);
     border: 1.5px solid var(--green-primary);
     border-radius: var(--radius-full);
@@ -536,6 +554,7 @@
 </head>
 <body>
 
+<button id="theme-toggle">Toggle Dark Mode</button>
 <div class="copied-toast" id="toast">Hex copied!</div>
 
 <header>
@@ -1195,6 +1214,11 @@
       setTimeout(() => toast.classList.remove('show'), 2000);
     });
   }
+
+  const toggle = document.getElementById('theme-toggle');
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+  });
 </script>
 </body>
 </html>

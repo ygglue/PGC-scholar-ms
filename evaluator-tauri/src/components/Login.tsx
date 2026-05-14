@@ -97,10 +97,10 @@ export const Login: React.FC<LoginProps> = ({ onSuccess, onShowModal }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0] dark:bg-dark-page p-4">
       <div className="auth-card">
-        <h1 className="font-bold text-[32px] text-[#1A1A1A] mb-2">Evaluator Portal</h1>
-        <p className="text-[#4A5568] mb-6">Sign in to manage scholars</p>
+        <h1 className="font-bold text-[32px] text-[#1A1A1A] dark:text-dark-text mb-2">Evaluator Portal</h1>
+        <p className="text-[#4A5568] dark:text-dark-text-sec mb-6">Sign in to manage scholars</p>
 
         {status && <p className="text-[#1A8C3C] text-sm mb-4">{status}</p>}
         {error && <p className="text-[#E53935] text-sm mb-4">{error}</p>}
@@ -131,7 +131,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess, onShowModal }) => {
         <div className="mt-8 flex justify-end">
           <button 
             onClick={handleClearCache}
-            className="text-[#4A5568] hover:text-[#1A8C3C] text-sm underline"
+            className="text-[#4A5568] dark:text-dark-text-sec hover:text-[#1A8C3C] text-sm underline"
           >
             Clear Cache
           </button>

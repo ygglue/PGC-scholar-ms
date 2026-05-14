@@ -12,6 +12,7 @@ from app.models.scholar import Scholar
 from app.models.pending_change import PendingChange
 from app.models.academic_record import AcademicRecord
 from app.models.system_sync import SystemSync
+from app.models.evaluation_remark import EvaluationRemark
 
 router = APIRouter(prefix="/pending-changes", tags=["pending-changes"])
 
@@ -157,6 +158,16 @@ def review_change(
         
     if change.status != "pending":
          raise HTTPException(status_code=400, detail="Submission already reviewed")
+
+    # Create remark from evaluator note if provided
+    if req.evaluator_note and req.evaluator_note.strip():
+        remark = EvaluationRemark(
+            pending_change_id=change.id,
+            evaluator_id=current_user.id,
+            scholar_id=change.scholar_id,
+            remark_text=req.evaluator_note.strip(),
+        )
+        db.add(remark)
 
     # Finalize state metadata
     change.status = req.status

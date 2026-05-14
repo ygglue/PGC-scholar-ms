@@ -165,7 +165,7 @@ Errors:
 ### POST `/documents/upload`
 ```
 Body (multipart/form-data):
-  file               File      JPEG, PNG, or PDF — max 10MB
+  file               File      JPEG, PNG, or PDF — max 1MB
   doc_type           string    COR | ROG | explanation_letter | completion_form | other
   academic_record_id string    UUID (optional) — links document to a semester
 
@@ -175,7 +175,7 @@ Response:
 Errors:
   400 — Invalid doc type
   400 — Invalid file type (only JPEG, PNG, PDF allowed)
-  400 — File too large (max 10MB)
+  400 — File too large (max 1MB)
   500 — Upload to Supabase Storage failed
 ```
 

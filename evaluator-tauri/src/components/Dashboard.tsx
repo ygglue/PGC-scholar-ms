@@ -74,26 +74,26 @@ const loadStats = async () => {
 };  const StatCard = ({ title, value, icon, onClick }: any) => (
     <div 
       onClick={onClick}
-      className={`bg-white p-6 rounded-2xl border border-[#E0E6E0] shadow-sm hover:shadow-md transition-all cursor-pointer group`}
+      className={`bg-white dark:bg-dark-card p-6 rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm hover:shadow-md transition-all cursor-pointer group`}
     >
       <div className="flex justify-between items-start mb-4">
-        <div className="p-3 bg-[#F7F9F7] rounded-xl text-[#1A8C3C]">{icon}</div>
-        <span className="text-[10px] font-bold uppercase px-2 py-1 rounded bg-[#F7F9F7] text-[#A0AEC0] group-hover:text-[#1A8C3C] group-hover:bg-[#E8F5ED] transition-colors">View</span>
+        <div className="p-3 bg-[#F7F9F7] dark:bg-dark-surface rounded-xl text-[#1A8C3C]">{icon}</div>
+        <span className="text-[10px] font-bold uppercase px-2 py-1 rounded bg-[#F7F9F7] dark:bg-dark-surface text-[#A0AEC0] dark:text-dark-text-muted group-hover:text-[#1A8C3C] group-hover:bg-[#E8F5ED] dark:group-hover:bg-dark-green-bg transition-colors">View</span>
       </div>
-      <h3 className="text-sm font-medium text-[#4A5568]">{title}</h3>
-      <p className="text-3xl font-bold text-[#1A1A1A] mt-1">{value}</p>
+      <h3 className="text-sm font-medium text-[#4A5568] dark:text-dark-text-sec">{title}</h3>
+      <p className="text-3xl font-bold text-[#1A1A1A] dark:text-dark-text mt-1">{value}</p>
     </div>
   );
 
   return (
     <div className="p-8 h-full flex flex-col">
       <div className="mb-10">
-        <h1 className="text-2xl text-[#1A1A1A]">Evaluator Dashboard</h1>
-        <p className="text-sm text-[#4A5568] mt-1">Overview of scholarship program status and pending tasks.</p>
+        <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text">Evaluator Dashboard</h1>
+        <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mt-1">Overview of scholarship program status and pending tasks.</p>
       </div>
 
       {loading ? (
-        <div className="flex-1 flex items-center justify-center text-[#A0AEC0]">
+        <div className="flex-1 flex items-center justify-center text-[#A0AEC0] dark:text-dark-text-muted">
           Loading dashboard data...
         </div>
       ) : (
@@ -120,49 +120,49 @@ const loadStats = async () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl border border-[#E0E6E0] p-8 shadow-sm">
-              <h2 className="text-lg text-[#1A1A1A] mb-6">Action Required</h2>
+            <div className="bg-white dark:bg-dark-card rounded-2xl border border-[#E0E6E0] dark:border-dark-border p-8 shadow-sm">
+              <h2 className="text-lg text-[#1A1A1A] dark:text-dark-text mb-6">Action Required</h2>
               <div className="space-y-4">
                 <div 
                   onClick={() => onNavigate('submissions')}
-                  className="flex items-center justify-between p-4 bg-[#F7F9F7] rounded-xl hover:bg-[#E8F5ED] transition-colors cursor-pointer group"
+                  className="flex items-center justify-between p-4 bg-[#F7F9F7] dark:bg-dark-surface rounded-xl hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"><User size={20} /></div>
                     <div>
-                      <p className="font-semibold text-sm text-[#1A1A1A]">Profile Updates</p>
-                      <p className="text-xs text-[#4A5568]">{stats.pendingProfiles} scholars requested profile changes</p>
+                      <p className="font-semibold text-sm text-[#1A1A1A] dark:text-dark-text">Profile Updates</p>
+                      <p className="text-xs text-[#4A5568] dark:text-dark-text-sec">{stats.pendingProfiles} scholars requested profile changes</p>
                     </div>
                   </div>
-                  <span className="text-[#A0AEC0] group-hover:text-[#1A8C3C] transition-colors">→</span>
+                  <span className="text-[#A0AEC0] dark:text-dark-text-muted group-hover:text-[#1A8C3C] transition-colors">→</span>
                 </div>
 
                 <div 
                   onClick={() => onNavigate('submissions')}
-                  className="flex items-center justify-between p-4 bg-[#F7F9F7] rounded-xl hover:bg-[#E8F5ED] transition-colors cursor-pointer group"
+                  className="flex items-center justify-between p-4 bg-[#F7F9F7] dark:bg-dark-surface rounded-xl hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><FileText size={20} /></div>
                     <div>
-                      <p className="font-semibold text-sm text-[#1A1A1A]">Grade Submissions</p>
-                      <p className="text-xs text-[#4A5568]">{stats.pendingGrades} semesters awaiting review</p>
+                      <p className="font-semibold text-sm text-[#1A1A1A] dark:text-dark-text">Grade Submissions</p>
+                      <p className="text-xs text-[#4A5568] dark:text-dark-text-sec">{stats.pendingGrades} semesters awaiting review</p>
                     </div>
                   </div>
-                  <span className="text-[#A0AEC0] group-hover:text-[#1A8C3C] transition-colors">→</span>
+                  <span className="text-[#A0AEC0] dark:text-dark-text-muted group-hover:text-[#1A8C3C] transition-colors">→</span>
                 </div>
 
                 <div 
                   onClick={() => onNavigate('submissions')}
-                  className="flex items-center justify-between p-4 bg-[#F7F9F7] rounded-xl hover:bg-[#E8F5ED] transition-colors cursor-pointer group"
+                  className="flex items-center justify-between p-4 bg-[#F7F9F7] dark:bg-dark-surface rounded-xl hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center"><FolderPlus size={20} /></div>
                     <div>
-                      <p className="font-semibold text-sm text-[#1A1A1A]">New Documents</p>
-                      <p className="text-xs text-[#4A5568]">{stats.pendingDocs} documents uploaded for verification</p>
+                      <p className="font-semibold text-sm text-[#1A1A1A] dark:text-dark-text">New Documents</p>
+                      <p className="text-xs text-[#4A5568] dark:text-dark-text-sec">{stats.pendingDocs} documents uploaded for verification</p>
                     </div>
                   </div>
-                  <span className="text-[#A0AEC0] group-hover:text-[#1A8C3C] transition-colors">→</span>
+                  <span className="text-[#A0AEC0] dark:text-dark-text-muted group-hover:text-[#1A8C3C] transition-colors">→</span>
                 </div>
               </div>
             </div>

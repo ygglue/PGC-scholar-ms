@@ -14,6 +14,7 @@ const Inbox = () => {
     const saved = localStorage.getItem('readAnnouncements');
     return saved ? JSON.parse(saved) : [];
   });
+  const [remarks, setRemarks] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -40,12 +41,14 @@ const Inbox = () => {
 
   const fetchData = async () => {
     try {
-      const [announcementsRes, profileRes] = await Promise.all([
+      const [announcementsRes, profileRes, remarksRes] = await Promise.all([
         apiClient.get(`${API_BASE}/announcements/`),
-        apiClient.get(`${API_BASE}/scholars/me`)
+        apiClient.get(`${API_BASE}/scholars/me`),
+        apiClient.get(`${API_BASE}/remarks/me`).catch(() => ({ data: [] }))
       ]);
       setAnnouncements(announcementsRes.data);
       setProfile(profileRes.data);
+      setRemarks(remarksRes.data);
       setLastUpdated(new Date());
     } catch (err) {
       if (err.response?.status === 401) {
@@ -196,13 +199,12 @@ const Inbox = () => {
         <section className="lg:col-span-7">
           <div className="flex items-center justify-between mb-4 px-2">
             <h2 className="text-xs font-bold font-label uppercase tracking-widest text-on-surface-variant">Evaluator Remarks</h2>
-            <button className="text-primary text-xs font-bold flex items-center gap-1">
-              Mark all read
-              <span className="material-symbols-outlined text-sm">done_all</span>
-            </button>
+            {remarks.length > 0 && (
+              <span className="bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold">{remarks.length} Total</span>
+            )}
           </div>
 
-          <div className="space-y-4">
+          {remarks.length === 0 ? (
             <div className="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-transparent hover:border-primary-fixed transition-colors opacity-60">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
@@ -223,7 +225,99 @@ const Inbox = () => {
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              {remarks.map((remark) => {
+                const changeLabel = remark.change_type
+                  ? remark.change_type.charAt(0).toUpperCase() + remark.change_type.slice(1)
+                  : 'Submission';
+
+                return (
+                  <div key={remark.id} className="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-transparent hover:border-primary-fixed transition-colors">
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-primary-container overflow-hidden border-2 border-primary/10 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-primary" style={{fontVariationSettings: '"FILL" 1'}}>rate_review</span>
+                        </div>
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-bold text-on-surface font-headline truncate">{remark.evaluator_email || 'Evaluator'}</h4>
+                            <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
+                              {changeLabel} — {remark.change_status || 'pending'}
+                            </p>
+                          </div>
+                          <span className="text-[10px] text-on-surface-variant font-medium shrink-0 ml-2">
+                            {new Date(remark.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-on-surface-variant mb-3 leading-relaxed">
+                          {remark.remark_text}
+                        </p>
+
+                        {remark.change_type === 'documents' && remark.payload?.document_id && (
+                          <button
+                            onClick={async () => {
+                              try {
+                                const res = await apiClient.get(`${API_BASE}/documents/${remark.payload.document_id}/view`);
+                                window.open(res.data.url, '_blank');
+                              } catch (e) {
+                                console.error('Failed to open document:', e);
+                              }
+                            }}
+                            className="mb-3 bg-primary text-on-primary px-5 py-2.5 rounded-full text-xs font-bold hover:bg-primary-fixed transition-all shadow-sm active:scale-95 inline-flex items-center gap-2"
+                          >
+                            <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: '"FILL" 1'}}>visibility</span>
+                            View Document
+                          </button>
+                        )}
+
+                        {remark.change_type === 'profile' && remark.payload && (
+                          <div className="mb-3 bg-surface-container-high rounded-xl p-4 space-y-2">
+                            {Object.entries(remark.payload).map(([key, val]) => {
+                              if (val && typeof val === 'object' && 'to' in val) {
+                                return (
+                                  <div key={key} className="text-xs border-b border-outline-variant/20 pb-2 last:border-0">
+                                    <span className="font-bold text-on-surface capitalize">{key.replace(/_/g, ' ')}:</span>
+                                    <div className="flex items-center gap-2 mt-0.5">
+                                      <span className="text-error line-through">{val.from || 'None'}</span>
+                                      <span className="text-on-surface-variant/50">→</span>
+                                      <span className="text-primary font-semibold">{val.to}</span>
+                                    </div>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })}
+                          </div>
+                        )}
+
+                        {remark.change_type === 'grades' && remark.payload && (
+                          <div className="mb-3 bg-surface-container-high rounded-xl px-4 py-3">
+                            <p className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">
+                              {remark.payload.school_year || ''} — {remark.payload.semester || ''}
+                            </p>
+                          </div>
+                        )}
+
+                        {remark.submitted_at && (
+                          <div className="mb-3 bg-surface-container-high rounded-xl px-4 py-3">
+                            <p className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Submission Date</p>
+                            <p className="text-xs text-on-surface font-medium">
+                              {new Date(remark.submitted_at).toLocaleDateString('en-US', {
+                                year: 'numeric', month: 'long', day: 'numeric'
+                              })}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
       </div>
 

@@ -18,7 +18,7 @@ router = APIRouter(prefix="/documents", tags=["documents"])
 
 ALLOWED_DOC_TYPES = ["COR", "ROG", "explanation_letter", "completion_form", "other"]
 ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "application/pdf"]
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB
 
 
 class BinInfoResponse(BaseModel):
@@ -71,7 +71,7 @@ async def upload_document(
 
     file_bytes = await file.read()
     if len(file_bytes) > MAX_FILE_SIZE:
-        raise HTTPException(status_code=400, detail="File too large (max 10MB)")
+        raise HTTPException(status_code=400, detail="File too large (max 1MB)")
 
     scholar = db.query(Scholar).filter(Scholar.user_id == current_user.id).first()
     if not scholar:

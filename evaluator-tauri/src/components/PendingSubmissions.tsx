@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ClipboardList, RefreshCw, Unlock } from 'lucide-react';
+import { ClipboardList, RefreshCw, Unlock, MessageSquareText } from 'lucide-react';
 import api from '../services/apiService';
 import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
@@ -31,6 +31,19 @@ interface PendingChange {
   claimed_by?: string;
 }
 
+interface EvaluationRemark {
+  id: string;
+  pending_change_id: string;
+  evaluator_id: string;
+  scholar_id: string;
+  remark_text: string;
+  created_at: string;
+  evaluator_email?: string;
+  change_type?: string;
+  change_status?: string;
+  submitted_at?: string;
+}
+
 interface PendingSubmissionsProps {
   onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
 }
@@ -42,6 +55,8 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
   const [reviewNote, setReviewNote] = useState('');
   const [reviewStatus, setReviewStatus] = useState<'approved' | 'rejected' | 'more_info'>('approved');
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [remarks, setRemarks] = useState<EvaluationRemark[]>([]);
+  const [remarksLoading, setRemarksLoading] = useState(false);
 
   useEffect(() => {
     loadPendingChanges();
@@ -51,6 +66,26 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
     };
     initUser();
   }, []);
+
+  useEffect(() => {
+    if (selectedChange) {
+      loadRemarks(selectedChange.id);
+    } else {
+      setRemarks([]);
+    }
+  }, [selectedChange]);
+
+  const loadRemarks = async (changeId: string) => {
+    setRemarksLoading(true);
+    try {
+      const res = await api.get(`/remarks/pending-change/${changeId}`);
+      setRemarks(res.data);
+    } catch (err) {
+      console.error("Failed to load remarks:", err);
+    } finally {
+      setRemarksLoading(false);
+    }
+  };
 
   const loadPendingChanges = async (forceRefresh: boolean = false) => {
     const CACHE_KEY = "pending_changes/list";
@@ -198,7 +233,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-red-500 line-through text-xs">{val.from || 'None'}</span>
                 <span className="text-[#A0AEC0]">→</span>
-                <span className="text-[#1A8C3C] font-bold text-sm">{val.to}</span>
+                    <span className="text-[#1A8C3C] dark:text-dark-green font-bold text-sm">{val.to}</span>
               </div>
             </div>
           ))}
@@ -212,7 +247,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
           {Object.entries(change.payload).map(([subject, grades]: [string, any]) => (
             <div key={subject} className="flex justify-between">
               <span className="font-medium">{subject}</span>
-              <span className="font-bold text-[#1A8C3C]">{grades.from} → {grades.to}</span>
+              <span className="font-bold text-[#1A8C3C] dark:text-dark-green">{grades.from} → {grades.to}</span>
             </div>
           ))}
         </div>
@@ -220,10 +255,10 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
     }
     if (change.change_type === 'documents') {
       return (
-        <div className="bg-[#F7F9F7] p-4 rounded-xl text-xs space-y-3">
-          <p className="font-bold uppercase text-[#A0AEC0]">Submitted Document</p>
-          <div className="bg-white p-3 rounded-lg border border-[#E0E6E0]">
-            <p className="font-medium text-[#1A1A1A] truncate">{change.payload.doc_type || 'Document'}</p>
+        <div className="bg-[#F7F9F7] dark:bg-dark-surface p-4 rounded-xl text-xs space-y-3">
+          <p className="font-bold uppercase text-[#A0AEC0] dark:text-dark-text-muted">Submitted Document</p>
+          <div className="bg-white dark:bg-dark-card p-3 rounded-lg border border-[#E0E6E0] dark:border-dark-border">
+            <p className="font-medium text-[#1A1A1A] dark:text-dark-text truncate">{change.payload.doc_type || 'Document'}</p>
           </div>
           <button 
             onClick={() => handleViewDocument(change.payload.document_id, change.scholar_id)}
@@ -234,7 +269,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
         </div>
       );
     }
-    return <pre className="text-xs bg-[#F7F9F7] p-4 rounded-xl overflow-auto">{JSON.stringify(change.payload, null, 2)}</pre>;
+    return <pre className="text-xs bg-[#F7F9F7] dark:bg-dark-surface p-4 rounded-xl overflow-auto dark:text-gray-300">{JSON.stringify(change.payload, null, 2)}</pre>;
   };
 
   const [filterType, setFilterType] = useState<string>('all');
@@ -248,14 +283,14 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
   // ... (in JSX return)
   return (
     <div className="p-8 h-full flex flex-col">
-      <h1 className="text-2xl text-[#1A1A1A] mb-8 shrink-0">Pending Submissions</h1>
+      <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text mb-8 shrink-0">Pending Submissions</h1>
       <div className="flex-1 flex gap-8 min-h-0">
-        <div className="flex-1 bg-white rounded-2xl border border-[#E0E6E0] shadow-sm overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-[#E0E6E0] bg-[#F7F9F7] flex justify-between items-center shrink-0">
+        <div className="flex-1 bg-white dark:bg-dark-card rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm overflow-hidden flex flex-col">
+          <div className="p-4 border-b border-[#E0E6E0] dark:border-dark-border bg-[#F7F9F7] dark:bg-dark-surface flex justify-between items-center shrink-0">
             <div className="flex items-center gap-4">
-                <span className="font-bold text-[11px] uppercase tracking-wider text-[#A0AEC0]">{filteredChanges.length} Items Pending</span>
+                <span className="font-bold text-[11px] uppercase tracking-wider text-[#A0AEC0] dark:text-dark-text-muted">{filteredChanges.length} Items Pending</span>
                 <select 
-                    className="text-[11px] font-semibold text-[#1A1A1A] border border-[#E0E6E0] rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-[#1A8C3C] outline-none transition-all cursor-pointer"
+                    className="text-[11px] font-semibold text-[#1A1A1A] dark:text-dark-text border border-[#E0E6E0] dark:border-dark-border rounded-lg px-3 py-2 bg-white dark:bg-dark-card focus:ring-2 focus:ring-[#1A8C3C] outline-none transition-all cursor-pointer"
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
                 >
@@ -265,28 +300,28 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
                     <option value="documents">Documents</option>
                 </select>
             </div>
-            <button onClick={() => loadPendingChanges(true)} className="text-[#1A8C3C] p-2 hover:bg-[#E8F5ED] rounded-full transition-colors" title="Refresh">
+            <button onClick={() => loadPendingChanges(true)} className="text-[#1A8C3C] p-2 hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg rounded-full transition-colors" title="Refresh">
                 <RefreshCw size={16} />
             </button>
           </div>
           
           <div className="flex-1 overflow-y-auto">
             {loading ? (
-              <div className="p-8 text-center text-[#4A5568]">Loading submissions...</div>
+              <div className="p-8 text-center text-[#4A5568] dark:text-dark-text-sec">Loading submissions...</div>
             ) : filteredChanges.length === 0 ? (
-              <div className="p-8 text-center text-[#4A5568]">No pending submissions found.</div>
+              <div className="p-8 text-center text-[#4A5568] dark:text-dark-text-sec">No pending submissions found.</div>
             ) : (
               <>
                 {filteredChanges.map(change => (
                     <div 
                     key={change.id} 
                     onClick={() => handleClaimAndSelect(change)}
-                    className={`p-5 border-b border-[#F0F2F0] cursor-pointer hover:bg-[#F7F9F7] transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] border-l-4 border-l-[#1A8C3C]' : ''} ${change.claimed_by ? 'opacity-70' : ''}`}
+                    className={`p-5 border-b border-[#F0F2F0] dark:border-dark-border cursor-pointer hover:bg-[#F7F9F7] dark:hover:bg-gray-800 transition-all ${selectedChange?.id === change.id ? 'bg-[#E8F5ED] dark:bg-dark-green-bg border-l-4 border-l-[#1A8C3C]' : ''} ${change.claimed_by ? 'opacity-70' : ''}`}
                     >
                     <div className="flex justify-between items-start mb-2">
-                        <span className={`font-bold text-[#1A1A1A] ${change.claimed_by ? 'flex items-center gap-2' : ''}`}>
+                        <span className={`font-bold text-[#1A1A1A] dark:text-dark-text ${change.claimed_by ? 'flex items-center gap-2' : ''}`}>
                         {change.scholar_first_name} {change.scholar_last_name} — {change.change_type.toUpperCase()}
-                        {change.claimed_by && <span className="text-[10px] bg-gray-200 px-2 py-0.5 rounded italic">Locked</span>}
+                        {change.claimed_by && <span className="text-[10px] bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded italic">Locked</span>}
                         </span>
                         <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full ${
                         change.change_type === 'profile' ? 'bg-[#EBF8FF] text-[#3182CE]' :
@@ -297,7 +332,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
-                        <p className="text-[11px] text-[#A0AEC0] font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
+                        <p className="text-[11px] text-[#A0AEC0] dark:text-dark-text-muted font-mono">Submitted: {new Date(change.submitted_at).toLocaleString()}</p>
                         {change.claimed_by && (
                         <p className="text-[10px] text-[#DD6B20] font-semibold">
                             In Review By: {change.claimed_by === currentUserId ? 'You' : 'Evaluator'}
@@ -311,31 +346,62 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
           </div>
         </div>
 
-        <div className="w-[400px] bg-white rounded-2xl border border-[#E0E6E0] shadow-sm flex flex-col p-8 overflow-hidden">
+        <div className="w-[400px] bg-white dark:bg-dark-card rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm flex flex-col p-8 overflow-hidden">
           {selectedChange ? (
             <>
               <div className="flex justify-between items-start mb-1 shrink-0">
-                  <h2 className="text-xl text-[#1A1A1A]">Review Details</h2>
+                  <h2 className="text-xl text-[#1A1A1A] dark:text-dark-text">Review Details</h2>
                   {selectedChange.claimed_by === currentUserId && (
-                    <button onClick={() => handleUnlock(selectedChange.id)} className="text-[#A0AEC0] hover:text-blue-600 p-2" title="Unlock">
+                    <button onClick={() => handleUnlock(selectedChange.id)} className="text-[#A0AEC0] dark:text-dark-text-muted hover:text-blue-600 p-2" title="Unlock">
                         <Unlock size={18} />
                     </button>
                   )}
               </div>
-              <p className="text-sm text-[#4A5568] mb-6 shrink-0">
+              <p className="text-sm text-[#4A5568] dark:text-dark-text-sec mb-6 shrink-0">
                 Scholar: {selectedChange.scholar_first_name} {selectedChange.scholar_last_name}
               </p>
 
-              <div className="flex-1 overflow-y-auto mb-6 pr-2">
-                <h3 className="text-[11px] font-bold text-[#A0AEC0] uppercase tracking-wider mb-3">Change Summary</h3>
-                {renderPayload(selectedChange)}
+              <div className="flex-1 overflow-y-auto mb-6 pr-2 space-y-6">
+                <div>
+                  <h3 className="text-[11px] font-bold text-[#A0AEC0] dark:text-dark-text-muted uppercase tracking-wider mb-3">Change Summary</h3>
+                  {renderPayload(selectedChange)}
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-[11px] font-bold text-[#A0AEC0] dark:text-dark-text-muted uppercase tracking-wider">Remarks History</h3>
+                    <MessageSquareText size={14} className="text-[#A0AEC0] dark:text-dark-text-muted" />
+                  </div>
+
+                  {remarksLoading ? (
+                    <p className="text-xs text-[#A0AEC0] dark:text-dark-text-muted">Loading remarks...</p>
+                  ) : remarks.length === 0 ? (
+                    <p className="text-xs text-[#A0AEC0] dark:text-dark-text-muted italic">No remarks yet.</p>
+                  ) : (
+                    <div className="space-y-3 max-h-[240px] overflow-y-auto">
+                      {remarks.map(remark => (
+                        <div key={remark.id} className="bg-[#F7F9F7] dark:bg-dark-surface rounded-xl p-3 border border-[#E0E6E0] dark:border-dark-border">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[10px] font-bold text-[#1A1A1A] dark:text-dark-text">
+                              {remark.evaluator_email || 'Evaluator'}
+                            </span>
+                            <span className="text-[9px] text-[#A0AEC0] dark:text-dark-text-muted">
+                              {new Date(remark.created_at).toLocaleString()}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#4A5568] dark:text-dark-text-sec leading-relaxed">{remark.remark_text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="flex flex-col gap-5 pt-6 border-t border-[#F0F2F0] shrink-0">
+              <div className="flex flex-col gap-5 pt-6 border-t border-[#F0F2F0] dark:border-dark-border shrink-0">
                 <div>
-                  <label className="text-[11px] font-bold text-[#A0AEC0] uppercase mb-2 block">Evaluation Decision</label>
+                  <label className="text-[11px] font-bold text-[#A0AEC0] dark:text-dark-text-muted uppercase mb-2 block">Evaluation Decision</label>
                   <select 
-                    className="w-full p-3 rounded-xl border border-[#E0E6E0] focus:ring-2 focus:ring-[#1A8C3C] outline-none text-sm"
+                    className="w-full p-3 rounded-xl border border-[#E0E6E0] dark:border-dark-border bg-white dark:bg-dark-card text-[#1A1A1A] dark:text-dark-text focus:ring-2 focus:ring-[#1A8C3C] outline-none text-sm"
                     value={reviewStatus}
                     onChange={(e) => setReviewStatus(e.target.value as any)}
                   >
@@ -346,10 +412,10 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-[#A0AEC0] uppercase mb-2 block">Evaluator Notes</label>
+                  <label className="text-[11px] font-bold text-[#A0AEC0] dark:text-dark-text-muted uppercase mb-2 block">Evaluator Notes / Remarks</label>
                   <textarea 
-                    className="w-full p-3 rounded-xl border border-[#E0E6E0] focus:ring-2 focus:ring-[#1A8C3C] outline-none text-sm min-h-[100px] resize-none"
-                    placeholder="Add feedback for scholar..."
+                    className="w-full p-3 rounded-xl border border-[#E0E6E0] dark:border-dark-border bg-white dark:bg-dark-card text-[#1A1A1A] dark:text-dark-text focus:ring-2 focus:ring-[#1A8C3C] outline-none text-sm min-h-[100px] resize-none"
+                    placeholder="Add a remark for the scholar (saved on review)..."
                     value={reviewNote}
                     onChange={(e) => setReviewNote(e.target.value)}
                   />
@@ -364,11 +430,11 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
               </div>
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-center text-[#A0AEC0]">
-              <div className="p-4 bg-[#F7F9F7] rounded-2xl mb-4">
-                <ClipboardList size={48} className="text-[#A0AEC0]" />
+            <div className="flex-1 flex flex-col items-center justify-center text-center text-[#A0AEC0] dark:text-dark-text-muted">
+              <div className="p-4 bg-[#F7F9F7] dark:bg-dark-surface rounded-2xl mb-4">
+                <ClipboardList size={48} className="text-[#A0AEC0] dark:text-dark-text-muted" />
               </div>
-              <h2 className="text-lg text-[#4A5568]">No Submission Selected</h2>
+              <h2 className="text-lg text-[#4A5568] dark:text-dark-text-sec">No Submission Selected</h2>
               <p className="text-sm">Select an item on the left to begin your review.</p>
             </div>
           )}
