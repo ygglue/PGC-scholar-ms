@@ -6,6 +6,7 @@ import { SubmissionBins } from "./components/SubmissionBins";
 import { BinDocuments } from "./components/BinDocuments";
 import { PendingSubmissions } from "./components/PendingSubmissions";
 import { Announcements } from "./components/Announcements";
+import { TitleBar } from "./components/TitleBar";
 import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
@@ -62,14 +63,24 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F0F2F0] dark:bg-dark-page">
-        <p className="text-[#1A8C3C] text-xl">Initializing secure session...</p>
+      <div className="h-screen flex flex-col bg-[#F0F2F0] dark:bg-dark-page">
+        <TitleBar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-[#1A8C3C] text-xl">Initializing secure session...</p>
+        </div>
       </div>
     );
   }
 
   if (!token) {
-    return <Login onSuccess={(t) => setToken(t)} onShowModal={showModal} />;
+    return (
+      <div className="h-screen flex flex-col">
+        <TitleBar />
+        <div className="flex-1">
+          <Login onSuccess={(t) => setToken(t)} onShowModal={showModal} />
+        </div>
+      </div>
+    );
   }
 
   const handleToggleTheme = async () => {
@@ -97,22 +108,25 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Global Modal */}
-      {modalConfig && (
-        <Modal 
-          isOpen={true} 
-          {...modalConfig} 
-          onConfirm={() => {
-            modalConfig.onConfirm();
-            closeModal();
-          }}
-          onCancel={() => {
-            modalConfig.onCancel?.();
-            closeModal();
-          }}
-        />
-      )}
+    <div className="h-screen flex flex-col overflow-hidden">
+      <TitleBar />
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Global Modal */}
+        {modalConfig && (
+          <Modal 
+            isOpen={true} 
+            {...modalConfig} 
+            onConfirm={() => {
+              modalConfig.onConfirm();
+              closeModal();
+            }}
+            onCancel={() => {
+              modalConfig.onCancel?.();
+              closeModal();
+            }}
+          />
+        )}
 
       <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col shrink-0">
         <h2 className="text-xl font-bold mb-12">PGC-Scholar<br/>Evaluator</h2>
@@ -165,9 +179,10 @@ function App() {
         </button>
       </aside>
 
-      <main className="flex-1 h-screen overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">
+      <main className="flex-1 overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">
         {renderContent()}
       </main>
+      </div>
     </div>
   );
 }

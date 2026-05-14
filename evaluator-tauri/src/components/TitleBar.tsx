@@ -1,0 +1,157 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { getCurrentWindow } from '@tauri-apps/api/window';
+
+export const TitleBar: React.FC = () => {
+  const [maximized, setMaximized] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const w = getCurrentWindow();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setMaximized(await w.isMaximized());
+        const unlisten = await w.onResized(async () => {
+          setMaximized(await w.isMaximized());
+        });
+        return () => unlisten();
+      } catch (_) {}
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!menuPos) return;
+    const close = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuPos(null);
+      }
+    };
+    const keyClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuPos(null);
+    };
+    window.addEventListener('mousedown', close);
+    window.addEventListener('keydown', keyClose);
+    return () => {
+      window.removeEventListener('mousedown', close);
+      window.removeEventListener('keydown', keyClose);
+    };
+  }, [menuPos]);
+
+  const handleMinimize = async () => {
+    setMenuPos(null);
+    try { await w.minimize(); } catch (_) {}
+  };
+
+  const handleMaximize = async () => {
+    setMenuPos(null);
+    try { await w.toggleMaximize(); } catch (_) {}
+  };
+
+  const handleClose = async () => {
+    setMenuPos(null);
+    try { await w.close(); } catch (_) {}
+  };
+
+  const handleRestore = async () => {
+    setMenuPos(null);
+    try {
+      if (await w.isMaximized()) await w.toggleMaximize();
+    } catch (_) {}
+  };
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuPos({ x: e.clientX, y: e.clientY });
+  };
+
+  return (
+    <>
+      <div
+        data-tauri-drag-region
+        onDoubleClick={handleMaximize}
+        onContextMenu={handleContextMenu}
+        className="h-9 bg-[#0F5C27] flex items-center justify-between shrink-0 select-none"
+      >
+        <div data-tauri-drag-region className="flex items-center gap-2 px-4">
+          <span data-tauri-drag-region className="text-[11px] font-semibold text-white/80 tracking-wide">
+            PGC-Scholar Evaluator
+          </span>
+        </div>
+
+        <div className="flex h-full">
+          <button
+            onClick={handleMinimize}
+            className="px-4 h-full text-white/60 hover:text-white hover:bg-white/10 transition-colors text-xs"
+            title="Minimize"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <rect x="1" y="4.5" width="8" height="1" fill="currentColor" />
+            </svg>
+          </button>
+          <button
+            onClick={handleMaximize}
+            className="px-4 h-full text-white/60 hover:text-white hover:bg-white/10 transition-colors text-xs"
+            title={maximized ? 'Restore' : 'Maximize'}
+          >
+            {maximized ? (
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <rect x="2" y="0.5" width="7" height="7" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
+                <rect x="0.5" y="2" width="7" height="7" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
+              </svg>
+            ) : (
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <rect x="0.5" y="0.5" width="9" height="9" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
+              </svg>
+            )}
+          </button>
+          <button
+            onClick={handleClose}
+            className="px-4 h-full text-white/60 hover:text-white hover:bg-red-600 transition-colors text-xs"
+            title="Close"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" strokeWidth="1" />
+              <line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" strokeWidth="1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {menuPos && (
+        <div
+          ref={menuRef}
+          className="fixed z-[200] w-48 py-1 bg-white dark:bg-dark-card border border-[#E0E6E0] dark:border-dark-border rounded-lg shadow-xl text-sm select-none"
+          style={{ left: menuPos.x, top: menuPos.y }}
+        >
+          <button
+            onClick={handleRestore}
+            className="w-full text-left px-4 py-1.5 text-[#1A1A1A] dark:text-dark-text hover:bg-[#F7F9F7] dark:hover:bg-dark-surface disabled:opacity-40"
+            disabled={!maximized}
+          >
+            Restore
+          </button>
+          <button
+            onClick={handleMinimize}
+            className="w-full text-left px-4 py-1.5 text-[#1A1A1A] dark:text-dark-text hover:bg-[#F7F9F7] dark:hover:bg-dark-surface"
+          >
+            Minimize
+          </button>
+          <button
+            onClick={handleMaximize}
+            className="w-full text-left px-4 py-1.5 text-[#1A1A1A] dark:text-dark-text hover:bg-[#F7F9F7] dark:hover:bg-dark-surface disabled:opacity-40"
+            disabled={maximized}
+          >
+            Maximize
+          </button>
+          <div className="h-px bg-[#E0E6E0] dark:bg-dark-border my-1" />
+          <button
+            onClick={handleClose}
+            className="w-full text-left px-4 py-1.5 text-[#1A1A1A] dark:text-dark-text hover:bg-[#F7F9F7] dark:hover:bg-dark-surface"
+          >
+            Close
+          </button>
+        </div>
+      )}
+    </>
+  );
+};

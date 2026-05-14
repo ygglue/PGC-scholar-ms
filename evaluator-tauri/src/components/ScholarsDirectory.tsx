@@ -32,7 +32,7 @@ interface ScholarsDirectoryProps {
   onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
 }
 
-export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModal }) => {
+export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModal: _onShowModal }) => {
   const [scholars, setScholars] = useState<Scholar[]>([]);
   const [filtered, setFiltered] = useState<Scholar[]>([]);
   const [search, setSearch] = useState('');
