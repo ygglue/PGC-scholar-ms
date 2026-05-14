@@ -90,38 +90,34 @@ def get_announcements(
         db.query(Announcement).order_by(Announcement.created_at.desc()).all()
     )
 
+    # Pre-fetch scholar info once if needed (avoids N queries in loop)
+    scholar = None
+    is_scholar_user = hasattr(current_user, 'scholar_id') and current_user.scholar_id
+    if is_scholar_user:
+        from app.models.scholar import Scholar
+        scholar = db.query(Scholar).filter(Scholar.id == current_user.scholar_id).first()
+
     result = []
     for a in announcements:
-        # If recipient_filter is set and user is a scholar, check if scholar matches
-        if a.recipient_filter and hasattr(current_user, 'scholar_id') and current_user.scholar_id:
-            # Need to get scholar info if user is a scholar
-            from app.models.scholar import Scholar
-            scholar = db.query(Scholar).filter(Scholar.id == current_user.scholar_id).first()
-            if scholar:
-                should_include = True
-                rf = a.recipient_filter
-                # Check batch
-                if "batch" in rf and scholar.batch_number != rf["batch"]:
-                    should_include = False
-                # Check school
-                if "school" in rf and scholar.school != rf["school"]:
-                    should_include = False
-                # Check status
-                if "status" in rf and scholar.status != rf["status"]:
-                    should_include = False
+        if a.recipient_filter and is_scholar_user and scholar:
+            should_include = True
+            rf = a.recipient_filter
+            if "batch" in rf and scholar.batch_number != rf["batch"]:
+                should_include = False
+            if "school" in rf and scholar.school != rf["school"]:
+                should_include = False
+            if "status" in rf and scholar.status != rf["status"]:
+                should_include = False
+            if not should_include:
+                continue
 
-                if not should_include:
-                    continue
-
-        result.append(
-            {
-                "id": str(a.id),
-                "title": a.title,
-                "message": a.message,
-                "type": a.type,
-                "created_at": a.created_at.isoformat() if a.created_at else None,
-                "created_by": str(a.created_by) if a.created_by else None,
-            }
-        )
+        result.append({
+            "id": str(a.id),
+            "title": a.title,
+            "message": a.message,
+            "type": a.type,
+            "created_at": a.created_at.isoformat() if a.created_at else None,
+            "created_by": str(a.created_by) if a.created_by else None,
+        })
 
     return result

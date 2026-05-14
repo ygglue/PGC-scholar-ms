@@ -20,8 +20,8 @@ const Inbox = () => {
     fetchData();
   }, [navigate]);
 
-  // Update timestamp every minute
   const [now, setNow] = useState(new Date());
+
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(interval);

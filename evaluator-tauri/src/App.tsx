@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Login } from "./components/Login";
-import { Dashboard } from "./components/Dashboard";
-import { ScholarsDirectory } from "./components/ScholarsDirectory";
-import { SubmissionBins } from "./components/SubmissionBins";
-import { BinDocuments } from "./components/BinDocuments";
-import { PendingSubmissions } from "./components/PendingSubmissions";
-import { Announcements } from "./components/Announcements";
 import { TitleBar } from "./components/TitleBar";
-import { Settings } from "./components/Settings";
 import { Modal, ModalProps } from "./components/shared/Modal";
 import { getToken, removeToken } from "./services/secureStore";
 import { syncService } from "./services/syncService";
 import { getTheme, saveTheme } from "./services/settingsStore";
 import "./index.css";
+
+const Dashboard = lazy(() => import("./components/Dashboard").then(m => ({ default: m.Dashboard })));
+const ScholarsDirectory = lazy(() => import("./components/ScholarsDirectory").then(m => ({ default: m.ScholarsDirectory })));
+const SubmissionBins = lazy(() => import("./components/SubmissionBins").then(m => ({ default: m.SubmissionBins })));
+const BinDocuments = lazy(() => import("./components/BinDocuments").then(m => ({ default: m.BinDocuments })));
+const PendingSubmissions = lazy(() => import("./components/PendingSubmissions").then(m => ({ default: m.PendingSubmissions })));
+const Announcements = lazy(() => import("./components/Announcements").then(m => ({ default: m.Announcements })));
+const Settings = lazy(() => import("./components/Settings").then(m => ({ default: m.Settings })));
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
@@ -107,6 +108,12 @@ function App() {
     return <PendingSubmissions {...commonProps} />;
   };
 
+  const SuspendedContent = () => (
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center text-[#A0AEC0] dark:text-dark-text-muted text-sm">Loading...</div>}>
+      {renderContent()}
+    </Suspense>
+  );
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <TitleBar />
@@ -180,7 +187,7 @@ function App() {
       </aside>
 
       <main className="flex-1 overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">
-        {renderContent()}
+        <SuspendedContent />
       </main>
       </div>
     </div>

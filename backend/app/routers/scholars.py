@@ -167,6 +167,8 @@ def list_scholars(
     student_type: Optional[str] = None,
     search: Optional[str] = None,
     updated_since: Optional[datetime] = Query(None),
+    limit: Optional[int] = Query(200, ge=1, le=1000),
+    offset: Optional[int] = Query(0, ge=0),
     current_user: User = Depends(get_current_evaluator), 
     db: Session = Depends(get_db)):
     
@@ -183,7 +185,7 @@ def list_scholars(
             (Scholar.last_name.ilike(f"%{search}%"))
         )
         
-    return query.all()
+    return query.order_by(Scholar.last_name.asc(), Scholar.first_name.asc()).limit(limit).offset(offset).all()
 
 @router.get("/{scholar_id}", response_model=ScholarResponse)
 def get_scholar(scholar_id: str, current_user: User = Depends(get_current_evaluator), db: Session = Depends(get_db)):
