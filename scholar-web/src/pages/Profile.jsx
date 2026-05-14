@@ -10,17 +10,16 @@ const Profile = () => {
   const { data: profile, mutate: mutateProfile } = useApiCache('profile', `${API_BASE}/scholars/me`);
   const [pendingChanges, setPendingChanges] = useState([]);
 
-  useEffect(() => {
-    const fetchPending = async () => {
-        try {
-            const res = await apiClient.get(`${API_BASE}/pending-changes/me`);
-            setPendingChanges(res.data);
-        } catch (err) {
-            console.error("Failed to fetch pending changes", err);
-        }
-    };
-    fetchPending();
-  }, []);
+  const fetchPending = async () => {
+    try {
+        const res = await apiClient.get(`${API_BASE}/pending-changes/me`);
+        setPendingChanges(res.data);
+    } catch (err) {
+        console.error("Failed to fetch pending changes", err);
+    }
+  };
+
+  useEffect(() => { fetchPending(); }, []);
 
   const hasPendingProfileChanges = pendingChanges.some(c => c.change_type === 'profile' && c.status === 'pending');
 
@@ -65,13 +64,28 @@ const Profile = () => {
     navigate("/login");
   };
 
+  const editableFields = [
+    { key: 'first_name', label: 'First Name', type: 'text', required: true },
+    { key: 'last_name', label: 'Last Name', type: 'text', required: true },
+    { key: 'middle_name', label: 'Middle Name', type: 'text' },
+    { key: 'date_of_birth', label: 'Date of Birth', type: 'date' },
+    { key: 'place_of_birth', label: 'Place of Birth', type: 'text' },
+    { key: 'sex', label: 'Sex', type: 'text' },
+    { key: 'civil_status', label: 'Civil Status', type: 'text' },
+    { key: 'religion', label: 'Religion', type: 'text' },
+    { key: 'contact_number', label: 'Contact Number', type: 'tel' },
+    { key: 'address', label: 'Address', type: 'text' },
+    { key: 'batch_number', label: 'Batch Number', type: 'text' },
+    { key: 'year_level', label: 'Year Level', type: 'text' },
+    { key: 'course', label: 'Course', type: 'text' },
+    { key: 'school', label: 'School', type: 'text' },
+    { key: 'student_type', label: 'Student Type', type: 'text' },
+  ];
+
   const startEditing = () => {
-    setEditForm({
-      first_name: profile.first_name || "",
-      last_name: profile.last_name || "",
-      contact_number: profile.contact_number || "",
-      date_of_birth: profile.date_of_birth || "",
-    });
+    const form = {};
+    editableFields.forEach(({ key }) => { form[key] = profile[key] || ""; });
+    setEditForm(form);
     setIsEditing(true);
     setSubmitStatus(null);
   };
@@ -84,11 +98,10 @@ const Profile = () => {
   const [errors, setErrors] = useState({});
 
   const saveChanges = async () => {
-    const requiredFields = ["first_name", "last_name"];
     const newErrors = {};
-    requiredFields.forEach((field) => {
-      if (!editForm[field] || editForm[field].trim() === "") {
-        newErrors[field] = true;
+    editableFields.filter(f => f.required).forEach(({ key }) => {
+      if (!editForm[key] || editForm[key].trim() === "") {
+        newErrors[key] = true;
       }
     });
 
@@ -111,8 +124,7 @@ const Profile = () => {
       setSubmitStatus("success");
       setIsEditing(false);
       setErrors({});
-      // Refresh pending changes to show IN REVIEW badge
-      mutatePending();
+      fetchPending();
       setTimeout(() => setSubmitStatus(null), 3000);
     } catch (err) {
       setSubmitStatus("error");
@@ -131,7 +143,7 @@ const Profile = () => {
   return (
     <Layout>
       {submitStatus === "success" && (
-        <div className="bg-primary-container text-on-primary-container p-4 rounded-xl mb-6 font-bold flex items-center justify-center gap-2">
+        <div className="bg-primary-pale text-on-primary p-4 rounded-xl mb-6 font-bold flex items-center justify-center gap-2">
           <span className="material-symbols-outlined">check_circle</span>{" "}
           Changes submitted to queue!
         </div>
@@ -148,7 +160,7 @@ const Profile = () => {
           />
           <div
             onClick={() => fileInputRef.current?.click()}
-            className={`w-32 h-32 md:w-[200px] md:h-[200px] rounded-full border-4 border-surface-container-lowest shadow-lg overflow-hidden flex items-center justify-center cursor-pointer relative ${getAvatarColor(profile.id)}`}
+            className={`w-32 h-32 md:w-[200px] md:h-[200px] rounded-full border-4 border-outline/50est shadow-lg overflow-hidden flex items-center justify-center cursor-pointer relative ${getAvatarColor(profile.id)}`}
           >
             {profile.avatar_url ? (
               <img
@@ -170,7 +182,7 @@ const Profile = () => {
           </div>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-primary text-on-primary p-3 rounded-full shadow-md hover:bg-primary-container transition-colors z-10"
+            className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-gold text-on-primary w-10 h-10 flex items-center justify-center rounded-full shadow-lg hover:bg-gold-light transition-colors z-10"
             title="Change Profile Picture"
           >
             <span className="material-symbols-outlined text-sm md:text-base">
@@ -183,7 +195,7 @@ const Profile = () => {
             {profile.first_name} {profile.last_name}
           </h2>
           <div className="flex items-center justify-center mt-2">
-            <span className="text-label-sm font-label uppercase tracking-widest text-on-surface-variant bg-surface-container-highest px-3 py-1 rounded-full text-[10px] font-bold">
+            <span className="text-label-sm font-label uppercase tracking-widest text-on-surface-variant bg-surface-high px-3 py-1 rounded-full text-[10px] font-bold">
               Scholar ID: ES-2024-{profile.id.substring(0, 4)}
             </span>
           </div>
@@ -196,7 +208,7 @@ const Profile = () => {
             <div className="flex items-center gap-3">
               <h3 className="font-headline font-bold text-xl text-primary">Personal Information</h3>
               {hasPendingProfileChanges && (
-                  <span className="text-[#DD6B20] text-[9px] bg-orange-50 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">
+                  <span className="text-gold text-[9px] bg-gold/15 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">
                       UNDER REVIEW
                   </span>
               )}
@@ -210,66 +222,21 @@ const Profile = () => {
              )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-outline">
-                First Name
-              </label>
-              <input
-                className={`w-full ${isEditing ? (errors.first_name ? "bg-white ring-2 ring-red-500" : "bg-white ring-2 ring-primary") : "bg-surface-container-low"} border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary text-on-surface font-medium outline-none transition-all`}
-                name="first_name"
-                type="text"
-                readOnly={!isEditing}
-                value={isEditing ? editForm.first_name : profile.first_name}
-                onChange={handleEditChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-outline">
-                Last Name
-              </label>
-              <input
-                className={`w-full ${isEditing ? (errors.last_name ? "bg-white ring-2 ring-red-500" : "bg-white ring-2 ring-primary") : "bg-surface-container-low"} border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary text-on-surface font-medium outline-none transition-all`}
-                name="last_name"
-                type="text"
-                readOnly={!isEditing}
-                value={isEditing ? editForm.last_name : profile.last_name}
-                onChange={handleEditChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-outline">
-                Contact Number
-              </label>
-              <input
-                className={`w-full ${isEditing ? "bg-white ring-2 ring-primary" : "bg-surface-container-low"} border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary text-on-surface font-medium outline-none`}
-                name="contact_number"
-                type="tel"
-                readOnly={!isEditing}
-                value={
-                  isEditing
-                    ? editForm.contact_number
-                    : profile.contact_number || ""
-                }
-                onChange={handleEditChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-outline">
-                Date of Birth
-              </label>
-              <input
-                className={`w-full ${isEditing ? "bg-white ring-2 ring-primary" : "bg-surface-container-low"} border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary text-on-surface font-medium outline-none`}
-                name="date_of_birth"
-                type={isEditing ? "date" : "text"}
-                readOnly={!isEditing}
-                value={
-                  isEditing
-                    ? editForm.date_of_birth
-                    : profile.date_of_birth || ""
-                }
-                onChange={handleEditChange}
-              />
-            </div>
+            {editableFields.map(({ key, label, type, required }) => (
+              <div key={key} className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
+                  {label}{required && <span className="text-red-accent ml-0.5">*</span>}
+                </label>
+                <input
+                  className={`w-full ${isEditing ? (errors[key] ? "bg-surface-container-lowest ring-2 ring-red-500" : "bg-surface-container-lowest ring-2 ring-primary") : "bg-surface-high border border-outline"} rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary text-on-surface font-medium outline-none transition-all`}
+                  name={key}
+                  type={isEditing ? type : "text"}
+                  readOnly={!isEditing}
+                  value={isEditing ? editForm[key] : (profile[key] || "")}
+                  onChange={handleEditChange}
+                />
+              </div>
+            ))}
           </div>
           {isEditing && (
             <div className="pt-4 flex flex-col items-end gap-2">
@@ -288,7 +255,7 @@ const Profile = () => {
                 <button
                   onClick={saveChanges}
                   disabled={submitStatus === "saving"}
-                  className={`bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-md hover:bg-primary-container transition-all active:scale-95 ${submitStatus === "saving" ? "opacity-70" : ""}`}
+                  className={`bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-md hover:bg-primary-dark transition-all active:scale-95 ${submitStatus === "saving" ? "opacity-70" : ""}`}
                 >
                   {submitStatus === "saving" ? "Saving..." : "Save Changes"}
                 </button>
@@ -298,38 +265,13 @@ const Profile = () => {
         </section>
 
         <div className="md:col-span-4 space-y-6">
-          <section className="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm space-y-4 border-l-4 border-primary">
-            <h3 className="font-headline font-bold text-lg text-primary flex items-center gap-2">
-              <span className="material-symbols-outlined">school</span> Academic
-              Details
-            </h3>
-            <div className="space-y-4">
-              <div className="bg-surface-container-low p-4 rounded-2xl">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-outline block mb-1">
-                  Institution
-                </label>
-                <p className="text-on-surface font-bold">{profile.school}</p>
-              </div>
-              <div className="bg-surface-container-low p-4 rounded-2xl">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-outline block mb-1">
-                  Program
-                </label>
-                <p className="text-on-surface font-bold">{profile.course}</p>
-                <p className="text-xs text-on-surface-variant mt-1">
-                  Batch {profile.batch_number} • Year{" "}
-                  {profile.year_level || "1"}
-                </p>
-              </div>
-            </div>
-          </section>
-
           <section className="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm space-y-4">
             <h3 className="font-headline font-bold text-lg text-primary flex items-center gap-2">
               <span className="material-symbols-outlined">verified_user</span>{" "}
               Account Security
             </h3>
             <div className="flex flex-col gap-3">
-              <div className="w-full flex items-center justify-between px-5 py-4 bg-surface-container-low rounded-2xl text-on-surface opacity-80">
+              <div className="w-full flex items-center justify-between px-5 py-4 bg-surface-alt rounded-2xl text-on-surface opacity-80">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-primary">
                     email
@@ -343,7 +285,7 @@ const Profile = () => {
           <section className="bg-surface-container-lowest rounded-[32px] p-2 shadow-sm">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-between px-5 py-4 bg-error-container/20 hover:bg-error-container/40 transition-colors rounded-[24px] text-error group"
+              className="w-full flex items-center justify-between px-5 py-4 bg-error-container/20 hover:bg-error-container/40 dark:bg-red-accent/10 dark:hover:bg-red-accent/20 transition-colors rounded-[24px] text-error group"
             >
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined font-bold">
