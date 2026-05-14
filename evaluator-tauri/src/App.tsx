@@ -116,7 +116,10 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      <TitleBar />
+      <TitleBar
+        onOpenSettings={() => { setView('settings'); setSelectedBin(null); }}
+        onLogout={async () => { await removeToken(); setToken(null); }}
+      />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Global Modal */}
@@ -168,22 +171,7 @@ function App() {
           >
             Announcements
           </button>
-          <button 
-            onClick={() => {setView('settings'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'settings' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Settings
-          </button>
         </nav>
-        <button 
-          className="mt-auto text-left py-2 text-white/70 hover:text-white"
-          onClick={async () => {
-            await removeToken();
-            setToken(null);
-          }}
-        >
-          Log Out
-        </button>
       </aside>
 
       <main className="flex-1 overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">

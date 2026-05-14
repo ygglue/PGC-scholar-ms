@@ -71,3 +71,38 @@
         color: #707070;
     }
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c9d2;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0aab4;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #c1c9d2 transparent;
+}
+
+.dark * {
+    scrollbar-color: #444 transparent;
+}
