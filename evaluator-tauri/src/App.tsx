@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
+import { LayoutDashboard, ClipboardList, Users, FolderOpen, Megaphone, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Login } from "./components/Login";
 import { TitleBar } from "./components/TitleBar";
 import { Modal, ModalProps } from "./components/shared/Modal";
@@ -11,7 +12,7 @@ const Dashboard = lazy(() => import("./components/Dashboard").then(m => ({ defau
 const ScholarsDirectory = lazy(() => import("./components/ScholarsDirectory").then(m => ({ default: m.ScholarsDirectory })));
 const SubmissionBins = lazy(() => import("./components/SubmissionBins").then(m => ({ default: m.SubmissionBins })));
 const BinDocuments = lazy(() => import("./components/BinDocuments").then(m => ({ default: m.BinDocuments })));
-const PendingSubmissions = lazy(() => import("./components/PendingSubmissions").then(m => ({ default: m.PendingSubmissions })));
+const ReviewQueue = lazy(() => import("./components/ReviewQueue").then(m => ({ default: m.ReviewQueue })));
 const Announcements = lazy(() => import("./components/Announcements").then(m => ({ default: m.Announcements })));
 const Settings = lazy(() => import("./components/Settings").then(m => ({ default: m.Settings })));
 
@@ -21,6 +22,7 @@ function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [view, setView] = useState<'dashboard' | 'submissions' | 'directory' | 'bins' | 'announcements' | 'settings'>('dashboard');
   const [selectedBin, setSelectedBin] = useState<any>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Global Modal State
   const [modalConfig, setModalConfig] = useState<Omit<ModalProps, 'isOpen'> | null>(null);
@@ -105,7 +107,7 @@ function App() {
       if (selectedBin) return <BinDocuments bin={selectedBin} onBack={() => setSelectedBin(null)} {...commonProps} />;
       return <SubmissionBins onOpenBin={(b) => setSelectedBin(b)} {...commonProps} />;
     }
-    return <PendingSubmissions {...commonProps} />;
+    return <ReviewQueue {...commonProps} />;
   };
 
   const SuspendedContent = () => (
@@ -138,40 +140,41 @@ function App() {
           />
         )}
 
-      <aside className="w-[280px] bg-[#0F5C27] text-white p-8 flex flex-col shrink-0">
-        <h2 className="text-xl font-bold mb-12">PGC-Scholar<br/>Evaluator</h2>
-        <nav className="flex flex-col gap-4">
-          <button 
-            onClick={() => {setView('dashboard'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'dashboard' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Dashboard
-          </button>
-          <button 
-            onClick={() => {setView('submissions'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'submissions' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Pending Submissions
-          </button>
-          <button 
-            onClick={() => {setView('directory'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'directory' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Scholars Directory
-          </button>
-          <button 
-            onClick={() => {setView('bins'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'bins' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Submission Bins
-          </button>
-          <button 
-            onClick={() => {setView('announcements'); setSelectedBin(null);}} 
-            className={`text-left py-2 transition-all ${view === 'announcements' ? 'font-bold pl-2 border-l-2 border-white' : 'opacity-70 hover:opacity-100'}`}
-          >
-            Announcements
-          </button>
-        </nav>
+      <aside className={`${sidebarOpen ? 'w-[240px]' : 'w-[60px]'} bg-[#0F5C27] text-white shrink-0 overflow-hidden transition-all duration-200 flex flex-col`}>
+        <div className={`${sidebarOpen ? 'w-[240px]' : 'w-[60px]'} bg-[#0F5C27] text-white shrink-0 overflow-hidden transition-all duration-300 flex flex-col`}>
+          <div className="flex flex-col items-center h-full px-2">
+            <button
+              onClick={() => setSidebarOpen(o => !o)}
+              className={`relative flex items-center w-full px-3 h-9 mt-3 rounded-lg opacity-70 hover:opacity-100 hover:bg-white/5 transition-all ${sidebarOpen ? 'justify-start' : 'justify-center'}`}
+              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+            >
+              <PanelLeftClose size={18} className={`absolute left-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`} />
+              <PanelLeftOpen size={18} className={`absolute left-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 ${sidebarOpen ? 'opacity-0' : 'opacity-100'}`} />
+            </button>
+            <div className="h-px bg-white/10 mx-auto my-3 w-8" />
+            <nav className="flex flex-col w-full gap-3">
+              {[
+                { view: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+                { view: 'submissions', icon: ClipboardList, label: 'Review Queue' },
+                { view: 'directory', icon: Users, label: 'Scholars Directory' },
+                { view: 'bins', icon: FolderOpen, label: 'Submission Bins' },
+                { view: 'announcements', icon: Megaphone, label: 'Announcements' },
+              ].map(({ view: v, icon: Icon, label }) => (
+                <button
+                  key={v}
+                  onClick={() => { setView(v as any); setSelectedBin(null); }}
+                  className={`relative flex items-center w-full h-9 rounded-lg transition-all ${view === v ? 'bg-white/15 font-bold' : 'opacity-70 hover:opacity-100 hover:bg-white/5'} ${sidebarOpen ? 'justify-start' : 'justify-center'}`}
+                  title={label}
+                >
+                  <Icon size={18} className="absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className={`text-sm whitespace-nowrap pl-10 transition-all duration-200 ${sidebarOpen ? 'opacity-100 max-w-[200px]' : 'opacity-0 max-w-0 overflow-hidden'}`}>
+                    {label}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
       </aside>
 
       <main className="flex-1 overflow-hidden bg-[#F0F2F0] dark:bg-dark-page">

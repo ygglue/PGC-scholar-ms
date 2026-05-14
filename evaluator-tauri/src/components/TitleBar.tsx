@@ -92,7 +92,6 @@ export const TitleBar: React.FC<TitleBarProps> = ({ onOpenSettings, onLogout }) 
             PGC-Scholar Evaluator
           </span>
         </div>
-
         <div className="flex items-center h-full gap-0.5 pr-2">
           {onLogout && (
             <button

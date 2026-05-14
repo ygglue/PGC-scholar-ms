@@ -44,11 +44,11 @@ interface EvaluationRemark {
   submitted_at?: string;
 }
 
-interface PendingSubmissionsProps {
+interface ReviewQueueProps {
   onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
 }
 
-export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowModal }) => {
+export const ReviewQueue: React.FC<ReviewQueueProps> = ({ onShowModal }) => {
   const [changes, setChanges] = useState<PendingChange[]>([]);
   const [selectedChange, setSelectedChange] = useState<PendingChange | null>(null);
   const [loading, setLoading] = useState(true);
@@ -283,7 +283,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
   // ... (in JSX return)
   return (
     <div className="p-8 h-full flex flex-col">
-      <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text mb-8 shrink-0">Pending Submissions</h1>
+      <h1 className="text-2xl text-[#1A1A1A] dark:text-dark-text mb-8 shrink-0">Review Queue</h1>
       <div className="flex-1 flex gap-8 min-h-0">
         <div className="flex-1 bg-white dark:bg-dark-card rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm overflow-hidden flex flex-col">
           <div className="p-4 border-b border-[#E0E6E0] dark:border-dark-border bg-[#F7F9F7] dark:bg-dark-surface flex justify-between items-center shrink-0">
@@ -309,7 +309,7 @@ export const PendingSubmissions: React.FC<PendingSubmissionsProps> = ({ onShowMo
             {loading ? (
               <div className="p-8 text-center text-[#4A5568] dark:text-dark-text-sec">Loading submissions...</div>
             ) : filteredChanges.length === 0 ? (
-              <div className="p-8 text-center text-[#4A5568] dark:text-dark-text-sec">No pending submissions found.</div>
+              <div className="p-8 text-center text-[#4A5568] dark:text-dark-text-sec">No submissions found.</div>
             ) : (
               <>
                 {filteredChanges.map(change => (
