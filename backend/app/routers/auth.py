@@ -46,25 +46,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     _set_token_cookie(response, access_token)
     return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
 
-@router.post("/google")
-def google_login(req: GoogleLoginRequest, db: Session = Depends(get_db), response: Response = None):
-    idinfo = verify_google_token(req.token)
-    if not idinfo or "email" not in idinfo:
-        raise HTTPException(status_code=401, detail="Invalid Google token")
-        
-    email = idinfo["email"]
-    
-    user = db.query(User).filter(User.email == email).first()
-    if not user or user.role != "scholar":
-        raise HTTPException(status_code=403, detail="Not a registered scholar")
-        
-    if not user.is_active:
-        raise HTTPException(status_code=403, detail="Account is disabled")
-
-    access_token = create_access_token(data={"sub": str(user.id), "role": user.role})
-    _set_token_cookie(response, access_token)
-    return {"message": "Login successful"}
-
 @router.post("/dev-login")
 def dev_login(req: DevLoginRequest, db: Session = Depends(get_db), response: Response = None):
     if os.getenv("ENV") != "development":

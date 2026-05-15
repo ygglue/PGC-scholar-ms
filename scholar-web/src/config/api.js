@@ -11,8 +11,29 @@ if (isDev && !import.meta.env.VITE_API_URL) {
 
 const apiClient = axios.create({
   baseURL: API_BASE,
-  withCredentials: true,
 });
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('auth_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('auth_token');
+    }
+    return Promise.reject(err);
+  }
+);
+
+export const setToken = (token) => localStorage.setItem('auth_token', token);
+export const getToken = () => localStorage.getItem('auth_token');
+export const removeToken = () => localStorage.removeItem('auth_token');
 
 export default apiClient;
 export { API_BASE };

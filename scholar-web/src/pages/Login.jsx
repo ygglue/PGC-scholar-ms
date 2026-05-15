@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
-import apiClient, { API_BASE } from '../config/api';
+import apiClient, { API_BASE, getToken, setToken } from '../config/api';
 import '../index.css';
 
 const Login = () => {
@@ -13,19 +13,24 @@ const Login = () => {
   }, [navigate]);
 
   const checkAuth = async () => {
-    try {
-      await apiClient.get(`${API_BASE}/scholars/me`);
-      navigate('/');
-    } catch (err) {
-      setCheckingAuth(false);
+    if (getToken()) {
+      try {
+        await apiClient.get(`${API_BASE}/scholars/me`);
+        navigate('/');
+        return;
+      } catch (err) {
+        // Token is invalid, let them log in again
+      }
     }
+    setCheckingAuth(false);
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      await apiClient.post(`${API_BASE}/auth/google`, {
+      const res = await apiClient.post(`${API_BASE}/auth/google`, {
         id_token: credentialResponse.credential
       });
+      setToken(res.data.access_token);
       navigate('/');
     } catch (err) {
       alert("Login failed! Ensure your backend is running and scholar account exists.");
@@ -34,9 +39,10 @@ const Login = () => {
 
   const handleDevLogin = async () => {
     try {
-      await apiClient.post(`${API_BASE}/auth/dev-login`, {
+      const res = await apiClient.post(`${API_BASE}/auth/dev-login`, {
         email: "scholar@test.com"
       });
+      setToken(res.data.access_token);
       navigate('/');
     } catch (err) {
       alert("Dev Login failed! Backend may not be running. Make sure VITE_API_URL is set if accessing from another device.");

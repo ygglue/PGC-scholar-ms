@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import apiClient, { API_BASE } from "../config/api";
+import apiClient, { API_BASE, removeToken } from "../config/api";
 import Layout from "../components/Layout";
 import { useApiCache } from "../hooks/useApiCache";
 import { getAvatarColor } from "../utils/colors";
@@ -61,6 +61,7 @@ const Profile = () => {
     } catch (err) {
       // Ignore logout errors
     }
+    removeToken();
     navigate("/login");
   };
 
