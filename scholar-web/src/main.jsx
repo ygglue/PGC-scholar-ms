@@ -5,7 +5,7 @@ import './index.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 
 // Loads from active environments, fallback provided for development mounting 
-const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_GOES_HERE.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

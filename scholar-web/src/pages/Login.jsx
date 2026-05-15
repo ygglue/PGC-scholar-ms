@@ -28,7 +28,7 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await apiClient.post(`${API_BASE}/auth/google`, {
-        id_token: credentialResponse.credential
+        token: credentialResponse.credential
       });
       setToken(res.data.access_token);
       navigate('/');
