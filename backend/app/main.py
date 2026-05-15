@@ -18,14 +18,25 @@ app.add_middleware(
         "http://localhost:1420",
         "tauri://localhost",
         "http://tauri.localhost",
+        "https://pgc-scholar-ms.onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-from app.routers import academic_records, auth, documents, pending_changes, scholars, announcements, submission_bins, sync, remarks
 from app.core.events import register_event_listeners
+from app.routers import (
+    academic_records,
+    announcements,
+    auth,
+    documents,
+    pending_changes,
+    remarks,
+    scholars,
+    submission_bins,
+    sync,
+)
 
 register_event_listeners()
 
