@@ -13,9 +13,9 @@
   --color-dark-text: #F0F0F0;
   --color-dark-text-sec: #B0B0B0;
   --color-dark-text-muted: #707070;
-  --color-dark-green: #4DC97A;
+  --color-dark-green: #3BA55D;
   --color-dark-green-bg: #1a3a22;
-  --color-dark-green-badge: #14532d;
+  --color-dark-green-badge: #0d2817;
 }
 
 @layer base {

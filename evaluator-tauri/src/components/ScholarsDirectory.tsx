@@ -4,6 +4,7 @@ import { NetworkStatus } from '../services/networkStatus';
 import { CacheService } from '../services/cacheService';
 import api from '../services/apiService';
 import { getViewPreference, saveViewPreference } from '../services/settingsStore';
+import { useTabs } from '../contexts/TabContext';
 import { ModalProps } from './shared/Modal';
 
 interface Scholar {
@@ -33,6 +34,7 @@ interface ScholarsDirectoryProps {
 }
 
 export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModal: _onShowModal }) => {
+  const { openTab } = useTabs();
   const [scholars, setScholars] = useState<Scholar[]>([]);
   const [filtered, setFiltered] = useState<Scholar[]>([]);
   const [search, setSearch] = useState('');
@@ -41,7 +43,6 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
   const [courseFilter, setCourseFilter] = useState('All Courses');
   const [sortBy, setSortBy] = useState('name');
   const [viewType, setViewType] = useState<'card' | 'list'>('card');
-  const [selectedScholar, setSelectedScholar] = useState<Scholar | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Derive unique options
@@ -180,7 +181,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
               {filtered.map(s => (
                 <div 
                   key={s.id} 
-                  onClick={() => setSelectedScholar(s)}
+                  onClick={() => openTab('scholar', `${s.first_name} ${s.last_name}`, { scholarId: s.id })}
                   className="bg-white dark:bg-dark-card p-6 rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center cursor-pointer"
                 >
                   {s.avatar_url ? (
@@ -218,7 +219,7 @@ export const ScholarsDirectory: React.FC<ScholarsDirectoryProps> = ({ onShowModa
                     {filtered.map(s => (
                       <tr 
                         key={s.id} 
-                        onClick={() => setSelectedScholar(s)}
+                        onClick={() => openTab('scholar', `${s.first_name} ${s.last_name}`, { scholarId: s.id })}
                         className="border-b border-[#F0F2F0] dark:border-dark-border hover:bg-[#F7F9F7] dark:hover:bg-gray-800 transition-colors cursor-pointer"
                       >
                         <td className="p-4 font-medium text-[#1A1A1A] dark:text-dark-text">{s.first_name} {s.last_name}</td>
@@ -239,59 +240,9 @@ s.status === 'active' ? 'bg-[#E8F5ED] dark:bg-dark-green-badge text-[#1A8C3C] da
             </div>
           )}
         </div>
-        {selectedScholar && (
-          <div className="w-[400px] bg-white dark:bg-dark-card rounded-2xl border border-[#E0E6E0] dark:border-dark-border shadow-xl flex flex-col p-8 overflow-y-auto animate-in slide-in-from-right duration-200 z-20">
-            <div className="flex justify-between items-start mb-6 shrink-0">
-                <h2 className="text-xl text-[#1A1A1A] dark:text-dark-text">Scholar Profile</h2>
-                <button onClick={() => setSelectedScholar(null)} className="text-[#A0AEC0] dark:text-dark-text-muted hover:text-[#1A1A1A] dark:hover:text-gray-100 p-2">✕</button>
-            </div>
-            
-            <div className="flex flex-col items-center mb-8">
-                {selectedScholar.avatar_url ? (
-                    <img src={selectedScholar.avatar_url} alt="Avatar" className="w-24 h-24 rounded-full mb-4" />
-                ) : (
-                    <UserCircle size={80} className="text-[#A0AEC0] dark:text-dark-text-muted mb-4" />
-                )}
-                <h3 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.first_name} {selectedScholar.last_name}</h3>
-                <span className="text-xs text-[#A0AEC0] dark:text-dark-text-muted uppercase tracking-wider mt-1">{selectedScholar.status}</span>
-            </div>
-
-            <div className="space-y-4 pt-6 border-t border-[#F0F2F0] dark:border-dark-border">
-                <div className="grid grid-cols-2 gap-y-4">
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Status</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text capitalize">{selectedScholar.status}</div>
-
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">School</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.school}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Batch</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.batch_number}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Course</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.course}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Year Level</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.year_level}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Birth Date</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.date_of_birth || 'N/A'}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Sex</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text capitalize">{selectedScholar.sex || 'N/A'}</div>
-
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Religion</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.religion || 'N/A'}</div>
-                    
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Contact</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text">{selectedScholar.contact_number || 'N/A'}</div>
-
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A0AEC0] dark:text-dark-text-muted">Address</div>
-                    <div className="text-xs font-semibold text-[#1A1A1A] dark:text-dark-text col-span-2">{selectedScholar.address || 'N/A'}</div>
-                </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
+
+export default ScholarsDirectory;

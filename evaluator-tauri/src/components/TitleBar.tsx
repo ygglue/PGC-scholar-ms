@@ -79,20 +79,30 @@ export const TitleBar: React.FC<TitleBarProps> = ({ onOpenSettings, onLogout }) 
     </button>
   );
 
+  const WinBtn: React.FC<{ onClick: () => void; title: string; danger?: boolean; children: React.ReactNode }> = ({ onClick, title, danger, children }) => (
+    <button
+      onClick={onClick}
+      className={`flex items-center justify-center px-4 h-full text-white/60 hover:text-white transition-colors ${danger ? 'hover:bg-red-600' : 'hover:bg-white/10'}`}
+      title={title}
+    >
+      {children}
+    </button>
+  );
+
   return (
     <>
       <div
         data-tauri-drag-region
         onDoubleClick={handleMaximize}
         onContextMenu={handleContextMenu}
-        className="h-9 bg-[#0F5C27] flex items-center justify-between shrink-0 select-none"
+        className="h-9 bg-[#0F5C27] dark:bg-dark-card flex items-center justify-between shrink-0 select-none"
       >
         <div data-tauri-drag-region className="flex items-center gap-2 px-4">
           <span data-tauri-drag-region className="text-[11px] font-semibold text-white/80 tracking-wide">
             PGC-Scholar Evaluator
           </span>
         </div>
-        <div className="flex items-center h-full gap-0.5 pr-2">
+        <div className="flex items-center h-full">
           {onLogout && (
             <button
               onClick={onLogout}
@@ -116,12 +126,12 @@ export const TitleBar: React.FC<TitleBarProps> = ({ onOpenSettings, onLogout }) 
             </Btn>
           )}
           {(onLogout || onOpenSettings) && <div className="w-px h-5 bg-white/20 mx-2" />}
-          <Btn onClick={handleMinimize} title="Minimize">
+          <WinBtn onClick={handleMinimize} title="Minimize">
             <svg width="10" height="10" viewBox="0 0 10 10">
               <rect x="1" y="4.5" width="8" height="1" fill="currentColor" />
             </svg>
-          </Btn>
-          <Btn onClick={handleMaximize} title={maximized ? 'Restore' : 'Maximize'}>
+          </WinBtn>
+          <WinBtn onClick={handleMaximize} title={maximized ? 'Restore' : 'Maximize'}>
             {maximized ? (
               <svg width="10" height="10" viewBox="0 0 10 10">
                 <rect x="2" y="0.5" width="7" height="7" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
@@ -132,13 +142,13 @@ export const TitleBar: React.FC<TitleBarProps> = ({ onOpenSettings, onLogout }) 
                 <rect x="0.5" y="0.5" width="9" height="9" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
               </svg>
             )}
-          </Btn>
-          <Btn onClick={handleClose} title="Close" danger>
+          </WinBtn>
+          <WinBtn onClick={handleClose} title="Close" danger>
             <svg width="10" height="10" viewBox="0 0 10 10">
               <line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" strokeWidth="1" />
               <line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" strokeWidth="1" />
             </svg>
-          </Btn>
+          </WinBtn>
         </div>
       </div>
 

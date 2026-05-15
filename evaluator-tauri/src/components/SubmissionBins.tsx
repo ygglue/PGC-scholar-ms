@@ -5,6 +5,7 @@ import { CacheService } from '../services/cacheService';
 import api from '../services/apiService';
 import { ModalProps } from './shared/Modal';
 import { ViewLayout } from './shared/ViewLayout';
+import { useTabs } from '../contexts/TabContext';
 
 interface SubmissionBin {
   id: string;
@@ -14,11 +15,11 @@ interface SubmissionBin {
 }
 
 interface SubmissionBinsProps {
-  onOpenBin: (bin: SubmissionBin) => void;
   onShowModal: (config: Omit<ModalProps, 'isOpen'>) => void;
 }
 
-export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onShowModal }) => {
+export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onShowModal }) => {
+  const { openTab } = useTabs();
   const [bins, setBins] = useState<SubmissionBin[]>([]);
   const [status, setStatus] = useState("Loading bins...");
 
@@ -165,7 +166,7 @@ export const SubmissionBins: React.FC<SubmissionBinsProps> = ({ onOpenBin, onSho
               </div>
               
               <div className="flex gap-3 mt-6">
-                <button onClick={() => onOpenBin(bin)} className="flex-1 bg-[#F7F9F7] dark:bg-dark-surface text-[#1A8C3C] py-2 rounded-xl font-semibold text-sm hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors">
+                <button onClick={() => openTab('binDocuments', `AY ${bin.school_year}`, { bin })} className="flex-1 bg-[#F7F9F7] dark:bg-dark-surface text-[#1A8C3C] py-2 rounded-xl font-semibold text-sm hover:bg-[#E8F5ED] dark:hover:bg-dark-green-bg transition-colors">
                   View
                 </button>
                 <button onClick={() => deleteBin(bin.id)} className="px-4 py-2 rounded-xl font-semibold text-sm bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
