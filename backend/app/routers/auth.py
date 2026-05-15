@@ -24,7 +24,7 @@ def _set_token_cookie(response: Response, token: str):
         key="access_token",
         value=token,
         httponly=True,
-        samesite="lax",
+        samesite="none",
         secure=is_prod,
         max_age=ACCESS_TOKEN_EXPIRE_HOURS * 3600,
         path="/",
